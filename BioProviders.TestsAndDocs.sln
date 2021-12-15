@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AFD5787D-8010-4133-82D1-811FAB073EFE}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ProviderTests", "tests\ProviderTests\ProviderTests.fsproj", "{DCA048A8-D577-4EA2-A1AA-13BFB8F49B4F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DCA048A8-D577-4EA2-A1AA-13BFB8F49B4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCA048A8-D577-4EA2-A1AA-13BFB8F49B4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCA048A8-D577-4EA2-A1AA-13BFB8F49B4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCA048A8-D577-4EA2-A1AA-13BFB8F49B4F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DCA048A8-D577-4EA2-A1AA-13BFB8F49B4F} = {AFD5787D-8010-4133-82D1-811FAB073EFE}
+	EndGlobalSection
+EndGlobal
