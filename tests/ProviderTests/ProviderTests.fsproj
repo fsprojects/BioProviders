@@ -9,8 +9,8 @@
 
   <ItemGroup>
 	<None Include="paket.references" />
+	<None Include="ProviderTests.fsx" />
     <Compile Include="ProviderTests.fs"/>
-	<Compile Include="ProviderTests.fsx" />
     <Compile Include="Program.fs"/>
   </ItemGroup>
 
