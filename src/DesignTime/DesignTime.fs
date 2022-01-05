@@ -1,4 +1,4 @@
-﻿namespace DesignTime
+﻿namespace BioProviders.DesignTime
 
 module Say =
     let hello name =

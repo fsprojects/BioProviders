@@ -1,4 +1,4 @@
-﻿namespace RunTime
+﻿namespace BioProviders.RunTime
 
 module Say =
     let hello name =
