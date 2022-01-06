@@ -1,13 +1,26 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<DefineConstants>IS_DESIGNTIME</DefineConstants>
+	<AssemblyName>FSharp.Data.BioProviders.DesignTime</AssemblyName>
+	<Name>FSharp.Data.BioProviders</Name>
+	<OutputPath>..\..\bin\$(Configuration)\typeproviders\fsharp41\</OutputPath>
+	<Tailcalls>true</Tailcalls>
   </PropertyGroup>
-
   <ItemGroup>
-	<None Include="paket.references" />
+    <Compile Include="..\..\paket-files\typeprovidersdk\fsprojects\FSharp.TypeProviders.SDK\src\ProvidedTypes.fsi">
+      <Paket>True</Paket>
+      <Link>paket-files/ProvidedTypes.fsi</Link>
+    </Compile>
+    <Compile Include="..\..\paket-files\typeprovidersdk\fsprojects\FSharp.TypeProviders.SDK\src\ProvidedTypes.fs">
+      <Paket>True</Paket>
+      <Link>paket-files/ProvidedTypes.fs</Link>
+    </Compile>
+    <None Include="paket.references" />
+    <Compile Include="Utility.fs" />
+    <Compile Include="TypeGenerator.fs" />
     <Compile Include="DesignTime.fs" />
   </ItemGroup>
-
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

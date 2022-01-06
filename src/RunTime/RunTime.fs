@@ -1,5 +1,6 @@
 ﻿namespace BioProviders.RunTime
 
-module Say =
-    let hello name =
-        printfn "Hello %s" name
+open FSharp.Core.CompilerServices
+
+[<assembly:TypeProviderAssembly("FSharp.Data.BioProviders.DesignTime")>]
+do()

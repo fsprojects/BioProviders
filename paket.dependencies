@@ -1,4 +1,19 @@
+framework: net5.0, netstandard2.0
 source https://api.nuget.org/v3/index.json
 
-storage: none
-framework: net5.0, netstandard2.0, netstandard2.1
+nuget FSharp.Core >= 5.0.1 lowest_matching: true
+
+group TypeProviderSDK
+	github fsprojects/FSharp.TypeProviders.SDK src/ProvidedTypes.fsi
+	github fsprojects/FSharp.TypeProviders.SDK src/ProvidedTypes.fs
+
+group Test
+    frameworks: net5.0
+    source https://api.nuget.org/v3/index.json
+
+    nuget FSharp.Core 5.0.1
+    nuget Microsoft.NET.Test.Sdk
+    nuget NUnit 3.13.1
+    nuget NUnit3TestAdapter
+    nuget FsUnit  4.0.4
+    nuget FsCheck 2.15.1

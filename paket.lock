@@ -1,0 +1,48 @@
+RESTRICTION: || (== net5.0) (== netstandard2.0)
+NUGET
+  remote: https://api.nuget.org/v3/index.json
+    FSharp.Core (5.0.1)
+
+GROUP Test
+RESTRICTION: == net5.0
+NUGET
+  remote: https://api.nuget.org/v3/index.json
+    FsCheck (2.15.1)
+      FSharp.Core (>= 4.2.3)
+    FSharp.Core (5.0.1)
+    FsUnit (4.0.4)
+      FSharp.Core (>= 4.3.4)
+      NETStandard.Library (>= 2.0.3)
+      NUnit (>= 3.13 < 4.0)
+    Microsoft.CodeCoverage (17.0)
+    Microsoft.NET.Test.Sdk (17.0)
+      Microsoft.CodeCoverage (>= 17.0)
+      Microsoft.TestPlatform.TestHost (>= 17.0)
+    Microsoft.NETCore.Platforms (6.0.1)
+    Microsoft.TestPlatform.ObjectModel (17.0)
+      NuGet.Frameworks (>= 5.0)
+      System.Reflection.Metadata (>= 1.6)
+    Microsoft.TestPlatform.TestHost (17.0)
+      Microsoft.TestPlatform.ObjectModel (>= 17.0)
+      Newtonsoft.Json (>= 9.0.1)
+    NETStandard.Library (2.0.3)
+      Microsoft.NETCore.Platforms (>= 1.1)
+    Newtonsoft.Json (13.0.1)
+    NuGet.Frameworks (6.0)
+    NUnit (3.13.1)
+      NETStandard.Library (>= 2.0)
+    NUnit3TestAdapter (4.2)
+    System.Collections.Immutable (6.0)
+      System.Memory (>= 4.5.4)
+      System.Runtime.CompilerServices.Unsafe (>= 6.0)
+    System.Memory (4.5.4)
+    System.Reflection.Metadata (6.0)
+      System.Collections.Immutable (>= 6.0)
+    System.Runtime.CompilerServices.Unsafe (6.0)
+
+GROUP TypeProviderSDK
+
+GITHUB
+  remote: fsprojects/FSharp.TypeProviders.SDK
+    src/ProvidedTypes.fs (add1d43349c420e659a731268b64afa212ef3329)
+    src/ProvidedTypes.fsi (add1d43349c420e659a731268b64afa212ef3329)

@@ -1,0 +1,5 @@
+FSharp.Core
+
+group TypeProviderSDK
+	File:ProvidedTypes.fsi
+	File:ProvidedTypes.fs
