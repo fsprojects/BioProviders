@@ -3,19 +3,19 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-	<AssemblyName>FSharp.Data.BioProviders</AssemblyName>
+    <AssemblyName>FSharp.Data.BioProviders</AssemblyName>
     <Name>FSharp.Data.BioProviders</Name>
-	<OutputPath>..\..\bin\$(Configuration)\</OutputPath>
+    <OutputPath>..\..\bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <None Include="paket.references" />
     <Compile Include="RunTime.fs" />
   </ItemGroup>
   <ItemGroup>
-	<ProjectReference Include="..\DesignTime\DesignTime.fsproj">
-	  <IsFSharpDesignTimeProvider>true</IsFSharpDesignTimeProvider>
-	  <PrivateAssets>all</PrivateAssets>
-	</ProjectReference>
+    <ProjectReference Include="..\DesignTime\DesignTime.fsproj">
+      <IsFSharpDesignTimeProvider>true</IsFSharpDesignTimeProvider>
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
