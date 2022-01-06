@@ -4,6 +4,8 @@
 
 namespace BioProviders.RunTime
 
+open BioProviders.Common
+
 module BaseTypes = 
 
     type Assembly () =

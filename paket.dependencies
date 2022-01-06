@@ -7,6 +7,12 @@ group TypeProviderSDK
 	github fsprojects/FSharp.TypeProviders.SDK src/ProvidedTypes.fsi
 	github fsprojects/FSharp.TypeProviders.SDK src/ProvidedTypes.fs
 
+group Utility
+	source https://api.nuget.org/v3/index.json
+
+	nuget FluentFTP 34.0.1
+	nuget NetBio.Core
+
 group Test
     frameworks: net5.0
     source https://api.nuget.org/v3/index.json
