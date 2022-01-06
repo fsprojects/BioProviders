@@ -9,6 +9,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="paket.references" />
+    <Compile Include="BaseTypes.fs" />
     <Compile Include="RunTime.fs" />
   </ItemGroup>
   <ItemGroup>

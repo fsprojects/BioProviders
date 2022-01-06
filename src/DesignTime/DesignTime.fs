@@ -7,6 +7,7 @@ open ProviderImplementation.ProvidedTypes
 open BioProviders.DesignTime.Context
 open BioProviders.DesignTime.TypeGenerator
 
+// GenBank Type Provider.
 [<TypeProvider>]
 type public GenBankProvider (config:TypeProviderConfig) as this =
 
