@@ -1,9 +1,10 @@
 ﻿// --------------------------------------------------------------------------------------
 // Type Generation.
 // --------------------------------------------------------------------------------------
-namespace BioProviders.DesignTime.Utility
 
-open BioProviders.DesignTime.Utility.Context
+namespace BioProviders.DesignTime
+
+open BioProviders.DesignTime.Context
 
 module TypeGenerator =
 

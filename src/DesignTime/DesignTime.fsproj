@@ -5,7 +5,7 @@
 	<DefineConstants>IS_DESIGNTIME</DefineConstants>
 	<AssemblyName>FSharp.Data.BioProviders.DesignTime</AssemblyName>
 	<Name>FSharp.Data.BioProviders</Name>
-	<OutputPath>..\..\bin\$(Configuration)\typeproviders\fsharp41\</OutputPath>
+	<OutputPath>..\..\bin\$(Configuration)\typeproviders\fsharp5\</OutputPath>
 	<Tailcalls>true</Tailcalls>
   </PropertyGroup>
   <ItemGroup>
@@ -18,7 +18,7 @@
       <Link>paket-files/ProvidedTypes.fs</Link>
     </Compile>
     <None Include="paket.references" />
-    <Compile Include="Utility.fs" />
+    <Compile Include="Context.fs" />
     <Compile Include="TypeGenerator.fs" />
     <Compile Include="DesignTime.fs" />
   </ItemGroup>

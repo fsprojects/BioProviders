@@ -1,10 +1,11 @@
-﻿namespace BioProviders.DesignTime.Utility
+﻿// --------------------------------------------------------------------------------------
+// Design-Time Context State Types.
+// --------------------------------------------------------------------------------------
+
+namespace BioProviders.DesignTime
 
 open ProviderImplementation.ProvidedTypes
 
-// --------------------------------------------------------------------------------------
-// Design-Time Context State Types.
-// --------------------------------------------------------------------------------------
 module Context =
 
     type DatabaseName = 
@@ -43,6 +44,17 @@ module Context =
           SpeciesName: SpeciesName
           AssemblyGroupName: AssemblyGroupName
           AssemblyName: AssemblyName }
+
+        static member Parse taxon species assembly = 
+            let taxonName = taxon.ToString() |> (fun s -> s.Trim())
+            let speciesName = species.ToString() |> (fun s -> s.Trim())
+            let assemblyName = assembly.ToString() |> (fun s -> s.Trim())
+
+            match taxonName, speciesName, assemblyName with
+            | "", _, _ -> invalidArg "Taxon" "Taxon cannot be empty."
+            | _, "", _ -> invalidArg "Species" "Species cannot be empty."
+            | _, _, "" -> invalidArg "Assembly" "Assembly cannot be empty."
+            | _ -> (TaxonName taxonName, SpeciesName speciesName, AssemblyName assemblyName)
     
         static member Create providedType database taxon species assembly = 
             { ProvidedType = providedType
@@ -60,22 +72,3 @@ module Context =
                 this.AssemblyGroupName.ToString();
                 this.AssemblyName.ToString()
             ]
-
-
-// --------------------------------------------------------------------------------------
-// General Design-Time Utilities.
-// --------------------------------------------------------------------------------------
-open Context
-
-module Parse = 
-    
-    let parseAssemblyParameters (taxon:TaxonName) (species:SpeciesName) (assembly:AssemblyName) =
-        let taxonName = taxon.ToString() |> (fun s -> s.Trim())
-        let speciesName = species.ToString() |> (fun s -> s.Trim())
-        let assemblyName = assembly.ToString() |> (fun s -> s.Trim())
-
-        match taxonName, speciesName, assemblyName with
-        | "", _, _ -> invalidArg "Taxon" "Taxon cannot be empty."
-        | _, "", _ -> invalidArg "Species" "Species cannot be empty."
-        | _, _, "" -> invalidArg "Assembly" "Assembly cannot be empty."
-        | _ -> (TaxonName taxonName, SpeciesName speciesName, AssemblyName assemblyName)
