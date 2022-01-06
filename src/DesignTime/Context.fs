@@ -64,7 +64,7 @@ module Context =
               AssemblyGroupName = AssemblyGroupName ( "all_assembly_versions" )
               AssemblyName = assembly }
 
-        member this.GetURL () = 
+        member this.GetPath () = 
             String.concat "/" [ 
                 this.DatabaseName.ToString();
                 this.TaxonName.ToString();
