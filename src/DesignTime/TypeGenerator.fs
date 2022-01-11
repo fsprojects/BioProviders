@@ -5,27 +5,38 @@
 namespace BioProviders.DesignTime
 
 open ProviderImplementation.ProvidedTypes
+open BioProviders.RunTime
 open BioProviders.DesignTime.Context
-open BioProviders.RunTime.BaseTypes
 
 module internal TypeGenerator =
+
+    let createGenomicGenBankFlatFileType (path:string) () = 
+    
+        // Initialise the Genomic GBFF type
+        let genomicGBFF = ProvidedTypeDefinition(className = "GenomicGBFF", baseType = Some (typeof<GenomicGenBankFlatFile>))
+        let genomicGBFFHelpText = 
+            """<summary>Typed representation of an Assembly's Genomic GenBank Flat File.</summary>"""
+        genomicGBFF.AddXmlDoc(genomicGBFFHelpText)
+            
+        // Create and add constructor to the Genomic GBFF type
+        let genomicGBFFConstructor = ProvidedConstructor(parameters = [], invokeCode = (fun _ -> <@@ new GenomicGenBankFlatFile(path) @@>))
+        let genomicGBFFConstructorHelpText = 
+            """<summary>Generic constructor to initialise the Genomic GenBank Flat File.</summary>"""
+        genomicGBFFConstructor.AddXmlDoc(genomicGBFFConstructorHelpText)
+        genomicGBFF.AddMember(genomicGBFFConstructor)
+    
+        // Return the Genomic GBFF type
+        genomicGBFF
 
     let createAssemblyType (context:AssemblyContext) =
         
         // Extract information from context
         let assemblyType = context.ProvidedType
-        let path = context.GetPath()
+        let genomicGBFFPath = context.GetGenomicGBFFPath()
 
-        // Add method to load GenBank Flat File for the assembly
-        let loadGBFF = 
-            ProvidedMethod( 
-                methodName = "LoadGBFF", 
-                parameters = [], 
-                returnType = typeof<GenBankFlatFile>, 
-                invokeCode = (fun _ -> <@@ Assembly.LoadGBFF path @@>), 
-                isStatic = true 
-            )
-        assemblyType.AddMember loadGBFF
+        // Add Genomic GBFF to the assembly type
+        let genomicGBFF = createGenomicGenBankFlatFileType genomicGBFFPath
+        assemblyType.AddMemberDelayed(genomicGBFF)
 
         // Return the constructed assembly type
         assemblyType

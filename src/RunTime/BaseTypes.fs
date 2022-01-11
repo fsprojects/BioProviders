@@ -5,62 +5,57 @@
 namespace BioProviders.RunTime
 
 open System.IO
-open Bio.IO
+open Bio.IO.GenBank
 open BioProviders.Common
 
-module BaseTypes = 
+type GenomicGenBankFlatFile (path:string) = 
 
-    type Assembly () =
+    let cache = new Cache()
 
-        static member LoadGBFF (path:string) =
-            let cache = new Cache()
-            new GenBankFlatFile (cache, path)
+    let sequence = 
+        (cache :> ICache).LoadFile(path)
+        |> (fun stream -> new Compression.GZipStream(stream, Compression.CompressionMode.Decompress))
+        |> (new GenBankParser()).Parse
+        |> Seq.cast<Bio.ISequence>
+        |> Seq.head
 
-    and GenBankFlatFile (cache:Cache, path:string) = 
+    member _.Metadata with get() = new GenBankGenomicMetadata(sequence)
+    
+    
+and GenBankGenomicMetadata (sequence:Bio.ISequence) = 
+    
+    let metadata = ( sequence.Metadata.Item("GenBank") :?> GenBankMetadata )
+    
+    member _.Accession with get() = metadata.Accession
 
-        let sequence = 
-            (cache :> ICache).LoadFile(path)
-            |> (fun stream -> new Compression.GZipStream(stream, Compression.CompressionMode.Decompress))
-            |> (new GenBank.GenBankParser()).Parse
-            |> Seq.cast<Bio.ISequence>
-            |> Seq.head
+    member _.BaseCount with get() = metadata.BaseCount
 
-        member _.Metadata = new GenBankMetadata(sequence)
+    member _.Comments with get() = metadata.Comments
 
-    and GenBankMetadata (seq:Bio.ISequence) = 
+    member _.Contig with get() = metadata.Contig
 
-        let metadata = ( seq.Metadata.Item("GenBank") :?> GenBankMetadata )
-            
-        member _.Accession = metadata.Accession
+    member _.DbLinks with get() = metadata.DbLinks
 
-        member _.BaseCount = metadata.BaseCount
+    member _.DbSource with get() = metadata.DbSource
 
-        member _.Comments = metadata.Comments
+    member _.Definition with get() = metadata.Definition
 
-        member _.Contig = metadata.Contig
+    member _.Features with get() = metadata.Features
 
-        member _.DbLinks = metadata.DbLinks
+    member _.Keywords with get() = metadata.Keywords
 
-        member _.DbSource = metadata.DbSource
+    member _.Locus with get() = metadata.Locus
 
-        member _.Definition = metadata.Definition
+    member _.Origin with get() = metadata.Origin
 
-        member _.Features = metadata.Features
+    member _.Primary with get() = metadata.Primary
 
-        member _.Keywords = metadata.Keywords
+    member _.Project with get() = metadata.Project
 
-        member _.Locus = metadata.Locus
+    member _.References with get() = metadata.References
 
-        member _.Origin = metadata.Origin
+    member _.Segment with get() = metadata.Segment
 
-        member _.Primary = metadata.Primary
+    member _.Source with get() = metadata.Source
 
-        member _.Project = metadata.Project
-
-        member _.References = metadata.References
-
-        member _.Segment = metadata.Segment
-
-        member _.Source = metadata.Source
-
-        member _.Version = metadata.Version
+    member _.Version with get() = metadata.Version

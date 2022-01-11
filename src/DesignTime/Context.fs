@@ -64,11 +64,21 @@ module Context =
               AssemblyGroupName = AssemblyGroupName ( "all_assembly_versions" )
               AssemblyName = assembly }
 
-        member this.GetPath () = 
+        member this.GetDirectoryPath () = 
             String.concat "/" [ 
                 this.DatabaseName.ToString();
                 this.TaxonName.ToString();
                 this.SpeciesName.ToString();
                 this.AssemblyGroupName.ToString();
                 this.AssemblyName.ToString()
+            ]
+
+        member this.GetGenomicGBFFPath () = 
+            let filename = String.concat "_" [
+                this.AssemblyName.ToString();
+                "genomic.gbff.gz"
+            ]
+            String.concat "/" [
+                this.GetDirectoryPath ();
+                filename
             ]
