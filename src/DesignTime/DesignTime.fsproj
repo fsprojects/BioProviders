@@ -3,9 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
 	<DefineConstants>IS_DESIGNTIME</DefineConstants>
+	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	<AssemblyName>FSharp.Data.BioProviders.DesignTime</AssemblyName>
 	<Name>FSharp.Data.BioProviders</Name>
-	<OutputPath>..\..\bin\$(Configuration)\typeproviders\fsharp5\</OutputPath>
+	<OutputPath>..\..\bin\$(Configuration)\typeproviders\fsharp41\</OutputPath>
 	<Tailcalls>true</Tailcalls>
   </PropertyGroup>
   <ItemGroup>
@@ -18,6 +19,8 @@
       <Paket>True</Paket>
       <Link>paket-files/ProvidedTypes.fs</Link>
     </Compile>
+	<Compile Include="..\Core\FTP.fs" />
+    <Compile Include="..\Core\Cache.fs" />
 	<Compile Include="..\RunTime\BaseTypes.fs" />
     <Compile Include="Context.fs" />
     <Compile Include="TypeGenerator.fs" />

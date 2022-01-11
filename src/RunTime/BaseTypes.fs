@@ -4,47 +4,63 @@
 
 namespace BioProviders.RunTime
 
+open System.IO
+open Bio.IO
 open BioProviders.Common
 
 module BaseTypes = 
 
     type Assembly () =
+
         static member LoadGBFF (path:string) =
-            new GenBankFlatFile (path)
+            let cache = new Cache()
+            new GenBankFlatFile (cache, path)
 
-    and GenBankFlatFile (path:string) = 
-        
-        member _.Accession = 1
+    and GenBankFlatFile (cache:Cache, path:string) = 
 
-        member _.BaseCount = 1
+        let sequence = 
+            (cache :> ICache).LoadFile(path)
+            |> (fun stream -> new Compression.GZipStream(stream, Compression.CompressionMode.Decompress))
+            |> (new GenBank.GenBankParser()).Parse
+            |> Seq.cast<Bio.ISequence>
+            |> Seq.head
 
-        member _.Comments = 1
+        member _.Metadata = new GenBankMetadata(sequence)
 
-        member _.Contig = 1
+    and GenBankMetadata (seq:Bio.ISequence) = 
 
-        member _.DbLinks = 1
+        let metadata = ( seq.Metadata.Item("GenBank") :?> GenBankMetadata )
+            
+        member _.Accession = metadata.Accession
 
-        member _.DbSource = 1
+        member _.BaseCount = metadata.BaseCount
 
-        member _.Definitions = 1
+        member _.Comments = metadata.Comments
 
-        member _.Features = 1
+        member _.Contig = metadata.Contig
 
-        member _.Keywords = 1
+        member _.DbLinks = metadata.DbLinks
 
-        member _.Locus = 1
+        member _.DbSource = metadata.DbSource
 
-        member _.Origin = 1
+        member _.Definition = metadata.Definition
 
-        member _.Primary = 1
+        member _.Features = metadata.Features
 
-        member _.Project = 1
+        member _.Keywords = metadata.Keywords
 
-        member _.References = 1
+        member _.Locus = metadata.Locus
 
-        member _.Segment = 1
+        member _.Origin = metadata.Origin
 
-        member _.Source = 1
+        member _.Primary = metadata.Primary
 
-        member _.Version = 1
+        member _.Project = metadata.Project
 
+        member _.References = metadata.References
+
+        member _.Segment = metadata.Segment
+
+        member _.Source = metadata.Source
+
+        member _.Version = metadata.Version

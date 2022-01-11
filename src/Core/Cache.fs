@@ -41,7 +41,7 @@ module CacheHelpers =
 
 open CacheHelpers
 
-type Cache = 
+type Cache () = 
     interface ICache with 
         member _.SaveFile (path:string) =  saveCacheFile path
 
