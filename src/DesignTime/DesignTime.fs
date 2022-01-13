@@ -4,7 +4,6 @@ open FSharp.Core.CompilerServices
 open System.Reflection
 open ProviderImplementation.ProvidedTypes
 
-open BioProviders.Common
 open BioProviders.DesignTime.Context
 open BioProviders.DesignTime.TypeGenerator
 

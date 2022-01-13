@@ -19,8 +19,8 @@
       <Paket>True</Paket>
       <Link>paket-files/ProvidedTypes.fs</Link>
     </Compile>
-	<Compile Include="..\Core\FTP.fs" />
-    <Compile Include="..\Core\Cache.fs" />
+	<Compile Include="..\Common\FTP.fs" />
+    <Compile Include="..\Common\Cache.fs" />
 	<Compile Include="..\RunTime\BaseTypes.fs" />
     <Compile Include="Context.fs" />
     <Compile Include="TypeGenerator.fs" />
