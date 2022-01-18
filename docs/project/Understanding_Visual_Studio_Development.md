@@ -1,1 +1,0 @@
-# Understanding Visual Studio Development
