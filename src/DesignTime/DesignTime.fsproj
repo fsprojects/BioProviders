@@ -4,8 +4,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
 	<DefineConstants>IS_DESIGNTIME</DefineConstants>
 	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-	<AssemblyName>FSharp.Data.BioProviders.DesignTime</AssemblyName>
-	<Name>FSharp.Data.BioProviders</Name>
+	<AssemblyName>FSharp.Data.DesignTime</AssemblyName>
+	<Name>FSharp.Data</Name>
 	<OutputPath>..\..\bin\$(Configuration)\typeproviders\fsharp41\</OutputPath>
 	<Tailcalls>true</Tailcalls>
   </PropertyGroup>

@@ -2,5 +2,5 @@
 
 open FSharp.Core.CompilerServices
 
-[<assembly:TypeProviderAssembly("FSharp.Data.BioProviders.DesignTime")>]
+[<assembly:TypeProviderAssembly("FSharp.Data.DesignTime")>]
 do()
