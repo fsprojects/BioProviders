@@ -4,6 +4,7 @@
 
 namespace BioProviders.Common
 
+open System.IO
 open FluentFTP
 
 [<RequireQualifiedAccess>]
@@ -28,3 +29,20 @@ module FTP =
         let downloadFile (connection: FtpClient) = 
             connection.DownloadFile(localPath, remotePath)
         useConnection downloadFile
+
+    /// <summary>
+    /// Downloads a GenBank directory to the local file system asynchronously.
+    /// </summary>
+    /// <param name="localPath">The path to which the GenBank directory is being downloaded.</param>
+    /// <param name="remotePath">The path to the GenBank directory being downloaded.</param>
+    let downloadGenBankDirectory (localPath:string, remotePath:string) = 
+        let downloadDirectory (connection: FtpClient) = 
+            use writer = new StreamWriter(localPath)
+            connection.GetListing(remotePath, FtpListOption.ForceList)
+            |> Array.toList
+            |> List.map (fun listing -> listing.Name)
+            |> String.concat "\n"
+            |> writer.WriteAsync
+            |> ignore
+            FtpStatus.Success
+        useConnection downloadDirectory

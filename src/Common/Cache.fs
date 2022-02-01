@@ -8,7 +8,9 @@ open FluentFTP
 // --------------------------------------------------------------------------------------
 
 type ICache =
+    abstract LoadDirectory : string -> Stream
     abstract LoadFile : string -> Stream
+    abstract SaveDirectory : string -> FtpStatus
     abstract SaveFile : string -> FtpStatus
     abstract Purge : unit -> unit
 
@@ -29,9 +31,18 @@ module CacheHelpers =
         if File.Exists(cachePath) then Some(File.OpenRead(cachePath))
         else None
 
+    let loadCacheDirectory (path:string) =
+        let cachePath = getCacheFilePath(path)
+        if File.Exists(cachePath) then Some(File.OpenRead(cachePath))
+        else None
+
     let saveCacheFile (path:string) = 
         let cachePath = getCacheFilePath(path)
         FTP.downloadGenBankFlatFile(cachePath, path)
+
+    let saveCacheDirectory (path:string) =
+        let cachePath = getCacheFilePath(path)
+        FTP.downloadGenBankDirectory(cachePath, path)
 
     let clearCache () = ()
   
@@ -43,9 +54,11 @@ open CacheHelpers
 
 type Cache () = 
     interface ICache with 
-        member _.SaveFile (path:string) =  saveCacheFile path
+        member __.SaveFile (path:string) = saveCacheFile path
 
-        member _.Purge () = clearCache ()
+        member __.SaveDirectory (path:string) = saveCacheDirectory path
+
+        member __.Purge () = clearCache ()
 
         member this.LoadFile (path:string) =
             match loadCacheFile (path) with
@@ -53,4 +66,12 @@ type Cache () =
             | None -> 
                 match (this :> ICache).SaveFile (path) with
                 | FtpStatus.Success -> (this :> ICache).LoadFile (path)
-                | _ -> failwithf "Unable to load or save the path %s." path
+                | _ -> failwithf "Unable to load or save the file %s." path
+
+        member this.LoadDirectory (path:string) = 
+            match loadCacheDirectory (path) with
+            | Some (data) -> data :> Stream
+            | None ->
+                match (this :> ICache).SaveDirectory (path) with
+                | FtpStatus.Success -> (this :> ICache).LoadDirectory (path)
+                | _ -> failwithf "Unable to load or save the directory %s." path
