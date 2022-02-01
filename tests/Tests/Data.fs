@@ -394,11 +394,11 @@ module Data =
         (generateEmptyString ())
         |> FsCheck.Gen.map (fun assembly -> AssemblyName.Create assembly)
 
-    let generatePartialContext () = 
+    let generateContext () = 
         let (<!>) = FsCheck.Gen.map
         let (<*>) = FsCheck.Gen.apply
 
-        let numRegex = System.Random().Next(1, 4)
+        let numRegex = System.Random().Next(0, 4)
         let regexFields = [0; 1; 2]
                           |> FsCheck.Gen.shuffle
                           |> FsCheck.Gen.sample 0 1
@@ -412,28 +412,9 @@ module Data =
         let species = if (List.contains 1 regexFields) then generateRegexSpecies () else generatePlainSpecies ()
         let assembly = if (List.contains 2 regexFields) then generateRegexAssembly () else generatePlainAssembly ()
 
-        PartialContext.Create 
+        Context.Create 
         <!> providedType
         <*> database
         <*> taxon
         <*> species
         <*> assembly
-
-
-    let generateCompleteContext () = 
-        let (<!>) = FsCheck.Gen.map
-        let (<*>) = FsCheck.Gen.apply
-
-        let providedType = generateProvidedType ()
-        let database = generateDatabase ()
-        let taxon = generatePlainTaxon ()
-        let species = generatePlainSpecies ()
-        let assembly = generatePlainAssembly ()
-
-        CompleteContext.Create 
-        <!> providedType
-        <*> database
-        <*> taxon
-        <*> species
-        <*> assembly
-

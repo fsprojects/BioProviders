@@ -12,8 +12,12 @@ module Context =
     /// The context for type generation.
     /// </summary>
     type Context = 
-    | PartialContext of PartialContext
-    | CompleteContext of CompleteContext
+        { ProvidedType: ProvidedTypeDefinition
+          DatabaseName: DatabaseName
+          TaxonName: TaxonName
+          SpeciesName: SpeciesName
+          AssemblyGroupName: AssemblyGroupName
+          AssemblyName: AssemblyName }
 
         static member Parse (taxon:string) (species:string) (assembly:string) =
             let taxonName = taxon.ToString() |> (fun s -> s.Trim())
@@ -27,108 +31,30 @@ module Context =
             | _ -> (TaxonName.Create taxonName, SpeciesName.Create speciesName, AssemblyName.Create assemblyName)
 
         static member Create (providedType) (database) (taxon) (species) (assembly) = 
-            match taxon, species, assembly with
-            | TaxonPlainName _, SpeciesPlainName _, AssemblyPlainName _ ->
-                CompleteContext ( CompleteContext.Create (providedType) 
-                                                         (database) 
-                                                         (taxon) 
-                                                         (species) 
-                                                         (assembly) )
-            | _ -> PartialContext( PartialContext.Create (providedType) 
-                                                         (database) 
-                                                         (taxon) 
-                                                         (species) 
-                                                         (assembly) )
+            { ProvidedType = providedType
+              DatabaseName = database
+              TaxonName = taxon
+              SpeciesName = species
+              AssemblyGroupName = AssemblyGroupName.Create ()
+              AssemblyName = assembly }
 
-
-    /// <summary>
-    /// A partially complete context - that is, a context containing one or more
-    /// regex attributes.
-    /// </summary>
-    and PartialContext =
-        { ProvidedType: ProvidedTypeDefinition
-          DatabaseName: DatabaseName
-          TaxonName: TaxonName
-          SpeciesName: SpeciesName
-          AssemblyGroupName: AssemblyGroupName
-          AssemblyName: AssemblyName }
-
-        static member Create (providedType) (database) (taxon) (species) (assembly) = 
-            match taxon, species, assembly with
-            | TaxonPlainName _, SpeciesPlainName _, AssemblyPlainName _ -> 
-                failwith "Failed to create Partial Context. One or more of Taxon, Species, or Assembly were expected to be of Regex form."
-            | _ -> { ProvidedType = providedType
-                     DatabaseName = database
-                     TaxonName = taxon
-                     SpeciesName = species
-                     AssemblyGroupName = AssemblyGroupName ( "all_assembly_versions" )
-                     AssemblyName = assembly }  
-
-        member private this.GetDatabasePath () = 
+        member this.GetDatabasePath () =
             "/" + this.DatabaseName.ToString()
 
-        member private this.GetTaxonPath () = 
-            String.concat "/" [
-                this.GetDatabasePath ()
-                this.TaxonName.ToString()
-            ]
+        member this.GetTaxonPath () =
+            String.concat "/" [ this.GetDatabasePath(); this.TaxonName.ToString() ]
 
-        member private this.GetSpeciesPath () = 
-            String.concat "/" [
-                this.GetTaxonPath ()
-                this.SpeciesName.ToString()
-                this.AssemblyGroupName.ToString()
-            ]
+        member this.GetSpeciesPath () =
+            String.concat "/" [ this.GetTaxonPath() 
+                                this.SpeciesName.ToString()
+                                this.AssemblyGroupName.ToString() ]
 
-        member this.GetCompletedPath () =
-            match this.TaxonName, this.SpeciesName, this.AssemblyName with
-            | TaxonRegexName _, _, _ -> this.GetDatabasePath ()
-            | _, SpeciesRegexName _, _ -> this.GetTaxonPath ()
-            | _, _, AssemblyRegexName _ -> this.GetSpeciesPath ()
-            | _ -> failwith "Partial Context error. One or more of Taxon, Species, or Assembly were expected to be of Regex form."
+        member this.GetAssemblyPath () =
+            String.concat "/" [ this.GetSpeciesPath(); this.AssemblyName.ToString() ]
 
-    /// <summary>
-    /// The complete context. All attributes are entirely determined, that is, there
-    /// are no regex attributes.
-    /// </summary>
-    and CompleteContext = 
-       { ProvidedType: ProvidedTypeDefinition
-         DatabaseName: DatabaseName
-         TaxonName: TaxonName
-         SpeciesName: SpeciesName
-         AssemblyGroupName: AssemblyGroupName
-         AssemblyName: AssemblyName }
-
-        static member Create (providedType) (database) (taxon) (species) (assembly) = 
-            match taxon, species, assembly with
-            | TaxonRegexName _, _, _ -> 
-                invalidArg "Taxon" "Failed to create Complete Context. Taxon was expected to be plain."
-            | _, SpeciesRegexName _, _ -> 
-                invalidArg "Species" "Failed to create Complete Context. Species was expected to be plain."
-            | _, _, AssemblyRegexName _ -> 
-                invalidArg "Assembly" "Failed to create Complete Context. Assembly was expected to be plain"
-            | TaxonPlainName _, SpeciesPlainName _, AssemblyPlainName _ -> 
-                { ProvidedType = providedType
-                  DatabaseName = database
-                  TaxonName = taxon
-                  SpeciesName = species
-                  AssemblyGroupName = AssemblyGroupName ( "all_assembly_versions" )
-                  AssemblyName = assembly }
-
-        member this.GetAssemblyPath () = 
-            "/" + String.concat "/" [
-                this.DatabaseName.ToString()
-                this.TaxonName.ToString()
-                this.SpeciesName.ToString()
-                this.AssemblyGroupName.ToString()
-                this.AssemblyName.ToString()
-            ]
-
-        member this.GetGBFFPath () = 
-            String.concat "/" [
-                this.GetAssemblyPath ()
-                this.AssemblyName.ToString() + "_genomic.gbff.gz"
-            ]
+        member this.GetGenomicGBFFPath () =
+            String.concat "/" [ this.GetAssemblyPath() 
+                                this.AssemblyName.ToString() + "_genomic.gbff.gz" ]
 
         
     /// <summary>
