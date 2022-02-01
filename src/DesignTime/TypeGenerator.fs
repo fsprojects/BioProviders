@@ -10,33 +10,31 @@ open BioProviders.DesignTime.Context
 
 module internal TypeGenerator =
 
-    let createGenomicGenBankFlatFileType (path:string) () = 
-    
-        // Initialise the Genomic GBFF type
-        let genomicGBFF = ProvidedTypeDefinition(className = "GenomicGBFF", baseType = Some (typeof<GenomicGenBankFlatFile>))
-        let genomicGBFFHelpText = 
-            """<summary>Typed representation of an Assembly's Genomic GenBank Flat File.</summary>"""
-        genomicGBFF.AddXmlDoc(genomicGBFFHelpText)
-            
-        // Create and add constructor to the Genomic GBFF type
-        let genomicGBFFConstructor = ProvidedConstructor(parameters = [], invokeCode = (fun _ -> <@@ new GenomicGenBankFlatFile(path) @@>))
-        let genomicGBFFConstructorHelpText = 
-            """<summary>Generic constructor to initialise the Genomic GenBank Flat File.</summary>"""
-        genomicGBFFConstructor.AddXmlDoc(genomicGBFFConstructorHelpText)
-        genomicGBFF.AddMember(genomicGBFFConstructor)
-    
-        // Return the Genomic GBFF type
-        genomicGBFF
+    /// <summary>
+    /// Constructs a provided type based on the complete context provided. As the context
+    /// contains no regex fields, a complete assembly type will be returned.
+    /// </summary>
+    /// <param name="context">The complete context for the type generation.</param>
+    let createPlainType (context:CompleteContext) =
+        context.ProvidedType
 
-    let createAssemblyType (context:AssemblyContext) =
-        
-        // Extract information from context
-        let assemblyType = context.ProvidedType
-        let genomicGBFFPath = context.GetGenomicGBFFPath()
 
-        // Add Genomic GBFF to the assembly type
-        let genomicGBFF = createGenomicGenBankFlatFileType genomicGBFFPath
-        assemblyType.AddMemberDelayed(genomicGBFF)
+    /// <summary>
+    /// Constructs a provided type based on the partial context provided. Any context
+    /// fields of a regex type will be replaced by a list of plain types corresponding
+    /// to the regex pattern.
+    /// </summary>
+    /// <param name="context">The partial context for the regex type generation.</param>
+    let createRegexType (context:PartialContext) =
+        context.ProvidedType
 
-        // Return the constructed assembly type
-        assemblyType
+
+    /// <summary>
+    /// Construct the appropriate provided type based on the context of the 
+    /// Type Provider.
+    /// </summary>
+    /// <param name="context">The context of the Type Provider.</param>
+    let createType (context:Context) =
+        match context with 
+        | PartialContext ctx -> createRegexType ctx
+        | CompleteContext ctx -> createPlainType ctx
