@@ -11,7 +11,7 @@ The following databases and their associated datafiles are currently supported:
 
 | Databases | File Types |
 | :-------- |:-----------|
-| GenBank   | <ul><li>GenBank Flat File</li></ul> |
+| GenBank   | - GenBank Flat File |
 
 ## Project Goals
 The BioProviders Project has been developed with the following goals in mind:
