@@ -4,7 +4,7 @@ The BioProviders Project simplifies programmatic access to genomic datasets, ena
 This package contains F# Type Providers for exploring remote genomic data sources and accessing their data files. Parsing of the data is performed by [.NET Bio](https://github.com/dotnetbio/bio). 
 
 ## Releases
-The first release to NuGet is currently in progresss.
+The first release to NuGet is currently in progress.
 
 ## Support
 The following databases and their associated datafiles are currently supported:
@@ -12,16 +12,6 @@ The following databases and their associated datafiles are currently supported:
 | Databases | File Types |
 | :-------- |:-----------|
 | GenBank   | - GenBank Flat File |
-
-## Project Goals
-The BioProviders Project has been developed with the following goals in mind:
-
-* **Convenience**: It is important that the BioProviders package is highly accessible and easy to use. Developers should be able to incorporate the tools and functionality of this package into their own projects with minimal overhead. 
-
-* **Flexibility**: For the BioProviders package to be useful in external applications, it must be flexible. Developers should be able to easily access the information they desire, whether that be searching for a particular assembly, all assemblies of a certain species, or all species of a genus. This flexibility must not occur at the cost of type-safety.
-
-* **Reliability**: The BioProviders package must be reliable. Developers should always be able to expect the outcome of the tools provided.
-
 
 ## Examples
 ### GenBankProvider
