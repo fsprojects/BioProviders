@@ -8,10 +8,13 @@
     <OutputPath>..\..\bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\ITaxon.fs" />
+    <Compile Include="Interfaces\IGenBankFlatFile.fs" />
+    <Compile Include="Interfaces\IAssembly.fs" />
+    <Compile Include="Interfaces\ISpecies.fs" />
+    <Compile Include="GenBankSpecies.fs" />
+    <Compile Include="GenBankFlatFile.fs" />
     <None Include="paket.references" />
-	<Compile Include="..\Common\FTP.fs" />
-	<Compile Include="..\Common\Cache.fs" />
-    <Compile Include="BaseTypes.fs" />
     <Compile Include="RunTime.fs" />
   </ItemGroup>
   <ItemGroup>
@@ -19,6 +22,9 @@
       <IsFSharpDesignTimeProvider>true</IsFSharpDesignTimeProvider>
       <PrivateAssets>all</PrivateAssets>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Implementation\" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

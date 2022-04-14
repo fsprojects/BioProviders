@@ -1,36 +1,42 @@
-﻿// --------------------------------------------------------------------------------------
-// Type Generation.
-// --------------------------------------------------------------------------------------
-
-namespace BioProviders.DesignTime
+﻿namespace BioProviders.DesignTime
 
 open ProviderImplementation.ProvidedTypes
 open BioProviders.RunTime
 open BioProviders.DesignTime.Context
 
+// --------------------------------------------------------------------------------------
+// Type Generation.
+// --------------------------------------------------------------------------------------
+
 module internal TypeGenerator =
 
+    /// <summary>
+    /// Creates a typed representation of a GenBank Flat File.
+    /// </summary>
+    /// <param name="path">The path to the GenBank Flat File.</param>
     let createGenomicGenBankFlatFile (path:string) = 
         
-        // Initialise the Genomic GBFF type
-        let genomicGBFF = ProvidedTypeDefinition(className = "GenomicGBFF", baseType = Some (typeof<GenomicGBFF>))
+        // Initialise the Genomic GBFF type.
+        let genomicGBFF = ProvidedTypeDefinition(className = "GenomicGBFF", baseType = Some (typeof<GenBankFlatFile>))
         let genomicGBFFHelpText = 
             """<summary>Typed representation of an Assembly's Genomic GenBank Flat File.</summary>"""
         genomicGBFF.AddXmlDocDelayed(fun () -> genomicGBFFHelpText)
                 
-        // Create and add constructor to the Genomic GBFF type
-        let genomicGBFFConstructor = ProvidedConstructor(parameters = [], invokeCode = (fun _ -> <@@ new GenomicGBFF(path) @@>))
+        // Create and add constructor to the Genomic GBFF type.
+        let genomicGBFFConstructor = ProvidedConstructor(parameters = [], invokeCode = (fun _ -> <@@ new GenBankFlatFile(path) @@>))
         let genomicGBFFConstructorHelpText = 
             """<summary>Generic constructor to initialise the Genomic GenBank Flat File.</summary>"""
         genomicGBFFConstructor.AddXmlDocDelayed(fun () -> genomicGBFFConstructorHelpText)
         genomicGBFF.AddMemberDelayed(fun () -> genomicGBFFConstructor)
-        
-        // Return the Genomic GBFF type
         genomicGBFF
 
 
+    /// <summary>
+    /// Creates a typed representation of a GenBank Assembly.
+    /// </summary>
+    /// <param name="context">The context for the GenBank Assembly.</param>
     let createAssembly (context:Context) = 
-        // Extract necessary information from context.
+
         let assemblyType = context.ProvidedType
         let genomicGBFFPath = context.GetGenomicGBFFPath()
 
@@ -38,16 +44,17 @@ module internal TypeGenerator =
         let genomicGBFF = createGenomicGenBankFlatFile genomicGBFFPath
         assemblyType.AddMemberDelayed (fun () -> genomicGBFF)
 
-        // Add documentation to assembly type.
+        // Add documentation to assembly type and return.
         let helpText = """<summary>Typed representation of a GenBank assembly.</summary>"""
         assemblyType.AddXmlDocDelayed(fun () -> helpText)
-
-        // Return the constructed assembly type.
         assemblyType
 
 
+    /// <summary>
+    /// Creates a typed representation of a GenBank Species.
+    /// </summary>
+    /// <param name="context">The context for the GenBank Species.</param>
     let createSpecies (context:Context) =
-        // Extract necessary information from context.
         let speciesType = context.ProvidedType
         let database = context.DatabaseName
         let taxon = context.TaxonName
@@ -68,11 +75,9 @@ module internal TypeGenerator =
                             |> List.map(fun context -> createAssembly context)
         speciesType.AddMembersDelayed(fun () -> assemblyTypes)
 
-        // Add documentation to the species type.
+        // Add documentation to the species type and return.
         let helpText = """<summary>Typed representation of a GenBank species.</summary>"""
         speciesType.AddXmlDocDelayed(fun () -> helpText)
-
-        // Return the constructed species type.
         speciesType
 
 

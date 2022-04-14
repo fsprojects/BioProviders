@@ -1,10 +1,10 @@
-﻿// --------------------------------------------------------------------------------------
-// Design-Time Context State Types.
-// --------------------------------------------------------------------------------------
-
-namespace BioProviders.DesignTime
+﻿namespace BioProviders.DesignTime
 
 open ProviderImplementation.ProvidedTypes
+
+// --------------------------------------------------------------------------------------
+// Design-Time Context State Types.
+// --------------------------------------------------------------------------------------
 
 module Context =
 
