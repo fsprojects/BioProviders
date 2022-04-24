@@ -13,6 +13,7 @@ type ICache =
     abstract SaveDirectory : string -> FtpStatus
     abstract SaveFile : string -> FtpStatus
     abstract Purge : unit -> unit
+    abstract Update : string -> unit
 
 // --------------------------------------------------------------------------------------
 // Cache Helpers.
@@ -45,6 +46,8 @@ module CacheHelpers =
         FTP.downloadGenBankDirectory(cachePath, path)
 
     let clearCache () = ()
+
+    let updateCache (path:string) = ()
   
 // --------------------------------------------------------------------------------------
 // Cache Implementation.
@@ -59,6 +62,8 @@ type Cache () =
         member __.SaveDirectory (path:string) = saveCacheDirectory path
 
         member __.Purge () = clearCache ()
+
+        member __.Update (server:string) = updateCache server
 
         member this.LoadFile (path:string) =
             match loadCacheFile (path) with
