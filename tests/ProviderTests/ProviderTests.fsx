@@ -1,30 +1,30 @@
 #I "../../bin/Debug/netstandard2.0"
-#r "Bio.Core.dll"
 #r "FSharp.Data.dll"
 
 open BioProviders
 
-//-------------------------------------------------------------//
-//  Creating a type for a single Assembly.                     //
-//-------------------------------------------------------------//
+// --------------------------------------------------------------------------------------
+// Creating a type for a single Assembly.   
+// --------------------------------------------------------------------------------------
 
 let [<Literal>] taxon = "bacteria"
 let [<Literal>] species = "Staphylococcus_borealis"
 let [<Literal>] assembly = "GCA_003042555.1_ASM304255v1"
 
-type Assembly304255Type = GenBankProvider<taxon, species, assembly>
+type Assembly = GenBankProvider<taxon, species, assembly>
 
-let genome304255 = Assembly304255Type.GenomicGBFF()
+let gbff = Assembly.GenBankFlatFile()
 
-//-------------------------------------------------------------//
-//  Creating a type for multiple Assemblies.                   //
-//-------------------------------------------------------------//
 
-let [<Literal>] assemblyWildcard = "GCA*"
+// --------------------------------------------------------------------------------------
+// Creating a type for multiple Assemblies.  
+// --------------------------------------------------------------------------------------
 
-type SpeciesType = GenBankProvider<taxon, species, assemblyWildcard>
+// Match all assemblies starting with GCA_013...
+let [<Literal>] assemblyWildcard = "GCA_013*"
 
-type Assembly358083Type = SpeciesType.``GCA_003580835.1_ASM358083v1``
+type Assemblies = GenBankProvider<taxon, species, assemblyWildcard>
+type AssemblyType = Assemblies.``GCA_013345165.1_ASM1334516v1``
 
-let genome358083 = Assembly358083Type.GenomicGBFF()
+let genbankFlatFile = AssemblyType.GenBankFlatFile()
 
