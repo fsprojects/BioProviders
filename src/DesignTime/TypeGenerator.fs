@@ -1,7 +1,7 @@
 ﻿namespace BioProviders.DesignTime
 
 open ProviderImplementation.ProvidedTypes
-open BioProviders.RunTime
+open BioProviders.RunTime.BaseTypes
 open BioProviders.DesignTime.Context
 
 // --------------------------------------------------------------------------------------
@@ -11,13 +11,47 @@ open BioProviders.DesignTime.Context
 module internal TypeGenerator =
 
     /// <summary>
+    /// Creates a typed representation of a GenBank Flat File Sequence.
+    /// </summary>
+    let createGenomicGenBankFlatFileSequence () = 
+
+        // Initialise the Genomic GBFF Sequence type.
+        let genomicGBFFSequence = ProvidedProperty(
+                                    propertyName = "Sequence", 
+                                    propertyType = typeof<IGenBankSequence>,
+                                    getterCode = fun args -> <@@ ((%%args.[0]:obj) :?> GenBankFlatFile).Sequence @@>)
+        let genomicGBFFSequenceHelpText = 
+            """<summary>Typed representation of a Genomic GenBank Flat File Sequence.</summary>"""
+        genomicGBFFSequence.AddXmlDocDelayed(fun () -> genomicGBFFSequenceHelpText)
+
+        genomicGBFFSequence
+
+
+    /// <summary>
+    /// Creates a typed representation of GenBank Flat File Metadata.
+    /// </summary>
+    let createGenomicGenBankFlatFileMetadata () = 
+
+        // Initialise the Genomic GBFF Metadata type.
+        let genomicGBFFMetadata = ProvidedProperty(
+                                    propertyName = "Metadata", 
+                                    propertyType = typeof<IGenBankMetadata>, 
+                                    getterCode = fun args -> <@@ ((%%args.[0]:obj) :?> GenBankFlatFile).Metadata @@>)
+        let genomicGBFFMetadataHelpText = 
+            """<summary>Typed representation of Genomic GenBank Flat File Metadata.</summary>"""
+        genomicGBFFMetadata.AddXmlDocDelayed(fun () -> genomicGBFFMetadataHelpText)        
+
+        genomicGBFFMetadata
+
+
+    /// <summary>
     /// Creates a typed representation of a GenBank Flat File.
     /// </summary>
     /// <param name="path">The path to the GenBank Flat File.</param>
     let createGenomicGenBankFlatFile (path:string) = 
         
         // Initialise the Genomic GBFF type.
-        let genomicGBFF = ProvidedTypeDefinition(className = "GenomicGBFF", baseType = Some (typeof<GenBankFlatFile>))
+        let genomicGBFF = ProvidedTypeDefinition(className = "GenBankFlatFile", baseType = Some (typeof<obj>), hideObjectMethods = true)
         let genomicGBFFHelpText = 
             """<summary>Typed representation of an Assembly's Genomic GenBank Flat File.</summary>"""
         genomicGBFF.AddXmlDocDelayed(fun () -> genomicGBFFHelpText)
@@ -28,6 +62,15 @@ module internal TypeGenerator =
             """<summary>Generic constructor to initialise the Genomic GenBank Flat File.</summary>"""
         genomicGBFFConstructor.AddXmlDocDelayed(fun () -> genomicGBFFConstructorHelpText)
         genomicGBFF.AddMemberDelayed(fun () -> genomicGBFFConstructor)
+
+        // Create and add Genomic GBFF Sequence.
+        let genomicGBFFSequence = createGenomicGenBankFlatFileSequence ()
+        genomicGBFF.AddMemberDelayed(fun () -> genomicGBFFSequence)
+
+        // Create and add Genomic GBFF Metadata.
+        let genomicGBFFMetadata = createGenomicGenBankFlatFileMetadata ()
+        genomicGBFF.AddMemberDelayed(fun () -> genomicGBFFMetadata)
+
         genomicGBFF
 
 
@@ -63,15 +106,15 @@ module internal TypeGenerator =
         let speciesPath = context.GetSpeciesPath()
 
         // Determine all assembly names for the given species.
-        let assemblyNames = Species(speciesPath, assembly.ToString())
+        let assemblyNames = GenBankSpecies.Create speciesPath (assembly.ToString())
                             |> (fun species -> species.Assemblies)
                             |> List.map (fun name -> AssemblyName.Create name)
 
         // Add assembly types to the species.
         let assemblyTypes = assemblyNames 
                             |> List.map(fun assemblyName -> 
-                                let assemblyType = ProvidedTypeDefinition(assemblyName.ToString(), Some typeof<obj>)
-                                Context.Create assemblyType database taxon species assemblyName)
+                                    let assemblyType = ProvidedTypeDefinition(assemblyName.ToString(), Some typeof<obj>)
+                                    Context.Create assemblyType database taxon species assemblyName)
                             |> List.map(fun context -> createAssembly context)
         speciesType.AddMembersDelayed(fun () -> assemblyTypes)
 
@@ -88,7 +131,7 @@ module internal TypeGenerator =
     /// <param name="context">The context of the Type Provider.</param>
     let createType (context:Context) =
         match context.TaxonName, context.SpeciesName, context.AssemblyName with
-        | TaxonRegexName _, _, _ -> context.ProvidedType
-        | _, SpeciesRegexName _, _ -> context.ProvidedType
+        | TaxonRegexName _, _, _ -> failwith "Wildcards are currently not supported for Taxon name."
+        | _, SpeciesRegexName _, _ -> failwith "Wildcards are currently not supported for Species name."
         | _, _, AssemblyRegexName _ -> createSpecies context
         | TaxonPlainName _, SpeciesPlainName _, AssemblyPlainName _ -> createAssembly context
