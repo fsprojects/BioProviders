@@ -8,12 +8,12 @@ open BioProviders
 // --------------------------------------------------------------------------------------
 
 let [<Literal>] taxon = "bacteria"
-let [<Literal>] species = "Staphylococcus_borealis"
-let [<Literal>] assembly = "GCA_003042555.1_ASM304255v1"
+let [<Literal>] species = "Staphylococcus_lugdunensis"
+let [<Literal>] assembly = "GCA_000025085.1_ASM2508v1"
 
 type Assembly = GenBankProvider<taxon, species, assembly>
 
-let gbff = Assembly.GenBankFlatFile()
+let gbff = Assembly.Genome()
 
 
 // --------------------------------------------------------------------------------------
@@ -21,10 +21,10 @@ let gbff = Assembly.GenBankFlatFile()
 // --------------------------------------------------------------------------------------
 
 // Match all assemblies starting with GCA_013...
-let [<Literal>] assemblyWildcard = "GCA_013*"
+let [<Literal>] assemblyWildcard = "GCA_000*"
 
 type Assemblies = GenBankProvider<taxon, species, assemblyWildcard>
-type AssemblyType = Assemblies.``GCA_013345165.1_ASM1334516v1``
+type AssemblyType = Assemblies.``GCA_000025085.1_ASM2508v1``
 
-let genbankFlatFile = AssemblyType.GenBankFlatFile()
+let genbankFlatFile = AssemblyType.Genome()
 
