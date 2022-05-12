@@ -7,6 +7,11 @@ The F# BioProviders simplify programmatic access to genomic datasets.
 
 
 ## Build
+Install .Net SDK 3.0.100 or higher
 
+Windows:
+1. Run `dotnet tool restore`
+2. Run `dotnet paket install`
+3. Run `dotnet build ".\BioProviders.sln"`
 
 ## Documentation
