@@ -14,7 +14,7 @@ type public GenBankProvider (config:TypeProviderConfig) as this =
     // Inherit basic Type Provider functionality and type construction.
     inherit TypeProviderForNamespaces(
         config, 
-        assemblyReplacementMap=[("FSharp.Data.DesignTime", "FSharp.Data")], 
+        assemblyReplacementMap=[("BioProviders.DesignTime", "BioProviders")], 
         addDefaultProbingLocation=true
     )
 

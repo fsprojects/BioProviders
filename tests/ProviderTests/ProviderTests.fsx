@@ -1,5 +1,5 @@
 #I "../../bin/Debug/netstandard2.0"
-#r "FSharp.Data.dll"
+#r "BioProviders.dll"
 
 open BioProviders
 

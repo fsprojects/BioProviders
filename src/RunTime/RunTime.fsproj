@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <AssemblyName>FSharp.Data</AssemblyName>
-    <Name>FSharp.Data</Name>
+    <AssemblyName>BioProviders</AssemblyName>
+    <Name>BioProviders</Name>
     <OutputPath>..\..\bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
