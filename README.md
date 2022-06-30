@@ -1,6 +1,6 @@
 # BioProviders
 
-[![Made with F#](https://img.shields.io/badge/Made%20with-FSharp-rgb(184,69,252).svg)](https://fsharp.org/) [![NuGet Status](https://img.shields.io/nuget/v/BioProviders.svg)](https://www.nuget.org/packages/BioProviders/) ![[GitHub contributors](https://img.shields.io/github/contributors/AlexKenna/BioProviders.svg)](https://github.com/AlexKenna/BioProviders/graphs/contributors)
+[![Made with F#](https://img.shields.io/badge/Made%20with-FSharp-rgb(184,69,252).svg)](https://fsharp.org/) [![NuGet Status](https://img.shields.io/nuget/v/BioProviders.svg)](https://www.nuget.org/packages/BioProviders/) [![GitHub contributors](https://img.shields.io/github/contributors/AlexKenna/BioProviders.svg)](https://github.com/AlexKenna/BioProviders/graphs/contributors)
 
 The F# BioProviders simplify programmatic access to genomic datasets.
 
