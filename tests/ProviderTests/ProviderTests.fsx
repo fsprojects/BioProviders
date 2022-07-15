@@ -4,11 +4,10 @@
 open BioProviders
 
 // Generate the Assembly Type
-let [<Literal>] Taxon = "bacteria"
-let [<Literal>] Species = "Staphylococcus_lugdunensis"
-let [<Literal>] Assembly = "GCA_000185485.1_ASM18548v1"
+let [<Literal>] Species = "Staphylococcus lugdunensis"
+let [<Literal>] Accession = "GCA_001546615.1"
 
-type AssemblyType = GenBankProvider<Taxon, Species, Assembly>
+type AssemblyType = GenBankProvider<Species, Accession>
 
 
 // Use the Assembly Type

@@ -60,7 +60,10 @@ module internal TypeGenerator =
     let createAssembly (context:Context) = 
 
         let assemblyType = context.ProvidedType
-        let genomicGBFFPath = context.GetGenomicGBFFPath()
+        let databasePath = context.DatabaseName.GetPath()
+        let speciesName = context.SpeciesName.ToString()
+        let accession = context.Accession.ToString()
+        let genomicGBFFPath = (GenBankAssembly.Create databasePath speciesName accession).GenBankFlatFilePath
 
         // Add the genomic GenBank flat file to the assembly type.
         let genomicGBFF = createGenomicGenBankFlatFile genomicGBFFPath
@@ -73,44 +76,12 @@ module internal TypeGenerator =
 
 
     /// <summary>
-    /// Creates a typed representation of a GenBank Species.
-    /// </summary>
-    /// <param name="context">The context for the GenBank Species.</param>
-    let createSpecies (context:Context) =
-        let speciesType = context.ProvidedType
-        let database = context.DatabaseName
-        let taxon = context.TaxonName
-        let species = context.SpeciesName
-        let assembly = context.AssemblyName
-        let speciesPath = context.GetSpeciesPath()
-
-        // Determine all assembly names for the given species.
-        let assemblyNames = GenBankSpecies.Create speciesPath (assembly.ToString())
-                            |> (fun species -> species.Assemblies)
-                            |> List.map (fun name -> AssemblyName.Create name)
-
-        // Add assembly types to the species.
-        let assemblyTypes = assemblyNames 
-                            |> List.map(fun assemblyName -> 
-                                    let assemblyType = ProvidedTypeDefinition(assemblyName.ToString(), Some typeof<obj>)
-                                    Context.Create assemblyType database taxon species assemblyName)
-                            |> List.map(fun context -> createAssembly context)
-        speciesType.AddMembersDelayed(fun () -> assemblyTypes)
-
-        // Add documentation to the species type and return.
-        let helpText = """<summary>Typed representation of a GenBank species.</summary>"""
-        speciesType.AddXmlDocDelayed(fun () -> helpText)
-        speciesType
-
-
-    /// <summary>
     /// Construct the appropriate provided type based on the context of the 
     /// Type Provider.
     /// </summary>
     /// <param name="context">The context of the Type Provider.</param>
     let createType (context:Context) =
-        match context.TaxonName, context.SpeciesName, context.AssemblyName with
-        | TaxonRegexName _, _, _ -> failwith "Wildcards are currently not supported for Taxon name."
-        | _, SpeciesRegexName _, _ -> failwith "Wildcards are currently not supported for Species name."
-        | _, _, AssemblyRegexName _ -> createSpecies context
-        | TaxonPlainName _, SpeciesPlainName _, AssemblyPlainName _ -> createAssembly context
+        match context.SpeciesName, context.Accession with
+        | SpeciesRegexName _, _ -> failwith "Wildcards are currently not supported for Species names."
+        | _, AssemblyRegexName _ -> failwith "Wildcards are currently not supported for Assembly names."
+        | SpeciesPlainName _, AssemblyPlainName _ -> createAssembly context

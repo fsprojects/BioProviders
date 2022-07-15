@@ -6,22 +6,6 @@ open System.Reflection
 
 module Data = 
 
-    // ----------------------------------------------------------------------------------
-    // Data.
-    // ----------------------------------------------------------------------------------
-    
-    let possibleTaxons = [
-        "archae"
-        "bacteria"
-        "fungi"
-        "invertebrate"
-        "plant"
-        "protozoa"
-        "vertebrate_mammalian"
-        "vertebrate_other"
-        "viral"
-    ]
-
     let possibleArchaeSpecies = [
         "Aigarchaeota_archaeon_SCGC_AAA471-E14"
         "Candidatus_Aenigmarchaeota_archaeon_JGI_0000106-F11"
@@ -309,7 +293,7 @@ module Data =
         "\t\f\n \t  \f\r"
     ]
 
-    let possibleNames = List.concat [ possibleTaxons; possibleSpecies; possibleAssemblies ]
+    let possibleNames = List.concat [ possibleSpecies; possibleAssemblies ]
    
 
     // ----------------------------------------------------------------------------------
@@ -322,19 +306,11 @@ module Data =
     let generatePlainName () =
         FsCheck.Gen.elements possibleNames
 
-    let generatePlainTaxonString () = 
-        FsCheck.Gen.elements possibleTaxons
-
     let generatePlainSpeciesString () = 
         FsCheck.Gen.elements possibleSpecies
 
     let generatePlainAssemblyString () = 
         FsCheck.Gen.elements possibleAssemblies
-
-    let generateRegexTaxonString () = 
-        possibleTaxons
-        |> List.map (fun taxon -> taxon + "*")
-        |> FsCheck.Gen.elements
 
     let generateRegexSpeciesString () = 
         possibleSpecies
@@ -358,18 +334,6 @@ module Data =
         [ RefSeq; GenBank ]
         |> FsCheck.Gen.elements
 
-    let generatePlainTaxon () = 
-        (generatePlainTaxonString ())
-        |> FsCheck.Gen.map (fun taxon -> TaxonName.Create taxon)
-
-    let generateRegexTaxon () = 
-        (generateRegexTaxonString ())
-        |> FsCheck.Gen.map (fun taxon -> TaxonName.Create taxon)
-
-    let generateEmptyTaxon () = 
-        (generateEmptyString ())
-        |> FsCheck.Gen.map (fun taxon -> TaxonName.Create taxon)
-
     let generatePlainSpecies () = 
         (generatePlainSpeciesString ())
         |> FsCheck.Gen.map (fun species -> SpeciesName.Create species)
@@ -384,15 +348,15 @@ module Data =
 
     let generatePlainAssembly () = 
         (generatePlainAssemblyString ())
-        |> FsCheck.Gen.map (fun assembly -> AssemblyName.Create assembly)
+        |> FsCheck.Gen.map (fun assembly -> Accession.Create assembly)
 
     let generateRegexAssembly () = 
         (generateRegexAssemblyString ())
-        |> FsCheck.Gen.map (fun assembly -> AssemblyName.Create assembly)
+        |> FsCheck.Gen.map (fun assembly -> Accession.Create assembly)
 
     let generateEmptyAssembly () = 
         (generateEmptyString ())
-        |> FsCheck.Gen.map (fun assembly -> AssemblyName.Create assembly)
+        |> FsCheck.Gen.map (fun assembly -> Accession.Create assembly)
 
     let generateContext () = 
         let (<!>) = FsCheck.Gen.map
@@ -408,13 +372,11 @@ module Data =
 
         let providedType = generateProvidedType ()
         let database = generateDatabase ()
-        let taxon = if (List.contains 0 regexFields) then generateRegexTaxon () else generatePlainTaxon ()
         let species = if (List.contains 1 regexFields) then generateRegexSpecies () else generatePlainSpecies ()
         let assembly = if (List.contains 2 regexFields) then generateRegexAssembly () else generatePlainAssembly ()
 
         Context.Create 
         <!> providedType
         <*> database
-        <*> taxon
         <*> species
         <*> assembly

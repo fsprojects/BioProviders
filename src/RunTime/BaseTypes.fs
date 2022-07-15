@@ -2,7 +2,6 @@
 
 open System.IO
 open System.Collections.Generic
-open System.Text.RegularExpressions
 open Bio.IO.GenBank
 open BioProviders.Common
 
@@ -53,11 +52,9 @@ module BaseTypes =
 
     type GenBankGenome (path:string) =
 
-        let cache = new Cache()
-        
         // Create DotNet Bio ISequence for the GenBank Flat File.
         let sequence = 
-            (cache :> ICache).LoadFile(path)
+            CacheAccess.loadFile path
             |> (fun stream -> new Compression.GZipStream(stream, Compression.CompressionMode.Decompress))
             |> (new GenBankParser()).Parse
             |> Seq.cast<Bio.ISequence>
@@ -70,37 +67,36 @@ module BaseTypes =
     // GenBank Assembly Representation.
     // ----------------------------------------------------------------------------------
 
+    type IGenBankAssembly = 
+        abstract Accession : string
+        abstract AssemblyPath : string
+        abstract GenBankFlatFilePath : string
+
+
+    type GenBankAssembly =
+
+        private { Accession: string
+                  AssemblyPath: string
+                  GenBankFlatFilePath: string}
+
+        interface IGenBankAssembly with
+            member x.Accession = x.Accession
+            member x.AssemblyPath = x.AssemblyPath
+            member x.GenBankFlatFilePath = x.GenBankFlatFilePath
+
+        static member Create (databasePath:string) (speciesName:string) (accession:string) =  
+            let assemblyPath = CacheAccess.getAssemblyPath speciesName accession
+                               |> (fun path -> $"/{databasePath}/{path}")
+            let genbankFlatFilePath = assemblyPath.Split('/')
+                                      |> (fun parts -> parts.[parts.Length - 1])
+                                      |> (fun identifier -> $"{assemblyPath}/{identifier}_genomic.gbff.gz")
+
+            { Accession = accession 
+              AssemblyPath = assemblyPath 
+              GenBankFlatFilePath = genbankFlatFilePath } :> IGenBankAssembly
+
 
     // ----------------------------------------------------------------------------------
     // GenBank Species Representation.
     // ----------------------------------------------------------------------------------
 
-    type IGenBankSpecies = 
-        abstract Assemblies : string list
-
-    type GenBankSpecies = 
-
-        private { AssemblyList: string list }
-
-        interface IGenBankSpecies with
-            member x.Assemblies = x.AssemblyList
-
-        static member Create (path:string) (pattern:string) = 
-            let cache = new Cache()
-
-            let regex = match pattern with
-                        | _ when pattern.Length = 0 || pattern.[pattern.Length - 1] <> '*' -> failwith ""
-                        | _ -> pattern.Substring(0, pattern.Length - 1) + ".*"
-
-            let assemblies = (cache :> ICache).LoadDirectory(path)
-                             |> fun stream -> 
-                                    ( seq { use sr = new StreamReader (stream)
-                                            while not sr.EndOfStream do
-                                            yield sr.ReadLine () } ) 
-                             |> Seq.filter (fun assembly -> 
-                                                match assembly with
-                                                | _ when Regex.IsMatch(assembly, regex) -> true
-                                                | _ -> false)
-                             |> Seq.toList
-
-            { AssemblyList = assemblies } :> IGenBankSpecies
