@@ -1,4 +1,4 @@
-framework: net5.0, netstandard2.0
+framework: net6.0, netstandard2.0
 source https://api.nuget.org/v3/index.json
 
 nuget FSharp.Core >= 5.0.1 lowest_matching: true
@@ -14,10 +14,10 @@ group Utility
 	nuget NetBio.Core
 
 group Test
-    frameworks: net5.0
+    frameworks: net6.0
     source https://api.nuget.org/v3/index.json
 
-    nuget FSharp.Core 5.0.1
+    nuget FSharp.Core 6.0.5
     nuget Microsoft.NET.Test.Sdk
     nuget NUnit 3.13.1
     nuget NUnit3TestAdapter
