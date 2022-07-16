@@ -77,19 +77,25 @@ module BaseTypes =
 
         private { Accession: string
                   AssemblyPath: string
-                  GenBankFlatFilePath: string}
+                  GenBankFlatFilePath: string }
 
         interface IGenBankAssembly with
             member x.Accession = x.Accession
             member x.AssemblyPath = x.AssemblyPath
             member x.GenBankFlatFilePath = x.GenBankFlatFilePath
 
+        static member CreateAssemblyPath (databasePath:string) (assemblyPath:string) = 
+            $"/{databasePath}/{assemblyPath}"
+
+        static member CreateGenBankFlatFilePath (assemblyPath:string) = 
+            assemblyPath.Split('/')
+            |> (fun parts -> parts.[parts.Length - 1])
+            |> (fun identifier -> $"{assemblyPath}/{identifier}_genomic.gbff.gz")
+
         static member Create (databasePath:string) (speciesName:string) (accession:string) =  
             let assemblyPath = CacheAccess.getAssemblyPath speciesName accession
-                               |> (fun path -> $"/{databasePath}/{path}")
-            let genbankFlatFilePath = assemblyPath.Split('/')
-                                      |> (fun parts -> parts.[parts.Length - 1])
-                                      |> (fun identifier -> $"{assemblyPath}/{identifier}_genomic.gbff.gz")
+                               |> GenBankAssembly.CreateAssemblyPath databasePath
+            let genbankFlatFilePath = GenBankAssembly.CreateGenBankFlatFilePath assemblyPath
 
             { Accession = accession 
               AssemblyPath = assemblyPath 
@@ -100,3 +106,39 @@ module BaseTypes =
     // GenBank Species Representation.
     // ----------------------------------------------------------------------------------
 
+    type IGenBankSpecies = 
+        abstract SpeciesName : string
+        abstract Assemblies : IGenBankAssembly list
+
+
+    type GenBankSpecies = 
+        
+        private { SpeciesName: string
+                  Assemblies: IGenBankAssembly list }
+
+        interface IGenBankSpecies with
+            member x.SpeciesName = x.SpeciesName
+            member x.Assemblies = x.Assemblies
+        
+        static member Create (databasePath:string) (speciesName:string) (accessionPattern:string) = 
+            let createAssembly (accession:string, assemblyPath:string) =
+                let assemblyPath = GenBankAssembly.CreateAssemblyPath databasePath assemblyPath
+                let genbankFlatFilePath = GenBankAssembly.CreateGenBankFlatFilePath assemblyPath
+                { Accession = accession
+                  AssemblyPath = assemblyPath
+                  GenBankFlatFilePath = genbankFlatFilePath } :> IGenBankAssembly
+
+            let pattern = match accessionPattern with
+                          | _ when accessionPattern.Length = 0 || accessionPattern.[accessionPattern.Length - 1] <> '*' -> failwith ""
+                          | _ -> accessionPattern.Substring(0, accessionPattern.Length - 1) + ".*"
+
+            let assemblies = CacheAccess.getAssemblies speciesName pattern
+                             |> List.map (fun assembly -> createAssembly assembly)
+            
+            { SpeciesName = speciesName 
+              Assemblies = assemblies } :> IGenBankSpecies
+
+
+    // ----------------------------------------------------------------------------------
+    // GenBank Species Collection Representation.
+    // ----------------------------------------------------------------------------------

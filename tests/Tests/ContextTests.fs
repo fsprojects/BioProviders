@@ -96,22 +96,22 @@ type Context() =
     [<Test>]
     member __.``Parse - Plain Assembly name`` () = 
         Context.Parse plainSpeciesString plainAssemblyString
-        |> (function | (_, AssemblyPlainName _) -> Assert.Pass()
-                     | (_, AssemblyRegexName _) -> Assert.Fail())
+        |> (function | (_, AccessionPlainName _) -> Assert.Pass()
+                     | (_, AccessionRegexName _) -> Assert.Fail())
 
         Context.Parse regexSpeciesString plainAssemblyString
-        |> (function | (_, AssemblyPlainName _) -> Assert.Pass()
-                     | (_, AssemblyRegexName _) -> Assert.Fail())
+        |> (function | (_, AccessionPlainName _) -> Assert.Pass()
+                     | (_, AccessionRegexName _) -> Assert.Fail())
 
     [<Test>]
     member __.``Parse - Regex Assembly name`` () = 
         Context.Parse plainSpeciesString regexAssemblyString
-        |> (function | (_, AssemblyPlainName _) -> Assert.Fail()
-                     | (_, AssemblyRegexName _) -> Assert.Pass())
+        |> (function | (_, AccessionPlainName _) -> Assert.Fail()
+                     | (_, AccessionRegexName _) -> Assert.Pass())
 
         Context.Parse regexSpeciesString regexAssemblyString
-        |> (function | (_, AssemblyPlainName _) -> Assert.Fail()
-                     | (_, AssemblyRegexName _) -> Assert.Pass())
+        |> (function | (_, AccessionPlainName _) -> Assert.Fail()
+                     | (_, AccessionRegexName _) -> Assert.Pass())
 
 
     [<Test>]
@@ -124,34 +124,34 @@ type Context() =
 
         Context.Parse paddedPlainSpecies paddedPlainAssembly
         |> should equal (SpeciesPlainName plainSpeciesString, 
-                         AssemblyPlainName plainAssemblyString)
+                         AccessionPlainName plainAssemblyString)
 
         Context.Parse paddedRegexSpecies paddedPlainAssembly
         |> should equal (SpeciesRegexName regexSpeciesString, 
-                         AssemblyPlainName plainAssemblyString)
+                         AccessionPlainName plainAssemblyString)
 
         Context.Parse paddedPlainSpecies paddedRegexAssembly
         |> should equal (SpeciesPlainName plainSpeciesString, 
-                         AssemblyRegexName regexAssemblyString)
+                         AccessionRegexName regexAssemblyString)
 
         Context.Parse paddedRegexSpecies paddedRegexAssembly
         |> should equal (SpeciesRegexName regexSpeciesString, 
-                         AssemblyRegexName regexAssemblyString)
+                         AccessionRegexName regexAssemblyString)
 
     [<Test>]
     member __.``Parse - Empty Assembly should be replaced by regex *`` () = 
         Context.Parse plainSpeciesString emptyAssemblyString
-        |> (function | (_, AssemblyRegexName "*") -> Assert.Pass()
+        |> (function | (_, AccessionRegexName "*") -> Assert.Pass()
                      | _ -> Assert.Fail())
 
         Context.Parse regexSpeciesString emptyAssemblyString
-        |> (function | (_, AssemblyRegexName "*") -> Assert.Pass()
+        |> (function | (_, AccessionRegexName "*") -> Assert.Pass()
                      | _ -> Assert.Fail())
 
     [<Test>]
     member __.``Parse - Empty Species should be replaced by regex * (Given Assembly also empty)`` () = 
         Context.Parse emptySpeciesString emptyAssemblyString
-        |> (function | (SpeciesRegexName "*", AssemblyRegexName "*") -> Assert.Pass()
+        |> (function | (SpeciesRegexName "*", AccessionRegexName "*") -> Assert.Pass()
                      | _ -> Assert.Fail())
 
 
@@ -317,8 +317,8 @@ type AssemblyName() =
         |> List.map (fun a -> Accession.Create a)
         |> Seq.iter (fun a ->
                         match a with
-                        | AssemblyPlainName _ -> Assert.Fail()
-                        | AssemblyRegexName _ -> Assert.Pass())
+                        | AccessionPlainName _ -> Assert.Fail()
+                        | AccessionRegexName _ -> Assert.Pass())
         
     [<Test>]
     member __.``Create - Strings not ending in * should return Plain Assembly Name`` () =
@@ -326,8 +326,8 @@ type AssemblyName() =
         |> List.map (fun a -> Accession.Create a)
         |> Seq.iter (fun a ->
                         match a with
-                        | AssemblyPlainName _ -> Assert.Pass()
-                        | AssemblyRegexName _ -> Assert.Fail())
+                        | AccessionPlainName _ -> Assert.Pass()
+                        | AccessionRegexName _ -> Assert.Fail())
 
     [<Test>]
     member __.``Create - Strings containing * anywhere other than end should return Plain Assembly Name`` () =
@@ -336,8 +336,8 @@ type AssemblyName() =
         |> List.map (fun a -> Accession.Create a)
         |> Seq.iter (fun a ->
                         match a with
-                        | AssemblyPlainName _ -> Assert.Pass()
-                        | AssemblyRegexName _ -> Assert.Fail())
+                        | AccessionPlainName _ -> Assert.Pass()
+                        | AccessionRegexName _ -> Assert.Fail())
 
     [<Test>]
     member __.``Create - Empty string should return Regex Assembly Name of *`` () =
@@ -345,8 +345,8 @@ type AssemblyName() =
         |> List.map (fun a -> Accession.Create a)
         |> Seq.iter (fun a ->
                         match a with
-                        | AssemblyPlainName _ -> Assert.Fail()
-                        | AssemblyRegexName _ -> Assert.Pass())
+                        | AccessionPlainName _ -> Assert.Fail()
+                        | AccessionRegexName _ -> Assert.Pass())
 
     [<Test>]
     member __.``ToString - Should always return string used to create the Assembly Name`` () =

@@ -86,15 +86,15 @@ module Context =
     /// Typed representation of the Assembly.
     /// </summary>
     and Accession = 
-    | AssemblyPlainName of string
-    | AssemblyRegexName of string
+    | AccessionPlainName of string
+    | AccessionRegexName of string
 
         static member Create (assembly:string) = 
             match Name.Create assembly with
-            | PlainName name -> AssemblyPlainName name
-            | RegexName name -> AssemblyRegexName name
+            | PlainName name -> AccessionPlainName name
+            | RegexName name -> AccessionRegexName name
 
         override this.ToString() = 
             match this with
-            | AssemblyPlainName name -> name
-            | AssemblyRegexName name -> name
+            | AccessionPlainName name -> name
+            | AccessionRegexName name -> name

@@ -1,5 +1,6 @@
 ﻿namespace BioProviders.Common
 
+open System.Text.RegularExpressions
 open System.IO
 open FluentFTP
 
@@ -13,7 +14,6 @@ type private ICache =
     abstract SaveDirectory : string -> FtpStatus
     abstract SaveFile : string -> FtpStatus
     abstract Purge : unit -> unit
-    abstract Update : string -> unit
 
 // --------------------------------------------------------------------------------------
 // Cache Helpers.
@@ -56,8 +56,6 @@ module private CacheHelpers =
         FTP.downloadGenBankDirectory(cachePath, path)
 
     let clearCache () = ()
-
-    let updateCache (path:string) = ()
   
 // --------------------------------------------------------------------------------------
 // Cache Implementation.
@@ -72,8 +70,6 @@ type private Cache () =
         member __.SaveDirectory (path:string) = saveCacheDirectory path
 
         member __.Purge () = clearCache ()
-
-        member __.Update (server:string) = updateCache server
 
         member this.LoadFile (path:string) =
             match loadCacheFile (path) with
@@ -112,11 +108,13 @@ module CacheAccess =
             |> (fun gzipStream -> 
                     use stream = new StreamReader(gzipStream)
                     let rec checkLine () =
-                        let line = stream.ReadLine()
-                        let info = line.Split(',')
-                        if info.[1] <> speciesName then
-                            checkLine()
-                        else info.[0]
+                        if not stream.EndOfStream then
+                            let line = stream.ReadLine()
+                            let info = line.Split(',')
+                            if info.[1] <> speciesName then
+                                checkLine()
+                            else info.[0]
+                        else invalidOp "The species could not be found. Check the species name is correct."
                     checkLine())
 
     let getAssemblyPath (speciesName:string) (accession:string) = 
@@ -131,9 +129,33 @@ module CacheAccess =
             |> (fun gzipStream -> 
                     use stream = new StreamReader(gzipStream)
                     let rec checkLine () =
-                        let line = stream.ReadLine()
-                        let info = line.Split(',')
-                        if info.[0] <> speciesID || info.[1] <> accession then
-                            checkLine()
-                        else info.[2]
+                        if not stream.EndOfStream then
+                            let line = stream.ReadLine()
+                            let info = line.Split(',')
+                            if info.[0] <> speciesID || info.[1] <> accession then
+                                checkLine()
+                            else info.[2]
+                        else invalidOp "The assembly could not be found. Check the accession is correct."
                     checkLine())
+
+    let getAssemblies (speciesName:string) (accessionPattern:string) = 
+        let speciesID = getSpeciesID speciesName
+        let assemblyLookupFile = getAssemblyLookupFilePath speciesName
+
+        match CacheHelpers.loadFile assemblyLookupFile with
+        | None -> invalidOp "Could not load assembly lookup file."
+        | Some data -> 
+            data :> Stream
+            |> (fun stream -> new Compression.GZipStream(stream, Compression.CompressionMode.Decompress)) 
+            |> (fun gzipStream -> 
+                    use stream = new StreamReader(gzipStream)
+                    let rec checkLine (assemblies:(string*string) list) =
+                        if not(stream.EndOfStream && assemblies.Length = 0) then
+                            let line = stream.ReadLine()
+                            let info = line.Split(',')
+                            if info.[0] <> speciesID || not(Regex.IsMatch(info.[1], accessionPattern)) then
+                                if assemblies.Length = 0 then checkLine assemblies
+                                else assemblies
+                            else assemblies @ [(info.[1], info.[2])] |> checkLine 
+                        else invalidOp "No assemblies matching the accession pattern could be found. Check the accession pattern is correct."
+                    checkLine [])

@@ -57,22 +57,36 @@ module internal TypeGenerator =
     /// Creates a typed representation of a GenBank Assembly.
     /// </summary>
     /// <param name="context">The context for the GenBank Assembly.</param>
-    let createAssembly (context:Context) = 
+    let createAssembly (providedType:ProvidedTypeDefinition) (assembly:IGenBankAssembly) = 
 
-        let assemblyType = context.ProvidedType
-        let databasePath = context.DatabaseName.GetPath()
-        let speciesName = context.SpeciesName.ToString()
-        let accession = context.Accession.ToString()
-        let genomicGBFFPath = (GenBankAssembly.Create databasePath speciesName accession).GenBankFlatFilePath
+        let genomicGBFFPath = assembly.GenBankFlatFilePath
 
         // Add the genomic GenBank flat file to the assembly type.
         let genomicGBFF = createGenomicGenBankFlatFile genomicGBFFPath
-        assemblyType.AddMemberDelayed (fun () -> genomicGBFF)
+        providedType.AddMemberDelayed (fun () -> genomicGBFF)
 
         // Add documentation to assembly type and return.
         let helpText = """<summary>Typed representation of a GenBank assembly.</summary>"""
-        assemblyType.AddXmlDocDelayed(fun () -> helpText)
-        assemblyType
+        providedType.AddXmlDocDelayed(fun () -> helpText)
+        providedType
+
+
+    /// <summary>
+    /// Creates a typed representation of a group of GenBank Assemblies.
+    /// </summary>
+    /// <param name="context">The context for the GenBank Assemblies.</param>
+    let createAssemblies (providedType:ProvidedTypeDefinition) (species:IGenBankSpecies) = 
+        
+        let assemblyTypes = species.Assemblies
+                            |> List.map (fun assembly -> 
+                                             let assemblyType = ProvidedTypeDefinition(assembly.Accession, Some typeof<obj>)
+                                             createAssembly assemblyType assembly)
+        providedType.AddMembersDelayed(fun () -> assemblyTypes)
+
+        // Add documentation to species type and return.
+        let helpText = """<summary>Typed representation of a collection of GenBank assemblies.</summary>"""
+        providedType.AddXmlDocDelayed(fun () -> helpText)
+        providedType
 
 
     /// <summary>
@@ -81,7 +95,12 @@ module internal TypeGenerator =
     /// </summary>
     /// <param name="context">The context of the Type Provider.</param>
     let createType (context:Context) =
+        let providedType = context.ProvidedType
+        let databasePath = context.DatabaseName.GetPath()
+
         match context.SpeciesName, context.Accession with
         | SpeciesRegexName _, _ -> failwith "Wildcards are currently not supported for Species names."
-        | _, AssemblyRegexName _ -> failwith "Wildcards are currently not supported for Assembly names."
-        | SpeciesPlainName _, AssemblyPlainName _ -> createAssembly context
+        | SpeciesPlainName species, AccessionRegexName accession -> GenBankSpecies.Create databasePath species accession
+                                                                    |> createAssemblies providedType
+        | SpeciesPlainName species, AccessionPlainName accession -> GenBankAssembly.Create databasePath species accession
+                                                                    |> createAssembly providedType 
