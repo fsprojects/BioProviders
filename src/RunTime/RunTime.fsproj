@@ -13,7 +13,9 @@
   </PropertyGroup>
   <ItemGroup>
 	<None Include="paket.references" />
-	<Compile Include="BaseTypes.fs" />
+	<Compile Include="GenomicGenBankFlatFile.fs" />
+	<Compile Include="GenBankAssembly.fs" />
+	<Compile Include="GenBankSpecies.fs" />
     <Compile Include="RunTime.fs" />
   </ItemGroup>
   <ItemGroup>

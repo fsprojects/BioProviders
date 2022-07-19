@@ -22,7 +22,9 @@
 	<Compile Include="..\Common\GenerationContext.fs" />
 	<Compile Include="..\Common\FTP.fs" />
     <Compile Include="..\Common\Cache.fs" />
-	<Compile Include="..\RunTime\BaseTypes.fs" />
+	<Compile Include="..\RunTime\GenomicGenBankFlatFile.fs" />
+	<Compile Include="..\RunTime\GenBankAssembly.fs" />
+	<Compile Include="..\RunTime\GenBankSpecies.fs" />
     <Compile Include="TypeGenerator.fs" />
     <Compile Include="DesignTime.fs" />
   </ItemGroup>
