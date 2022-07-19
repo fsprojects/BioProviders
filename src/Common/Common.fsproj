@@ -6,6 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="paket.references" />
+    <Compile Include="GenerationContext.fs" />
     <Compile Include="FTP.fs" />
     <Compile Include="Cache.fs" />
   </ItemGroup>

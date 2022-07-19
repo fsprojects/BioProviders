@@ -4,7 +4,7 @@ open FSharp.Core.CompilerServices
 open System.Reflection
 open ProviderImplementation.ProvidedTypes
 
-open BioProviders.DesignTime.Context
+open BioProviders.Common.Context
 open BioProviders.DesignTime.TypeGenerator
 
 // GenBank Type Provider.
@@ -36,8 +36,8 @@ type public GenBankProvider (config:TypeProviderConfig) as this =
         // Generate types
         ( species, assembly )
         ||> Context.Parse
-        ||> Context.Create providedType GenBank
-        |> createType
+        ||> Context.Create GenBank
+        |> createType providedType
 
     // Define static parameters for the Type Provider
     let assemblyParameters = 

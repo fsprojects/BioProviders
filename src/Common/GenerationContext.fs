@@ -1,9 +1,7 @@
-﻿namespace BioProviders.DesignTime
-
-open ProviderImplementation.ProvidedTypes
+﻿namespace BioProviders.Common
 
 // --------------------------------------------------------------------------------------
-// Design-Time Context State Types.
+// Generation Context State Types.
 // --------------------------------------------------------------------------------------
 
 module Context =
@@ -12,8 +10,7 @@ module Context =
     /// The context for type generation.
     /// </summary>
     type Context = 
-        { ProvidedType: ProvidedTypeDefinition
-          DatabaseName: DatabaseName
+        { DatabaseName: DatabaseName
           SpeciesName: SpeciesName
           Accession: Accession }
 
@@ -25,9 +22,8 @@ module Context =
             | "", _ when assemblyName <> "" -> invalidArg "Species" "Species must not be empty if an Assembly is provided."
             | _ -> (SpeciesName.Create speciesName, Accession.Create assemblyName)
 
-        static member Create (providedType) (database) (species) (assembly) = 
-            { ProvidedType = providedType
-              DatabaseName = database
+        static member Create (database) (species) (assembly) = 
+            { DatabaseName = database
               SpeciesName = species
               Accession = assembly }
 

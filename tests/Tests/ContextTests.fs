@@ -2,7 +2,7 @@ namespace BioProviders.Tests
 
 open NUnit.Framework
 open FsUnit
-open BioProviders.DesignTime.Context
+open BioProviders.Common.Context
 open BioProviders.Tests.Data
 
 
@@ -14,8 +14,6 @@ open BioProviders.Tests.Data
 type Context() = 
 
     let mutable contexts = []
-
-    let mutable providedType = FsCheck.Gen.sample 0 1 (generateProvidedType ()) |> Seq.head
 
     let mutable database = FsCheck.Gen.sample 0 1 (generateDatabase ()) |> Seq.head
     
@@ -39,8 +37,6 @@ type Context() =
         let count = 1
 
         contexts <- FsCheck.Gen.sample size 30 (generateContext ())
-
-        providedType <- FsCheck.Gen.sample size count (generateProvidedType ()) |> Seq.head
 
         database <- FsCheck.Gen.sample size count (generateDatabase ()) |> Seq.head
 
@@ -226,12 +222,12 @@ type DatabaseName() =
     [<Test>]
     member _.``ToString - RefSeq should return genomes/refseq`` () =
         let refseq = RefSeq
-        refseq.ToString() |> should equal "genomes/refseq"
+        refseq.GetPath() |> should equal "genomes/all/GCF"
 
     [<Test>]
     member _.``ToString - GenBank should return genomes/genbank`` () =
         let genbank = GenBank
-        genbank.ToString() |> should equal "genomes/genbank"
+        genbank.GetPath() |> should equal "genomes/all/GCA"
 
 
 // --------------------------------------------------------------------------------------

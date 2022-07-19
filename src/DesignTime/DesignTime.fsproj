@@ -19,10 +19,10 @@
       <Paket>True</Paket>
       <Link>paket-files/ProvidedTypes.fs</Link>
     </Compile>
+	<Compile Include="..\Common\GenerationContext.fs" />
 	<Compile Include="..\Common\FTP.fs" />
     <Compile Include="..\Common\Cache.fs" />
 	<Compile Include="..\RunTime\BaseTypes.fs" />
-    <Compile Include="GenerationContext.fs" />
     <Compile Include="TypeGenerator.fs" />
     <Compile Include="DesignTime.fs" />
   </ItemGroup>

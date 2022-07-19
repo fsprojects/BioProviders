@@ -1,8 +1,6 @@
 ﻿namespace BioProviders.Tests
 
-open ProviderImplementation.ProvidedTypes
-open BioProviders.DesignTime.Context
-open System.Reflection
+open BioProviders.Common.Context
 
 module Data = 
 
@@ -322,14 +320,6 @@ module Data =
         |> List.map (fun assembly -> assembly + "*")
         |> FsCheck.Gen.elements
 
-    let generateProvidedType () =
-        let namespaceName = "BioProviders"
-        let thisAssembly = Assembly.GetExecutingAssembly()
-        let providedType = ProvidedTypeDefinition(thisAssembly, namespaceName, "GenBankProvider", Some typeof<obj>)
-
-        [ providedType ]
-        |> FsCheck.Gen.elements
-
     let generateDatabase () = 
         [ RefSeq; GenBank ]
         |> FsCheck.Gen.elements
@@ -370,13 +360,11 @@ module Data =
                           |> Seq.take numRegex
                           |> Seq.toList
 
-        let providedType = generateProvidedType ()
         let database = generateDatabase ()
         let species = if (List.contains 1 regexFields) then generateRegexSpecies () else generatePlainSpecies ()
         let assembly = if (List.contains 2 regexFields) then generateRegexAssembly () else generatePlainAssembly ()
 
         Context.Create 
-        <!> providedType
-        <*> database
+        <!> database
         <*> species
         <*> assembly

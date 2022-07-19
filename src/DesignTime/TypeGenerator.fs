@@ -1,8 +1,8 @@
 ﻿namespace BioProviders.DesignTime
 
 open ProviderImplementation.ProvidedTypes
+open BioProviders.Common.Context
 open BioProviders.RunTime.BaseTypes
-open BioProviders.DesignTime.Context
 
 // --------------------------------------------------------------------------------------
 // Type Generation.
@@ -94,8 +94,7 @@ module internal TypeGenerator =
     /// Type Provider.
     /// </summary>
     /// <param name="context">The context of the Type Provider.</param>
-    let createType (context:Context) =
-        let providedType = context.ProvidedType
+    let createType (providedType:ProvidedTypeDefinition) (context:Context) =
         let databasePath = context.DatabaseName.GetPath()
 
         match context.SpeciesName, context.Accession with
