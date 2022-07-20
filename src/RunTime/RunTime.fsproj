@@ -16,9 +16,11 @@
 	<Compile Include="GenomicGenBankFlatFile.fs" />
 	<Compile Include="GenBankAssembly.fs" />
 	<Compile Include="GenBankSpecies.fs" />
+	<Compile Include="GenBankTaxon.fs" />
     <Compile Include="RunTime.fs" />
   </ItemGroup>
   <ItemGroup>
+	<ProjectReference Include="..\Common\Common.fsproj" />
     <ProjectReference Include="..\DesignTime\DesignTime.fsproj">
       <IsFSharpDesignTimeProvider>true</IsFSharpDesignTimeProvider>
       <PrivateAssets>all</PrivateAssets>

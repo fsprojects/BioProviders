@@ -16,7 +16,7 @@ module Context =
 
         static member Parse (species:string) (assembly:string) =
             let speciesName = species.ToString() |> (fun s -> s.Trim().ToLower())
-            let assemblyName = assembly.ToString() |> (fun s -> s.Trim())
+            let assemblyName = assembly.ToString() |> (fun s -> s.Trim().ToLower())
 
             match speciesName, assemblyName with
             | "", _ when assemblyName <> "" -> invalidArg "Species" "Species must not be empty if an Assembly is provided."
@@ -56,8 +56,8 @@ module Context =
 
         member this.GetPath() = 
             match this with
-            | GenBank -> "genomes/all/GCA"
-            | RefSeq -> "genomes/all/GCF"
+            | GenBank -> "/genomes/all/GCA"
+            | RefSeq -> "/genomes/all/GCF"
 
 
     /// <summary>
@@ -75,7 +75,7 @@ module Context =
         override this.ToString() = 
             match this with
             | SpeciesPlainName name -> name
-            | SpeciesRegexName name -> name
+            | SpeciesRegexName name -> name.Substring(0, name.Length - 1) + ".*"
 
 
     /// <summary>
@@ -93,4 +93,4 @@ module Context =
         override this.ToString() = 
             match this with
             | AccessionPlainName name -> name
-            | AccessionRegexName name -> name
+            | AccessionRegexName name -> name.Substring(0, name.Length - 1) + ".*"

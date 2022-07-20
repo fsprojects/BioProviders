@@ -1,6 +1,7 @@
 ﻿namespace BioProviders
 
 open BioProviders.Common
+open BioProviders.Common.Context
 
 // --------------------------------------------------------------------------------------
 // GenBank Assembly Representation.
@@ -8,34 +9,23 @@ open BioProviders.Common
 
 type IGenBankAssembly = 
     abstract Accession : string
+    abstract AssemblyName : string
     abstract AssemblyPath : string
     abstract GenBankFlatFilePath : string
 
 
-type GenBankAssembly =
-
-    private { Accession: string
-              AssemblyPath: string
-              GenBankFlatFilePath: string }
+type GenBankAssembly(accession:string, assemblyName:string, assemblyPath:string) =
 
     interface IGenBankAssembly with
-        member x.Accession = x.Accession
-        member x.AssemblyPath = x.AssemblyPath
-        member x.GenBankFlatFilePath = x.GenBankFlatFilePath
+        member __.Accession = accession
+        member __.AssemblyName = assemblyName
+        member __.AssemblyPath = assemblyPath
+        member __.GenBankFlatFilePath = $"{assemblyPath}/{assemblyName}_genomic.gbff.gz"
 
-    static member CreateAssemblyPath (databasePath:string) (assemblyPath:string) = 
-        $"/{databasePath}/{assemblyPath}"
+    new (context:Context) = 
+        let database = context.DatabaseName
+        let species = context.SpeciesName
+        let accession = context.Accession
+        let (accessionNumber, assemblyName, assemblyPath) = CacheAccess.getAssembly database species accession
 
-    static member CreateGenBankFlatFilePath (assemblyPath:string) = 
-        assemblyPath.Split('/')
-        |> (fun parts -> parts.[parts.Length - 1])
-        |> (fun identifier -> $"{assemblyPath}/{identifier}_genomic.gbff.gz")
-
-    static member Create (databasePath:string) (speciesName:string) (accession:string) =  
-        let assemblyPath = CacheAccess.getAssemblyPath speciesName accession
-                           |> GenBankAssembly.CreateAssemblyPath databasePath
-        let genbankFlatFilePath = GenBankAssembly.CreateGenBankFlatFilePath assemblyPath
-
-        { Accession = accession 
-          AssemblyPath = assemblyPath 
-          GenBankFlatFilePath = genbankFlatFilePath } :> IGenBankAssembly
+        GenBankAssembly(accessionNumber, assemblyName, assemblyPath)

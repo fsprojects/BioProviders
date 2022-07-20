@@ -19,7 +19,7 @@ module internal TypeGenerator =
         let genomicGBFFSequence = ProvidedProperty(
                                     propertyName = "Sequence", 
                                     propertyType = typeof<IGenBankGenomicSequence>,
-                                    getterCode = fun args -> <@@ ((%%args.[0]:obj) :?> IGenomicGenBankFlatFile).Sequence @@>)
+                                    getterCode = fun args -> <@@ (%%args.[0]: IGenomicGenBankFlatFile).Sequence @@>)
         let genomicGBFFSequenceHelpText = 
             """<summary>Typed representation of a Genomic GenBank Flat File Sequence.</summary>"""
         genomicGBFFSequence.AddXmlDocDelayed(fun () -> genomicGBFFSequenceHelpText)
@@ -34,7 +34,7 @@ module internal TypeGenerator =
     let createGenomicGenBankFlatFile (path:string) = 
         
         // Initialise the Genomic GBFF type.
-        let genomicGBFF = ProvidedTypeDefinition(className = "Genome", baseType = Some (typeof<obj>), hideObjectMethods = true)
+        let genomicGBFF = ProvidedTypeDefinition(className = "Genome", baseType = Some (typeof<IGenomicGenBankFlatFile>), hideObjectMethods = true)
         let genomicGBFFHelpText = 
             """<summary>Typed representation of an Assembly's Genomic GenBank Flat File.</summary>"""
         genomicGBFF.AddXmlDocDelayed(fun () -> genomicGBFFHelpText)
@@ -62,11 +62,53 @@ module internal TypeGenerator =
         let genomicGBFFPath = assembly.GenBankFlatFilePath
 
         // Add the genomic GenBank flat file to the assembly type.
-        let genomicGBFF = createGenomicGenBankFlatFile genomicGBFFPath
-        providedType.AddMemberDelayed (fun () -> genomicGBFF)
+        let genomicGBFF () = createGenomicGenBankFlatFile genomicGBFFPath
+        providedType.AddMemberDelayed genomicGBFF
 
         // Add documentation to assembly type and return.
         let helpText = """<summary>Typed representation of a GenBank assembly.</summary>"""
+        providedType.AddXmlDocDelayed(fun () -> helpText)
+        providedType
+
+
+    /// <summary>
+    /// Creates a typed representation of a GenBank Species.
+    /// </summary>
+    /// <param name="context">The context for the GenBank Assembly.</param>
+    let createSpecies (providedType:ProvidedTypeDefinition) (species:IGenBankSpecies) (accessionPattern:string) = 
+
+        // Create the assembly types for the species.
+        let assemblyTypes () = species.GetAssemblies accessionPattern
+                               |> List.map (fun assembly -> 
+                                    let assemblyType = ProvidedTypeDefinition(assembly.Accession, Some typeof<obj>, hideObjectMethods = true)
+                                    createAssembly assemblyType assembly)
+
+        // Add the assembly types to the species type.
+        providedType.AddMembersDelayed assemblyTypes
+
+        // Add documentation to species type and return.
+        let helpText = """<summary>Typed representation of a collection of GenBank assemblies for a species.</summary>"""
+        providedType.AddXmlDocDelayed(fun () -> helpText)
+        providedType
+
+
+    /// <summary>
+    /// Creates a typed representation of a GenBank Taxon.
+    /// </summary>
+    /// <param name="context">The context for the GenBank Assembly.</param>
+    let createTaxon (providedType:ProvidedTypeDefinition) (taxon:IGenBankTaxon) (speciesPattern:string) (accessionPattern:string) = 
+
+        // Create the species types for the taxon.
+        let speciesTypes () = taxon.GetSpecies speciesPattern
+                               |> List.map (fun species -> 
+                                    let speciesType = ProvidedTypeDefinition(species.SpeciesName, Some typeof<obj>, hideObjectMethods = true)
+                                    createSpecies speciesType species accessionPattern)
+
+        // Add the species types to the taxon type.
+        providedType.AddMembersDelayed speciesTypes
+
+        // Add documentation to taxon type and return.
+        let helpText = """<summary>Typed representation of a collection of GenBank species.</summary>"""
         providedType.AddXmlDocDelayed(fun () -> helpText)
         providedType
 
@@ -77,10 +119,7 @@ module internal TypeGenerator =
     /// </summary>
     /// <param name="context">The context of the Type Provider.</param>
     let createType (providedType:ProvidedTypeDefinition) (context:Context) =
-        let databasePath = context.DatabaseName.GetPath()
-
         match context.SpeciesName, context.Accession with
-        | SpeciesRegexName _, _ -> failwith "Wildcards are currently not supported for Species names."
-        | SpeciesPlainName species, AccessionRegexName accession -> failwith "Wildcards are currently not supported for Assembly names."
-        | SpeciesPlainName species, AccessionPlainName accession -> GenBankAssembly.Create databasePath species accession
-                                                                    |> createAssembly providedType 
+        | SpeciesRegexName _, _ -> createTaxon providedType (new GenBankTaxon(context)) (context.SpeciesName.ToString()) (context.Accession.ToString())
+        | SpeciesPlainName _, AccessionRegexName _ -> createSpecies providedType (new GenBankSpecies(context)) (context.Accession.ToString())
+        | SpeciesPlainName _, AccessionPlainName _ -> createAssembly providedType (new GenBankAssembly(context))

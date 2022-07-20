@@ -5,7 +5,7 @@ open BioProviders
 
 // Generate the Assembly Type
 let [<Literal>] Species = "Staphylococcus lugdunensis"
-let [<Literal>] Accession = "GCA_001546615.1"
+let [<Literal>] Accession = "gca_001546615.1"
 
 type AssemblyType = GenBankProvider<Species, Accession>
 
