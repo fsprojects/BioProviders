@@ -352,3 +352,9 @@ MigrationBackup/
 # Paket
 .paket/
 paket-files/
+
+# Documentation
+/temp
+/output
+.fsdocs
+/tmp/watch
