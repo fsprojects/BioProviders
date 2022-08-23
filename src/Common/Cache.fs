@@ -1,5 +1,6 @@
 ﻿namespace BioProviders.Common
 
+open System.Reflection
 open System.Text.RegularExpressions
 open System.IO
 open FluentFTP
@@ -15,6 +16,7 @@ type private ICache =
     abstract SaveDirectory : string -> FtpStatus
     abstract SaveFile : string -> FtpStatus
     abstract Purge : unit -> unit
+
 
 // --------------------------------------------------------------------------------------
 // Cache Helpers.
@@ -55,13 +57,17 @@ module private CacheHelpers =
             | c when System.Char.IsLetter(c) -> c
             | _ -> '#'
 
+        let private getContentPath (fileName:string) =
+            let assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+            Path.Combine(assemblyDirectory, "contentFiles", fileName)
+
         let private getSpeciesLookupPath (speciesName:string) =
             let character = getLookupCharacter speciesName
-            __SOURCE_DIRECTORY__ + @$"..\..\..\data\genbank-species-{character}.txt.gz"
+            getContentPath $"genbank-species-{character}.txt.gz"
 
         let private getAssemblyLookupPath (speciesName:string) =
             let character = getLookupCharacter speciesName
-            __SOURCE_DIRECTORY__ + @$"..\..\..\data\genbank-assemblies-{character}.txt.gz"
+            getContentPath $"genbank-assemblies-{character}.txt.gz"
 
         let private getSpeciesID (speciesName:string) = 
             let speciesLookupFile = getSpeciesLookupPath speciesName

@@ -6,6 +6,14 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="paket.references" />
+	<None Include="..\..\contentFiles\**\*.*" LinkBase="contentFiles\">
+      <Pack>true</Pack>
+      <PackagePath></PackagePath>
+	  <IncludeInPackage>true</IncludeInPackage>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	</None>
     <Compile Include="GenerationContext.fs" />
     <Compile Include="FTP.fs" />
     <Compile Include="Cache.fs" />

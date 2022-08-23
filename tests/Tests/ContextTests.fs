@@ -119,20 +119,20 @@ type Context() =
         let paddedRegexAssembly = " \n\r\t\f" + regexAssemblyString + " \n\r\t\f"
 
         Context.Parse paddedPlainSpecies paddedPlainAssembly
-        |> should equal (SpeciesPlainName plainSpeciesString, 
-                         AccessionPlainName plainAssemblyString)
+        |> should equal (SpeciesPlainName (plainSpeciesString.ToLower()), 
+                         AccessionPlainName (plainAssemblyString.ToLower()))
 
         Context.Parse paddedRegexSpecies paddedPlainAssembly
-        |> should equal (SpeciesRegexName regexSpeciesString, 
-                         AccessionPlainName plainAssemblyString)
+        |> should equal (SpeciesRegexName (regexSpeciesString.ToLower()), 
+                         AccessionPlainName (plainAssemblyString.ToLower()))
 
         Context.Parse paddedPlainSpecies paddedRegexAssembly
-        |> should equal (SpeciesPlainName plainSpeciesString, 
-                         AccessionRegexName regexAssemblyString)
+        |> should equal (SpeciesPlainName (plainSpeciesString.ToLower()), 
+                         AccessionRegexName (regexAssemblyString.ToLower()))
 
         Context.Parse paddedRegexSpecies paddedRegexAssembly
-        |> should equal (SpeciesRegexName regexSpeciesString, 
-                         AccessionRegexName regexAssemblyString)
+        |> should equal (SpeciesRegexName (regexSpeciesString.ToLower()), 
+                         AccessionRegexName (regexAssemblyString.ToLower()))
 
     [<Test>]
     member __.``Parse - Empty Assembly should be replaced by regex *`` () = 
@@ -222,12 +222,12 @@ type DatabaseName() =
     [<Test>]
     member _.``ToString - RefSeq should return genomes/refseq`` () =
         let refseq = RefSeq
-        refseq.GetPath() |> should equal "genomes/all/GCF"
+        refseq.GetPath() |> should equal "/genomes/all/GCF"
 
     [<Test>]
     member _.``ToString - GenBank should return genomes/genbank`` () =
         let genbank = GenBank
-        genbank.GetPath() |> should equal "genomes/all/GCA"
+        genbank.GetPath() |> should equal "/genomes/all/GCA"
 
 
 // --------------------------------------------------------------------------------------

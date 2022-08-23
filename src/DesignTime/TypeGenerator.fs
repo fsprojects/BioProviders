@@ -28,7 +28,7 @@ module internal TypeGenerator =
 
 
     /// <summary>
-    /// Creates a typed representation of a GenBank Flat File.
+    /// Creates a typed representation of a Genomic GenBank Flat File.
     /// </summary>
     /// <param name="path">The path to the GenBank Flat File.</param>
     let createGenomicGenBankFlatFile (path:string) = 
@@ -49,14 +49,14 @@ module internal TypeGenerator =
         // Create and add Genomic GBFF Sequence.
         let genomicGBFFSequence = createGenomicGenBankFlatFileSequence ()
         genomicGBFF.AddMemberDelayed(fun () -> genomicGBFFSequence)
-
         genomicGBFF
 
 
     /// <summary>
     /// Creates a typed representation of a GenBank Assembly.
     /// </summary>
-    /// <param name="context">The context for the GenBank Assembly.</param>
+    /// <param name="providedType">The assembly type to be constructed.</param>
+    /// <param name="assembly">The runtime representation of the assembly to be created.</param>
     let createAssembly (providedType:ProvidedTypeDefinition) (assembly:IGenBankAssembly) = 
 
         let genomicGBFFPath = assembly.GenBankFlatFilePath
@@ -74,7 +74,9 @@ module internal TypeGenerator =
     /// <summary>
     /// Creates a typed representation of a GenBank Species.
     /// </summary>
-    /// <param name="context">The context for the GenBank Assembly.</param>
+    /// <param name="providedType">The species type to be constructed.</param>
+    /// <param name="species">The runtime representation of the species to be created.</param>
+    /// <param name="accessionPattern">The accession pattern for the species assemblies.</param>
     let createSpecies (providedType:ProvidedTypeDefinition) (species:IGenBankSpecies) (accessionPattern:string) = 
 
         // Create the assembly types for the species.
@@ -95,7 +97,10 @@ module internal TypeGenerator =
     /// <summary>
     /// Creates a typed representation of a GenBank Taxon.
     /// </summary>
-    /// <param name="context">The context for the GenBank Assembly.</param>
+    /// <param name="providedType">The taxon type to be constructed.</param>
+    /// <param name="taxon">The runtime representation of the taxon to be created.</param>
+    /// <param name="speciesPattern">The species name pattern for species to be added to the taxon.</param>
+    /// <param name="accessionPattern">The accession pattern for the species assemblies.</param>
     let createTaxon (providedType:ProvidedTypeDefinition) (taxon:IGenBankTaxon) (speciesPattern:string) (accessionPattern:string) = 
 
         // Create the species types for the taxon.
@@ -114,9 +119,9 @@ module internal TypeGenerator =
 
 
     /// <summary>
-    /// Construct the appropriate provided type based on the context of the 
-    /// Type Provider.
+    /// Construct the appropriate provided type based on the context of the Type Provider.
     /// </summary>
+    /// <param name="providedType">The Type Provider type being constructed.</param>
     /// <param name="context">The context of the Type Provider.</param>
     let createType (providedType:ProvidedTypeDefinition) (context:Context) =
         match context.SpeciesName, context.Accession with
