@@ -1,10 +1,10 @@
 # BioProviders
 
-[![Made with F#](https://img.shields.io/badge/Made%20with-FSharp-rgb(184,69,252).svg)](https://fsharp.org/) [![NuGet Status](https://img.shields.io/nuget/v/BioProviders.svg)](https://www.nuget.org/packages/BioProviders/) ![[GitHub contributors](https://img.shields.io/github/contributors/AlexKenna/BioProviders)](https://github.com/AlexKenna/BioProviders/graphs/contributors)
+[![Made with F#](https://img.shields.io/badge/Made%20with-FSharp-rgb(184,69,252).svg)](https://fsharp.org/) [![NuGet Status](https://img.shields.io/nuget/v/BioProviders.svg)](https://www.nuget.org/packages/BioProviders/) [![GitHub contributors](https://img.shields.io/github/contributors/AlexKenna/BioProviders.svg)](https://github.com/AlexKenna/BioProviders/graphs/contributors)
 
 The F# BioProviders simplify programmatic access to genomic datasets.
 
-This library provides strongly typed access to genomic sequences and data through a set of TypeProviders including the GenBankProvider. The ability to interact with the genomic sequences and data is provided through [.NET Bio](https://github.com/dotnetbio/bio) with goals to later also incorporate [BioFSharp](https://github.com/CSBiology/BioFSharp) functionality.
+This library provides strongly typed access to genomic sequences and data through a set of TypeProviders including the GenBankProvider. The ability to interact with the genomic sequences and data is provided through [.NET Bio](https://github.com/dotnetbio/bio) with goals to later incorporate [BioFSharp](https://github.com/CSBiology/BioFSharp) functionality.
 
 ## Build
 [![Build Status](https://github.com/AlexKenna/BioProviders/actions/workflows/dotnet.yml/badge.svg)](https://github.com/AlexKenna/BioProviders/actions) 
