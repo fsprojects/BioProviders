@@ -6,7 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="paket.references" />
-	<None Include="..\..\contentFiles\**\*.*" LinkBase="contentFiles\">
+	<None Include="..\..\build\data\**\*.*" LinkBase="data\">
       <Pack>true</Pack>
       <PackagePath></PackagePath>
 	  <IncludeInPackage>true</IncludeInPackage>

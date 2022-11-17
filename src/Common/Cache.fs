@@ -59,7 +59,7 @@ module private CacheHelpers =
 
         let private getContentPath (fileName:string) =
             let assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-            Path.Combine(assemblyDirectory, "contentFiles", fileName)
+            Path.Combine(assemblyDirectory, "data", fileName)
 
         let private getSpeciesLookupPath (speciesName:string) =
             let character = getLookupCharacter speciesName
