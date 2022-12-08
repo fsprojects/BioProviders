@@ -2,6 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
+		<GenerateDocumentationFile>false</GenerateDocumentationFile>
 		<DefineConstants>IS_DESIGNTIME</DefineConstants>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<AssemblyName>BioProviders.DesignTime</AssemblyName>
