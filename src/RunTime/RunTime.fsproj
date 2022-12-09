@@ -9,7 +9,7 @@
     <OutputPath>..\..\bin\$(Configuration)\lib\</OutputPath>
     <RepositoryUrl>https://github.com/AlexKenna/BioProviders</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
-    <PackageTags>bioinformatics, typeprovider, genbank, refseq</PackageTags>
+    <PackageTags>fsharp data bioinformatics typeprovider genbank refseq</PackageTags>
   </PropertyGroup>
   <ItemGroup>
 	<None Include="paket.references" />
