@@ -11,7 +11,7 @@ open BioProviders.Common
 
 type IGenBankGenomicSequence = 
     inherit seq<byte>
-    abstract Count : int64 with get
+    abstract Length : int64 with get
     abstract Item : int64 -> byte with get
     abstract GetComplementedSequence : unit -> IGenBankGenomicSequence
     abstract GetReversedSequence : unit -> IGenBankGenomicSequence
@@ -20,19 +20,19 @@ type IGenBankGenomicSequence =
     abstract ToString : unit -> string
 
 
-type GenBankGenomeSequence (sequence:Bio.ISequence) = 
+type GenBankGenomicSequence (sequence:Bio.ISequence) = 
     
     // Standardise sequence (capitalise items).
     let _seq = sequence.GetComplementedSequence().GetComplementedSequence()
     
     // Implement GenBank sequence interface.
     interface IGenBankGenomicSequence with
-        member __.Count = _seq.Count
+        member __.Length = _seq.Count
         member __.Item with get index = _seq.Item(index)
-        member __.GetComplementedSequence() = new GenBankGenomeSequence(_seq.GetComplementedSequence()) :> IGenBankGenomicSequence
-        member __.GetReversedSequence() = new GenBankGenomeSequence(_seq.GetReversedSequence()) :> IGenBankGenomicSequence
-        member __.GetReverseComplementedSequence() = new GenBankGenomeSequence(_seq.GetReverseComplementedSequence()) :> IGenBankGenomicSequence
-        member __.GetSubSequence start length = new GenBankGenomeSequence(_seq.GetSubSequence(start, length)) :> IGenBankGenomicSequence
+        member __.GetComplementedSequence() = new GenBankGenomicSequence(_seq.GetComplementedSequence()) :> IGenBankGenomicSequence
+        member __.GetReversedSequence() = new GenBankGenomicSequence(_seq.GetReversedSequence()) :> IGenBankGenomicSequence
+        member __.GetReverseComplementedSequence() = new GenBankGenomicSequence(_seq.GetReverseComplementedSequence()) :> IGenBankGenomicSequence
+        member __.GetSubSequence start length = new GenBankGenomicSequence(_seq.GetSubSequence(start, length)) :> IGenBankGenomicSequence
         member __.GetEnumerator(): IEnumerator<byte> = _seq.GetEnumerator()
         member __.GetEnumerator(): System.Collections.IEnumerator = _seq.GetEnumerator() :> System.Collections.IEnumerator
         override __.ToString() = _seq.ToString()
@@ -48,9 +48,6 @@ type GenBankGenomeSequence (sequence:Bio.ISequence) =
 // GenBank Flat File Representation.
 // --------------------------------------------------------------------------------------
 
-type IGenomicGenBankFlatFile = 
-    abstract Sequence : IGenBankGenomicSequence
-
 type GenomicGenBankFlatFile (path:string) =
 
     // Create DotNet Bio ISequence for the GenBank Flat File.
@@ -61,5 +58,5 @@ type GenomicGenBankFlatFile (path:string) =
         |> Seq.cast<Bio.ISequence>
         |> Seq.head
 
-    interface IGenomicGenBankFlatFile with
-        member __.Sequence = new GenBankGenomeSequence(sequence)
+    // Add type members.
+    member __.Sequence = new GenBankGenomicSequence(sequence)

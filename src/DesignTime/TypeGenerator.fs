@@ -19,7 +19,7 @@ module internal TypeGenerator =
         let genomicGBFFSequence = ProvidedProperty(
                                     propertyName = "Sequence", 
                                     propertyType = typeof<IGenBankGenomicSequence>,
-                                    getterCode = fun args -> <@@ (%%args.[0]: IGenomicGenBankFlatFile).Sequence @@>)
+                                    getterCode = fun args -> <@@ (%%args.[0]: GenomicGenBankFlatFile).Sequence @@>)
         let genomicGBFFSequenceHelpText = 
             """<summary>Typed representation of the Sequence of a Genomic GenBank Flat File.</summary>"""
         genomicGBFFSequence.AddXmlDocDelayed(fun () -> genomicGBFFSequenceHelpText)
@@ -34,7 +34,7 @@ module internal TypeGenerator =
     let createGenomicGenBankFlatFile (path:string) = 
         
         // Initialise the Genomic GBFF type.
-        let genomicGBFF = ProvidedTypeDefinition(className = "Genome", baseType = Some (typeof<IGenomicGenBankFlatFile>), hideObjectMethods = true)
+        let genomicGBFF = ProvidedTypeDefinition(className = "Genome", baseType = Some (typeof<GenomicGenBankFlatFile>), hideObjectMethods = true)
         let genomicGBFFHelpText = 
             """<summary>Typed representation of an Assembly's Genomic GenBank Flat File.</summary>"""
         genomicGBFF.AddXmlDocDelayed(fun () -> genomicGBFFHelpText)
