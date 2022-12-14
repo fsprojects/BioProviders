@@ -13,6 +13,7 @@
   </PropertyGroup>
   <ItemGroup>
 	<None Include="paket.references" />
+	<Compile Include="GenBankGenomicSequence.fs" />
 	<Compile Include="GenBankGenomicFlatFile.fs" />
 	<Compile Include="GenBankAssembly.fs" />
 	<Compile Include="GenBankSpecies.fs" />
