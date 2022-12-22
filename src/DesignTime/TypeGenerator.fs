@@ -13,18 +13,35 @@ module internal TypeGenerator =
     /// <summary>
     /// Creates a typed representation of a GenBank Flat File Sequence.
     /// </summary>
-    let createGenomicGenBankFlatFileSequence () = 
+    //let createGenomicGenBankFlatFileSequence () = 
 
-        // Initialise the Genomic GBFF Sequence type.
-        let genomicGBFFSequence = ProvidedProperty(
-                                    propertyName = "Sequence", 
-                                    propertyType = typeof<IGenBankGenomicSequence>,
-                                    getterCode = fun args -> <@@ (%%args.[0]: GenomicGenBankFlatFile).Sequence @@>)
-        let genomicGBFFSequenceHelpText = 
-            """<summary>Typed representation of the Sequence of a Genomic GenBank Flat File.</summary>"""
-        genomicGBFFSequence.AddXmlDocDelayed(fun () -> genomicGBFFSequenceHelpText)
+    //    // Initialise the Genomic GBFF Sequence type.
+    //    let genomicGBFFSequence = ProvidedProperty(
+    //                                propertyName = "Sequence", 
+    //                                propertyType = typeof<IGenBankGenomicSequence>,
+    //                                getterCode = fun args -> <@@ (%%args.[0]: GenBankFlatFile.GenBankFlatFile). @@>)
+    //    let genomicGBFFSequenceHelpText = 
+    //        """<summary>Typed representation of the Sequence of a Genomic GenBank Flat File.</summary>"""
+    //    genomicGBFFSequence.AddXmlDocDelayed(fun () -> genomicGBFFSequenceHelpText)
 
-        genomicGBFFSequence
+    //    genomicGBFFSequence
+
+
+    /// <summary>
+    /// Creates a typed representation of a GenBank Flat File Metadata.
+    /// </summary>
+    let createGenomicGenBankFlatFileMetadata () = 
+
+        // Initialise the Genomic GBFF Metadata type.
+        let genomicGBFFMetadata = ProvidedProperty(
+                                    propertyName = "Metadata", 
+                                    propertyType = typeof<Metadata.Metadata>,
+                                    getterCode = fun args -> <@@ (%%args.[0]: GenBankFlatFile.GenBankFlatFile).Metadata @@>)
+        let genomicGBFFMetadataHelpText = 
+            """<summary>Typed representation of the Metadata of a Genomic GenBank Flat File.</summary>"""
+        genomicGBFFMetadata.AddXmlDocDelayed(fun () -> genomicGBFFMetadataHelpText)
+
+        genomicGBFFMetadata
 
 
     /// <summary>
@@ -34,21 +51,25 @@ module internal TypeGenerator =
     let createGenomicGenBankFlatFile (path:string) = 
         
         // Initialise the Genomic GBFF type.
-        let genomicGBFF = ProvidedTypeDefinition(className = "Genome", baseType = Some (typeof<GenomicGenBankFlatFile>), hideObjectMethods = true)
+        let genomicGBFF = ProvidedTypeDefinition(className = "Genome", baseType = Some (typeof<GenBankFlatFile.GenBankFlatFile>), hideObjectMethods = true)
         let genomicGBFFHelpText = 
             """<summary>Typed representation of an Assembly's Genomic GenBank Flat File.</summary>"""
         genomicGBFF.AddXmlDocDelayed(fun () -> genomicGBFFHelpText)
                 
         // Create and add constructor to the Genomic GBFF type.
-        let genomicGBFFConstructor = ProvidedConstructor(parameters = [], invokeCode = (fun _ -> <@@ new GenomicGenBankFlatFile(path) @@>))
+        let genomicGBFFConstructor = ProvidedConstructor(parameters = [], invokeCode = (fun _ -> <@@ GenBankFlatFile.createGenBankFlatFile path @@>))
         let genomicGBFFConstructorHelpText = 
             """<summary>Generic constructor to initialise the Genomic GenBank Flat File.</summary>"""
         genomicGBFFConstructor.AddXmlDocDelayed(fun () -> genomicGBFFConstructorHelpText)
         genomicGBFF.AddMemberDelayed(fun () -> genomicGBFFConstructor)
 
         // Create and add Genomic GBFF Sequence.
-        let genomicGBFFSequence = createGenomicGenBankFlatFileSequence ()
-        genomicGBFF.AddMemberDelayed(fun () -> genomicGBFFSequence)
+        //let genomicGBFFSequence = createGenomicGenBankFlatFileSequence ()
+        //genomicGBFF.AddMemberDelayed(fun () -> genomicGBFFSequence)
+        
+        // Create and add Genomic GBFF Metadata.
+        let genomicGBFFMetadata = createGenomicGenBankFlatFileMetadata ()
+        genomicGBFF.AddMemberDelayed(fun () -> genomicGBFFMetadata)
         genomicGBFF
 
 

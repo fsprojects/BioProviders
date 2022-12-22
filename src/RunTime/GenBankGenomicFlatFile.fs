@@ -4,24 +4,30 @@ open System.IO
 open BioProviders.Common
 
 // --------------------------------------------------------------------------------------
-// GenBank Flat File Metadata Representation.
-// --------------------------------------------------------------------------------------
-
-
-
-// --------------------------------------------------------------------------------------
 // GenBank Flat File Representation.
 // --------------------------------------------------------------------------------------
 
-type GenomicGenBankFlatFile (path:string) =
+module GenBankFlatFile =
 
-    // Create DotNet Bio ISequence for the GenBank Flat File.
-    let sequence = 
-        CacheAccess.loadFile path
-        |> (fun stream -> new Compression.GZipStream(stream, Compression.CompressionMode.Decompress))
-        |> (new Bio.IO.GenBank.GenBankParser()).Parse
-        |> Seq.cast<Bio.ISequence>
-        |> Seq.head
+    /// <summary>
+    /// GenBank Flat File representation.
+    /// </summary>
+    type GenBankFlatFile =
+        { Metadata : Metadata.Metadata }
 
-    // Add type members.
-    member __.Sequence = new GenBankGenomicSequence(sequence)
+    /// <summary>
+    /// Basic constructor for GenBankFlatFile type.
+    /// </summary>
+    let createGenBankFlatFile (path:string) = 
+        
+        // Create DotNet Bio ISequence for the GenBank Flat File.
+        let sequence = 
+            CacheAccess.loadFile path
+            |> (fun stream -> new Compression.GZipStream(stream, Compression.CompressionMode.Decompress))
+            |> (new Bio.IO.GenBank.GenBankParser()).Parse
+            |> Seq.cast<Bio.ISequence>
+            |> Seq.head
+        let metadata = sequence.Metadata.Item("GenBank") :?> Bio.IO.GenBank.GenBankMetadata
+
+        // Create GenBank Flat File Type.
+        { Metadata = Metadata.createMetadata metadata }

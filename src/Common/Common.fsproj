@@ -14,6 +14,7 @@
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  <CopyToPublishDirectory>Always</CopyToPublishDirectory>
 	</None>
+	<Compile Include="Helpers.fs" />
     <Compile Include="GenerationContext.fs" />
     <Compile Include="FTP.fs" />
     <Compile Include="Cache.fs" />
