@@ -13,7 +13,8 @@ module GenBankFlatFile =
     /// GenBank Flat File representation.
     /// </summary>
     type GenBankFlatFile =
-        { Metadata : Metadata.Metadata }
+        { Metadata : Metadata.Metadata
+          Sequence : int}
 
     /// <summary>
     /// Basic constructor for GenBankFlatFile type.
@@ -30,4 +31,5 @@ module GenBankFlatFile =
         let metadata = sequence.Metadata.Item("GenBank") :?> Bio.IO.GenBank.GenBankMetadata
 
         // Create GenBank Flat File Type.
-        { Metadata = Metadata.createMetadata metadata }
+        { Metadata = Metadata.createMetadata metadata
+          Sequence = Sequence.createSequence sequence }
