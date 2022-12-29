@@ -1,5 +1,4 @@
 FSharp.Core
-
-group Utility
-	FluentFTP
-	NetBio.Core
+FluentFTP
+NetBio.Core
+BioFSharp

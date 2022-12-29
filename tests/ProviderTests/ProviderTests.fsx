@@ -1,7 +1,9 @@
 ﻿#I "../../bin/Debug/lib/netstandard2.0"
 #r "BioProviders.dll"
+#r "nuget: BioFSharp"
 
 open BioProviders
+open BioFSharp
 
 // Generate the Assembly Type
 let [<Literal>] Species = "Staphylococcus lugdunensis"
@@ -13,6 +15,4 @@ type AssemblyType = GenBankProvider<Species, Accession>
 // Use the Assembly Type
 let gbff = AssemblyType.Genome()
 
-gbff.Sequence.GetSubSequence 0 20
-|> fun x -> x.ToString()
-|> printfn "The first 20 bases for the sequence are: %s"
+gbff.Sequence |> BioSeq.complement

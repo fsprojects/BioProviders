@@ -1,36 +1,36 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
-		<GenerateDocumentationFile>false</GenerateDocumentationFile>
-		<DefineConstants>IS_DESIGNTIME</DefineConstants>
-		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<AssemblyName>BioProviders.DesignTime</AssemblyName>
-		<Name>BioProviders</Name>
-		<OutputPath>..\..\bin\$(Configuration)\typeproviders\fsharp41\</OutputPath>
-		<Tailcalls>true</Tailcalls>
-	</PropertyGroup>
-	<ItemGroup>
-		<None Include="paket.references" />
-		<Compile Include="..\..\paket-files\typeprovidersdk\fsprojects\FSharp.TypeProviders.SDK\src\ProvidedTypes.fsi">
-			<Paket>True</Paket>
-			<Link>paket-files/ProvidedTypes.fsi</Link>
-		</Compile>
-		<Compile Include="..\..\paket-files\typeprovidersdk\fsprojects\FSharp.TypeProviders.SDK\src\ProvidedTypes.fs">
-			<Paket>True</Paket>
-			<Link>paket-files/ProvidedTypes.fs</Link>
-		</Compile>
-		<Compile Include="..\RunTime\GenBankGenomicSequence.fs" />
-		<Compile Include="..\RunTime\GenBankGenomicMetadata.fs" />
-		<Compile Include="..\RunTime\GenBankGenomicFlatFile.fs" />
-		<Compile Include="..\RunTime\GenBankAssembly.fs" />
-		<Compile Include="..\RunTime\GenBankSpecies.fs" />
-		<Compile Include="..\RunTime\GenBankTaxon.fs" />
-		<Compile Include="TypeGenerator.fs" />
-		<Compile Include="DesignTime.fs" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\Common\Common.fsproj" />
-	</ItemGroup>
-	<Import Project="..\..\.paket\Paket.Restore.targets" />
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <DefineConstants>IS_DESIGNTIME</DefineConstants>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <AssemblyName>BioProviders.DesignTime</AssemblyName>
+    <Name>BioProviders</Name>
+    <OutputPath>..\..\bin\$(Configuration)\typeproviders\fsharp41\</OutputPath>
+    <Tailcalls>true</Tailcalls>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\paket-files\fsprojects\FSharp.TypeProviders.SDK\src\ProvidedTypes.fsi">
+      <Paket>True</Paket>
+      <Link>paket-files/ProvidedTypes.fsi</Link>
+    </Compile>
+    <Compile Include="..\..\paket-files\fsprojects\FSharp.TypeProviders.SDK\src\ProvidedTypes.fs">
+      <Paket>True</Paket>
+      <Link>paket-files/ProvidedTypes.fs</Link>
+    </Compile>
+    <None Include="paket.references" />
+    <Compile Include="..\RunTime\GenBankGenomicSequence.fs" />
+    <Compile Include="..\RunTime\GenBankGenomicMetadata.fs" />
+    <Compile Include="..\RunTime\GenBankGenomicFlatFile.fs" />
+    <Compile Include="..\RunTime\GenBankAssembly.fs" />
+    <Compile Include="..\RunTime\GenBankSpecies.fs" />
+    <Compile Include="..\RunTime\GenBankTaxon.fs" />
+    <Compile Include="TypeGenerator.fs" />
+    <Compile Include="DesignTime.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.fsproj" />
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

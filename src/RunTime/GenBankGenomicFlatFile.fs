@@ -14,7 +14,7 @@ module GenBankFlatFile =
     /// </summary>
     type GenBankFlatFile =
         { Metadata : Metadata.Metadata
-          Sequence : int}
+          Sequence : BioFSharp.BioSeq.BioSeq<BioFSharp.Nucleotides.Nucleotide> }
 
     /// <summary>
     /// Basic constructor for GenBankFlatFile type.

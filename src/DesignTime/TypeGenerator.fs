@@ -18,7 +18,7 @@ module internal TypeGenerator =
         // Initialise the Genomic GBFF Sequence type.
         let genomicGBFFSequence = ProvidedProperty(
                                     propertyName = "Sequence", 
-                                    propertyType = typeof<int>,
+                                    propertyType = typeof<BioFSharp.BioSeq.BioSeq<BioFSharp.Nucleotides.Nucleotide>>,
                                     getterCode = fun args -> <@@ (%%args.[0]: GenBankFlatFile.GenBankFlatFile).Sequence @@>)
         let genomicGBFFSequenceHelpText = 
             """<summary>Typed representation of the Sequence of a Genomic GenBank Flat File.</summary>"""

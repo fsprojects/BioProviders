@@ -1,17 +1,15 @@
 framework: net6.0, netstandard2.0
 source https://api.nuget.org/v3/index.json
 
+github fsprojects/FSharp.TypeProviders.SDK src/ProvidedTypes.fsi
+github fsprojects/FSharp.TypeProviders.SDK src/ProvidedTypes.fs
+
 nuget FSharp.Core >= 5.0.1 lowest_matching: true
+nuget FluentFTP 34.0.1
+nuget NetBio.Core
 
-group TypeProviderSDK
-	github fsprojects/FSharp.TypeProviders.SDK src/ProvidedTypes.fsi
-	github fsprojects/FSharp.TypeProviders.SDK src/ProvidedTypes.fs
-
-group Utility
-	source https://api.nuget.org/v3/index.json
-
-	nuget FluentFTP 34.0.1
-	nuget NetBio.Core
+git https://github.com/CSBiology/BioFSharp.git nuget Packages: /
+nuget BioFSharp
 
 group Test
     frameworks: net6.0

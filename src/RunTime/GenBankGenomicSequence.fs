@@ -7,4 +7,4 @@
 module Sequence = 
 
     let createSequence (sequence:Bio.ISequence) = 
-        1
+        BioFSharp.BioSeq.ofNucleotideString ( sequence.ToString() )
