@@ -20,9 +20,9 @@
       <Link>paket-files/ProvidedTypes.fs</Link>
     </Compile>
     <None Include="paket.references" />
-    <Compile Include="..\RunTime\GenBankGenomicSequence.fs" />
-    <Compile Include="..\RunTime\GenBankGenomicMetadata.fs" />
-    <Compile Include="..\RunTime\GenBankGenomicFlatFile.fs" />
+    <Compile Include="..\RunTime\GenBankSequence.fs" />
+    <Compile Include="..\RunTime\GenBankMetadata.fs" />
+    <Compile Include="..\RunTime\GenBankFlatFile.fs" />
     <Compile Include="..\RunTime\GenBankAssembly.fs" />
     <Compile Include="..\RunTime\GenBankSpecies.fs" />
     <Compile Include="..\RunTime\GenBankTaxon.fs" />
