@@ -77,10 +77,18 @@ module internal TypeGenerator =
     /// Creates a typed representation of a GenBank Assembly.
     /// </summary>
     /// <param name="providedType">The assembly type to be constructed.</param>
-    /// <param name="assembly">The runtime representation of the assembly to be created.</param>
-    let createAssembly (providedType:ProvidedTypeDefinition) (assembly:GenBankAssembly) = 
+    /// <param name="context">The context of the Type Provider.</param>
+    let createAssembly (providedType:ProvidedTypeDefinition) (context:Context) = 
 
-        let genomicGBFFPath = assembly.GenBankFlatFilePath
+        // Make sure GenBankFlatFilePath is defined.
+        let genomicGBFFPath = 
+            match context.Accession.GenBankFlatFilePath with
+            | Some path -> path
+            | None -> GenBank.createAssembly context 
+                      |> (fun c -> 
+                            match c.Accession.GenBankFlatFilePath with
+                            | Some path -> path
+                            | None -> failwith "GenBank Flat File path must exist to create assembly. Something when wrong creating the assembly context.")
 
         // Add the genomic GenBank flat file to the assembly type.
         let genomicGBFF () = createGenomicGenBankFlatFile genomicGBFFPath
@@ -96,15 +104,21 @@ module internal TypeGenerator =
     /// Creates a typed representation of a GenBank Species.
     /// </summary>
     /// <param name="providedType">The species type to be constructed.</param>
-    /// <param name="species">The runtime representation of the species to be created.</param>
-    /// <param name="accessionPattern">The accession pattern for the species assemblies.</param>
-    let createSpecies (providedType:ProvidedTypeDefinition) (species:GenBankSpecies) (accessionPattern:string) = 
+    /// <param name="context">The context of the Type Provider.</param>
+    let createSpecies (providedType:ProvidedTypeDefinition) (context:Context) = 
 
         // Create the assembly types for the species.
-        let assemblyTypes () = species.GetAssemblies accessionPattern
-                               |> List.map (fun assembly -> 
-                                    let assemblyType = ProvidedTypeDefinition(assembly.Accession, Some typeof<obj>, hideObjectMethods = true)
-                                    createAssembly assemblyType assembly)
+        let assemblyTypes () = 
+            match context.DatabaseName with
+            | DatabaseName.GenBank -> GenBank.createAssemblies context
+                                      |> List.map (fun assemblyContext -> 
+                                            let assemblyType = 
+                                                ProvidedTypeDefinition(
+                                                    className = assemblyContext.Accession.AccessionName.ToString(), 
+                                                    baseType = Some typeof<obj>, 
+                                                    hideObjectMethods = true )
+                                            createAssembly assemblyType assemblyContext)
+            | DatabaseName.RefSeq -> invalidArg "DatabaseName" "RefSeq database is not currently supported."
 
         // Add the assembly types to the species type.
         providedType.AddMembersDelayed assemblyTypes
@@ -116,19 +130,24 @@ module internal TypeGenerator =
 
 
     /// <summary>
-    /// Creates a typed representation of a GenBank Taxon.
+    /// Creates a group of GenBank Species matching the provided species name pattern.
     /// </summary>
     /// <param name="providedType">The taxon type to be constructed.</param>
-    /// <param name="taxon">The runtime representation of the taxon to be created.</param>
-    /// <param name="speciesPattern">The species name pattern for species to be added to the taxon.</param>
-    /// <param name="accessionPattern">The accession pattern for the species assemblies.</param>
-    let createTaxon (providedType:ProvidedTypeDefinition) (taxon:GenBankTaxon) (speciesPattern:string) (accessionPattern:string) = 
+    /// <param name="context">The context of the Type Provider.</param>
+    let createTaxon (providedType:ProvidedTypeDefinition) (context:Context) = 
 
         // Create the species types for the taxon.
-        let speciesTypes () = taxon.GetSpecies speciesPattern
-                               |> List.map (fun species -> 
-                                    let speciesType = ProvidedTypeDefinition(species.SpeciesName, Some typeof<obj>, hideObjectMethods = true)
-                                    createSpecies speciesType species accessionPattern)
+        let speciesTypes () = 
+            match context.DatabaseName with
+            | DatabaseName.GenBank -> GenBank.createSpecies context
+                                      |> List.map (fun speciesContext -> 
+                                            let speciesType = 
+                                                ProvidedTypeDefinition(
+                                                    className = speciesContext.Species.SpeciesName.ToString(), 
+                                                    baseType = Some typeof<obj>, 
+                                                    hideObjectMethods = true )
+                                            createSpecies speciesType speciesContext)
+            | DatabaseName.RefSeq -> invalidArg "DatabaseName" "RefSeq database is not currently supported."
 
         // Add the species types to the taxon type.
         providedType.AddMembersDelayed speciesTypes
@@ -145,7 +164,7 @@ module internal TypeGenerator =
     /// <param name="providedType">The Type Provider type being constructed.</param>
     /// <param name="context">The context of the Type Provider.</param>
     let createType (providedType:ProvidedTypeDefinition) (context:Context) =
-        match context.SpeciesName, context.Accession with
-        | SpeciesRegexName _, _ -> createTaxon providedType (new GenBankTaxon(context)) (context.SpeciesName.ToString()) (context.Accession.ToString())
-        | SpeciesPlainName _, AccessionRegexName _ -> createSpecies providedType (new GenBankSpecies(context)) (context.Accession.ToString())
-        | SpeciesPlainName _, AccessionPlainName _ -> createAssembly providedType (new GenBankAssembly(context))
+        match context.Species.SpeciesName, context.Accession.AccessionName with
+        | SpeciesRegexName _, _ -> createTaxon providedType context
+        | SpeciesPlainName _, AccessionRegexName _ -> createSpecies providedType context
+        | SpeciesPlainName _, AccessionPlainName _ -> createAssembly providedType context

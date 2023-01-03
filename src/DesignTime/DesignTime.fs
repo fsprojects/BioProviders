@@ -28,15 +28,15 @@ type public GenBankProvider (config:TypeProviderConfig) as this =
         
         // Extract parameters
         let species = args.[0] :?> string
-        let assembly = args.[1] :?> string
+        let accession = args.[1] :?> string
 
         // Define the assembly type
         let providedType = ProvidedTypeDefinition(thisAssembly, namespaceName, typeName, Some typeof<obj>)
 
         // Generate types
-        ( species, assembly )
+        ( species, accession )
         ||> Context.Parse
-        ||> Context.Create GenBank
+        ||> Context.CreateDefault GenBank
         |> createType providedType
 
     // Define static parameters for the Type Provider

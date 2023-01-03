@@ -23,9 +23,7 @@
     <Compile Include="..\RunTime\GenBankGenomicSequence.fs" />
     <Compile Include="..\RunTime\GenBankGenomicMetadata.fs" />
     <Compile Include="..\RunTime\GenBankGenomicFlatFile.fs" />
-    <Compile Include="..\RunTime\GenBankAssembly.fs" />
-    <Compile Include="..\RunTime\GenBankSpecies.fs" />
-    <Compile Include="..\RunTime\GenBankTaxon.fs" />
+	<Compile Include="..\RunTime\GenBank.fs" />
     <Compile Include="TypeGenerator.fs" />
     <Compile Include="DesignTime.fs" />
   </ItemGroup>

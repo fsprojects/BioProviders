@@ -16,9 +16,7 @@
 	<Compile Include="GenBankGenomicSequence.fs" />
 	<Compile Include="GenBankGenomicMetadata.fs" />
 	<Compile Include="GenBankGenomicFlatFile.fs" />
-	<Compile Include="GenBankAssembly.fs" />
-	<Compile Include="GenBankSpecies.fs" />
-	<Compile Include="GenBankTaxon.fs" />
+	<Compile Include="GenBank.fs" />
     <Compile Include="RunTime.fs" />
   </ItemGroup>
   <ItemGroup>

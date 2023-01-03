@@ -338,15 +338,15 @@ module Data =
 
     let generatePlainAssembly () = 
         (generatePlainAssemblyString ())
-        |> FsCheck.Gen.map (fun assembly -> Accession.Create assembly)
+        |> FsCheck.Gen.map (fun assembly -> AccessionName.Create assembly)
 
     let generateRegexAssembly () = 
         (generateRegexAssemblyString ())
-        |> FsCheck.Gen.map (fun assembly -> Accession.Create assembly)
+        |> FsCheck.Gen.map (fun assembly -> AccessionName.Create assembly)
 
     let generateEmptyAssembly () = 
         (generateEmptyString ())
-        |> FsCheck.Gen.map (fun assembly -> Accession.Create assembly)
+        |> FsCheck.Gen.map (fun assembly -> AccessionName.Create assembly)
 
     let generateContext () = 
         let (<!>) = FsCheck.Gen.map
@@ -364,7 +364,7 @@ module Data =
         let species = if (List.contains 1 regexFields) then generateRegexSpecies () else generatePlainSpecies ()
         let assembly = if (List.contains 2 regexFields) then generateRegexAssembly () else generatePlainAssembly ()
 
-        Context.Create 
+        Context.CreateDefault 
         <!> database
         <*> species
         <*> assembly

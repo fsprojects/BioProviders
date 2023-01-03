@@ -6,32 +6,14 @@
 
 module Context =
 
-    /// <summary>
-    /// The context for type generation.
-    /// </summary>
-    type Context = 
-        { DatabaseName: DatabaseName
-          SpeciesName: SpeciesName
-          Accession: Accession }
-
-        static member Parse (species:string) (assembly:string) =
-            let speciesName = species.ToString() |> (fun s -> s.Trim().ToLower())
-            let assemblyName = assembly.ToString() |> (fun s -> s.Trim().ToLower())
-
-            match speciesName, assemblyName with
-            | "", _ when assemblyName <> "" -> invalidArg "Species" "Species must not be empty if an Assembly is provided."
-            | _ -> (SpeciesName.Create speciesName, Accession.Create assemblyName)
-
-        static member Create (database) (species) (assembly) = 
-            { DatabaseName = database
-              SpeciesName = species
-              Accession = assembly }
-
-        
+    // ----------------------------------------------------------------------------------
+    // Base Name Type.
+    // ----------------------------------------------------------------------------------
+       
     /// <summary>
     /// The base name type. Responsible for determining if a string is regex in nature.
     /// </summary>
-    and Name = 
+    type Name = 
     | PlainName of string
     | RegexName of string
 
@@ -47,10 +29,14 @@ module Context =
             | RegexName name -> name
 
 
+    // ----------------------------------------------------------------------------------
+    // Database Name Type.
+    // ----------------------------------------------------------------------------------
+
     /// <summary>
     /// Typed representation of the Database.
     /// </summary>
-    and DatabaseName = 
+    type DatabaseName = 
     | GenBank
     | RefSeq
 
@@ -60,10 +46,14 @@ module Context =
             | RefSeq -> "/genomes/all/GCF"
 
 
+    // ----------------------------------------------------------------------------------
+    // Species Types.
+    // ----------------------------------------------------------------------------------
+
     /// <summary>
-    /// Typed representation of the Species.
+    /// Typed representation of the Species name.
     /// </summary>
-    and SpeciesName = 
+    type SpeciesName = 
     | SpeciesPlainName of string
     | SpeciesRegexName of string
 
@@ -79,9 +69,22 @@ module Context =
 
 
     /// <summary>
-    /// Typed representation of the Assembly.
+    /// Typed representation of the Species context.
     /// </summary>
-    and Accession = 
+    type Species =
+        { SpeciesName : SpeciesName 
+          SpeciesID : string option 
+          LookupPath : string option }
+
+
+    // ----------------------------------------------------------------------------------
+    // Accession Types.
+    // ----------------------------------------------------------------------------------
+
+    /// <summary>
+    /// Typed representation of the Accession name.
+    /// </summary>
+    type AccessionName = 
     | AccessionPlainName of string
     | AccessionRegexName of string
 
@@ -94,3 +97,46 @@ module Context =
             match this with
             | AccessionPlainName name -> name
             | AccessionRegexName name -> name.Substring(0, name.Length - 1) + ".*"
+
+
+    /// <summary>
+    /// Typed representation of the Species context.
+    /// </summary>
+    type Accession =
+        { AccessionName : AccessionName 
+          AssemblyName : string option 
+          AssemblyPath : string option
+          GenBankFlatFilePath : string option }
+
+
+    // --------------------------------------------------------------------------------------
+    // Generation Context.
+    // --------------------------------------------------------------------------------------
+
+    /// <summary>
+    /// The context for type generation.
+    /// </summary>
+    type Context = 
+        { DatabaseName: DatabaseName
+          Species: Species
+          Accession: Accession }
+
+        static member Parse (species:string) (assembly:string) =
+            let speciesName = species.ToString() |> (fun s -> s.Trim().ToLower())
+            let accessionName = assembly.ToString() |> (fun s -> s.Trim().ToLower())
+
+            match speciesName, accessionName with
+            | "", _ when accessionName <> "" -> invalidArg "Species" "Species must not be empty if an Assembly is provided."
+            | _ -> (SpeciesName.Create speciesName, AccessionName.Create accessionName)
+
+        static member CreateDefault (database:DatabaseName) (species:SpeciesName) (accessionName:AccessionName) = 
+            { DatabaseName = database
+              Species = 
+                { SpeciesName = species
+                  SpeciesID = None 
+                  LookupPath = None }
+              Accession = 
+                { AccessionName = accessionName 
+                  AssemblyName = None
+                  AssemblyPath = None
+                  GenBankFlatFilePath = None } }
