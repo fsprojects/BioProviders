@@ -33,12 +33,14 @@ module GenBank =
     /// <summary>
     /// Creates types for all GenBank assemblies matching the provided accession pattern.
     /// </summary>
-    let createAssemblies (context:Context) =
+    let rec createAssemblies (context:Context) =
 
         // Extract information.
+        let database = context.DatabaseName
+        let species = context.Species.SpeciesName
         let accession = context.Accession.AccessionName.ToString()
 
-        // Make sure the context is valid.
+        // Create assemblies, making sure LookupPath and SpeciesID are defined.
         match context.Species.LookupPath, context.Species.SpeciesID with
         | Some lookup, Some speciesID -> 
             CacheAccess.getAssemblies (context.DatabaseName) (lookup) (speciesID) (accession)
@@ -51,8 +53,14 @@ module GenBank =
                                       AssemblyName = Some assemblyName
                                       AssemblyPath = Some assemblyPath
                                       GenBankFlatFilePath = Some $"{assemblyPath}/{assemblyName}_genomic.gbff.gz" } })
-        | None, _ -> failwith "Lookup path must exist to create assemblies. Something went wrong creating the species context"
-        | Some _, None -> failwith "SpeciesID must exist to create assemblies. Something went wrong creating the species context"
+        | _ -> let (speciesID, speciesName, assemblyLookupPath) = CacheAccess.getSpecies database species
+               { DatabaseName = DatabaseName.GenBank
+                 Species = 
+                   { SpeciesName = SpeciesPlainName speciesName
+                     SpeciesID = Some speciesID 
+                     LookupPath = Some assemblyLookupPath }
+                 Accession = context.Accession } 
+               |> createAssemblies
 
     
     /// <summary>
