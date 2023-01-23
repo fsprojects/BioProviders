@@ -310,7 +310,7 @@ type AssemblyName() =
     member __.``Create - Strings ending in * should return Regex Assembly Name`` () =
         data
         |> List.map (fun a -> a + "*")
-        |> List.map (fun a -> Accession.Create a)
+        |> List.map (fun a -> AccessionName.Create a)
         |> Seq.iter (fun a ->
                         match a with
                         | AccessionPlainName _ -> Assert.Fail()
@@ -319,7 +319,7 @@ type AssemblyName() =
     [<Test>]
     member __.``Create - Strings not ending in * should return Plain Assembly Name`` () =
         data
-        |> List.map (fun a -> Accession.Create a)
+        |> List.map (fun a -> AccessionName.Create a)
         |> Seq.iter (fun a ->
                         match a with
                         | AccessionPlainName _ -> Assert.Pass()
@@ -329,7 +329,7 @@ type AssemblyName() =
     member __.``Create - Strings containing * anywhere other than end should return Plain Assembly Name`` () =
         data
         |> List.map (fun a -> a.Insert(System.Random().Next(a.Length), "*"))
-        |> List.map (fun a -> Accession.Create a)
+        |> List.map (fun a -> AccessionName.Create a)
         |> Seq.iter (fun a ->
                         match a with
                         | AccessionPlainName _ -> Assert.Pass()
@@ -338,7 +338,7 @@ type AssemblyName() =
     [<Test>]
     member __.``Create - Empty string should return Regex Assembly Name of *`` () =
         [""; "\t"; " "; "\n"; "  \t \n  "]
-        |> List.map (fun a -> Accession.Create a)
+        |> List.map (fun a -> AccessionName.Create a)
         |> Seq.iter (fun a ->
                         match a with
                         | AccessionPlainName _ -> Assert.Fail()
@@ -347,6 +347,6 @@ type AssemblyName() =
     [<Test>]
     member __.``ToString - Should always return string used to create the Assembly Name`` () =
         data
-        |> List.map (fun a -> Accession.Create a)
+        |> List.map (fun a -> AccessionName.Create a)
         |> List.map (fun a -> a.ToString())
         |> should equal data

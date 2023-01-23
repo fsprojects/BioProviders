@@ -338,15 +338,15 @@ module Data =
 
     let generatePlainAssembly () = 
         (generatePlainAssemblyString ())
-        |> FsCheck.Gen.map (fun assembly -> Accession.Create assembly)
+        |> FsCheck.Gen.map (fun assembly -> AccessionName.Create assembly)
 
     let generateRegexAssembly () = 
         (generateRegexAssemblyString ())
-        |> FsCheck.Gen.map (fun assembly -> Accession.Create assembly)
+        |> FsCheck.Gen.map (fun assembly -> AccessionName.Create assembly)
 
     let generateEmptyAssembly () = 
         (generateEmptyString ())
-        |> FsCheck.Gen.map (fun assembly -> Accession.Create assembly)
+        |> FsCheck.Gen.map (fun assembly -> AccessionName.Create assembly)
 
     let generateContext () = 
         let (<!>) = FsCheck.Gen.map

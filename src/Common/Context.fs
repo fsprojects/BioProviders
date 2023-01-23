@@ -113,3 +113,11 @@ module Context =
             let accessionName = accession.ToString() |> (fun s -> s.Trim().ToLower())
 
             SpeciesName.Create speciesName, AccessionName.Create accessionName
+
+
+        /// Creates the context type given a Database, Species, and Accession.
+        static member Create (database:DatabaseName) (species:SpeciesName) 
+                             (accession:AccessionName) =
+            { DatabaseName = database
+              SpeciesName = species
+              Accession = accession }

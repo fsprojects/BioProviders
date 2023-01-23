@@ -91,7 +91,7 @@ module private CacheHelpers =
 
             (accession, assemblyName, assemblyPath)
 
-        let getAssembly (database:DatabaseName) (species:SpeciesName) (accession:Accession) = 
+        let getAssembly (database:DatabaseName) (species:SpeciesName) (accession:AccessionName) = 
             let speciesID = getSpeciesID (species.ToString())
             let assemblyLookupFile = getAssemblyLookupPath (species.ToString())
 
@@ -194,7 +194,7 @@ module CacheAccess =
     let loadFile (path:string) = 
         (new Cache() :> ICache).LoadFile path
 
-    let getAssembly (database:DatabaseName) (species:SpeciesName) (accession:Accession) = 
+    let getAssembly (database:DatabaseName) (species:SpeciesName) (accession:AccessionName) = 
         match database with
         | RefSeq _ -> failwith "RefSeq is not currently supported."
         | GenBank _ -> CacheHelpers.GenBank.getAssembly database species accession
