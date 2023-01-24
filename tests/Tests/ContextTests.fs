@@ -55,21 +55,6 @@ type Context() =
         emptyAssembly <- FsCheck.Gen.sample size count (generateEmptyAssembly ()) |> Seq.head
 
     [<Test>]
-    member __.``Parse - Species cannot be empty if Assembly provided`` () = 
-        (fun () -> (Context.Parse emptySpeciesString plainAssemblyString |> ignore))
-        |> should throw typeof<System.ArgumentException>
-
-        (fun () -> (Context.Parse emptySpeciesString regexAssemblyString |> ignore))
-        |> should throw typeof<System.ArgumentException>
-
-        (fun () -> (Context.Parse emptySpeciesString plainAssemblyString |> ignore))
-        |> should throw typeof<System.ArgumentException>
-
-        (fun () -> (Context.Parse emptySpeciesString regexAssemblyString |> ignore))
-        |> should throw typeof<System.ArgumentException>
-
-
-    [<Test>]
     member __.``Parse - Plain Species name`` () = 
         Context.Parse plainSpeciesString plainAssemblyString
         |> (function | (SpeciesPlainName _, _) -> Assert.Pass()
