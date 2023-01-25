@@ -17,4 +17,4 @@ Windows:
 3. Run `dotnet build ".\BioProviders.sln"`
 
 ## Documentation
-More information can be found in the [documentation](https://github.com/AlexKenna/BioProviders/tree/main/docs).
+More information can be found in the [documentation](https://fsprojects.github.io/BioProviders/).
