@@ -33,6 +33,8 @@ jobs:
       run: dotnet test "./BioProviders.sln" --no-build --verbosity normal
     - name: TypeProvider tests
       run: dotnet test "./BioProviders.TestsAndDocs.sln" --no-build --verbosity normal
+    - name: Build documentation
+      run: dotnet fsdocs build
     - name: Deploy documentation
       uses: peaceiris/actions-gh-pages@v3
       with:
