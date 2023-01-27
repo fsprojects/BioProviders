@@ -354,7 +354,10 @@ MigrationBackup/
 paket-files/
 
 # Documentation
-/temp
-/output
+temp/
+output/
 .fsdocs
-/tmp/watch
+tmp/
+
+# FAKE
+.fake
