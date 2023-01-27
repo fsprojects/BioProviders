@@ -13,21 +13,22 @@ module GenBankFlatFile =
     /// GenBank Flat File representation.
     /// </summary>
     type GenBankFlatFile =
-        { Metadata : Metadata.Metadata
-          Sequence : BioFSharp.BioSeq.BioSeq<BioFSharp.Nucleotides.Nucleotide> }
+        { Metadata: Metadata.Metadata
+          Sequence: BioFSharp.BioSeq.BioSeq<BioFSharp.Nucleotides.Nucleotide> }
 
     /// <summary>
     /// Basic constructor for GenBankFlatFile type.
     /// </summary>
-    let createGenBankFlatFile (path:string) = 
-        
+    let createGenBankFlatFile (path: string) =
+
         // Create DotNet Bio ISequence for the GenBank Flat File.
-        let sequence = 
+        let sequence =
             CacheAccess.loadFile path
             |> (fun stream -> new Compression.GZipStream(stream, Compression.CompressionMode.Decompress))
             |> (new Bio.IO.GenBank.GenBankParser()).Parse
             |> Seq.cast<Bio.ISequence>
             |> Seq.head
+
         let metadata = sequence.Metadata.Item("GenBank") :?> Bio.IO.GenBank.GenBankMetadata
 
         // Create GenBank Flat File Type.

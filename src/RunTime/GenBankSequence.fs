@@ -4,7 +4,7 @@
 // GenBank Flat File Sequence Representation.
 // --------------------------------------------------------------------------------------
 
-module Sequence = 
+module Sequence =
 
-    let createSequence (sequence:Bio.ISequence) = 
-        BioFSharp.BioSeq.ofNucleotideString ( sequence.ToString() )
+    let createSequence (sequence: Bio.ISequence) =
+        BioFSharp.BioSeq.ofNucleotideString (sequence.ToString())
