@@ -4,3 +4,4 @@ group Test
     NUnit3TestAdapter
     FsUnit
     FsCheck
+    GitHubActionsTestLogger
