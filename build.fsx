@@ -37,6 +37,11 @@ let summary = "F# library for accessing and manipulating bioinformatic datasets.
 
 let description =
     """
+    The BioProviders library provides tools and functionality to simplify accessing and 
+    manipulating bioinformatic data. This library includes:
+
+    * GenBankProvider -- Type Provider for type-safe access to over 240 million genomic 
+                         sequences and their metadata.
     """
 
 let tags = "F# fsharp data typeprovider bioinformatics genbank refseq"
@@ -162,7 +167,7 @@ Target.create "GenerateDocs" (fun _ ->
         DotNet.exec
             id
             "fsdocs"
-            ("build --properties Configuration=Release --strict --eval --clean --parameters fsdocs-package-version "
+            ("build --properties Configuration=Release --eval --clean --parameters fsdocs-package-version "
              + release.NugetVersion)
 
     if not result.OK then
