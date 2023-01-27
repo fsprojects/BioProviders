@@ -19,22 +19,10 @@ jobs:
         dotnet-version: 6.0.x
     - name: Restore tools
       run: dotnet tool restore
-    - name: Install dependencies
-      run: dotnet paket install
-    - name: Restore TypeProvider dependencies
-      run: dotnet restore "./BioProviders.sln"
-    - name: Restore TestAndDocs dependencies
-      run: dotnet restore "./BioProviders.TestsAndDocs.sln"
-    - name: Build TypeProvider
-      run: dotnet build "./BioProviders.sln" --no-restore
-    - name: Build TestAndDocs
-      run: dotnet build "./BioProviders.TestsAndDocs.sln" --no-restore
-    - name: Unit tests
-      run: dotnet test "./BioProviders.sln" --no-build --verbosity normal
-    - name: TypeProvider tests
-      run: dotnet test "./BioProviders.TestsAndDocs.sln" --no-build --verbosity normal
-    - name: Build documentation
-      run: dotnet fsdocs build --eval
+    - name: Restore packages
+      run: dotnet paket restore
+    - name: Build and test
+      run: dotnet fake buld -t All
     - name: Deploy documentation
       uses: peaceiris/actions-gh-pages@v3
       with:
