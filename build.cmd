@@ -1,2 +1,5 @@
+@echo off
+
 dotnet tool restore
-dotnet fake %*
+dotnet paket restore
+dotnet fake build %*
