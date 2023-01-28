@@ -1,4 +1,4 @@
-﻿#I "../../bin/Debug/lib/netstandard2.0"
+﻿#I "../../bin/Release/lib/netstandard2.0"
 #r "BioProviders.dll"
 #r "nuget: BioFSharp"
 
