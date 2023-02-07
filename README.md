@@ -39,8 +39,8 @@ To build the BioProviders package, perform the following steps:
 
 The BioProviders package code is formatted using [fantomas](https://fsprojects.github.io/fantomas/). 
 
-* To format the code, run `build.sh -t Format` 
-* To check formatting, run `build.sh -t CheckFormat` 
+* To format the code, run `build.sh -t Format` or `build.cmd -t Format`
+* To check formatting, run `build.sh -t CheckFormat` or `build.cmd -t CheckFormat` 
 
 ## License
 
