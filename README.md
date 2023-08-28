@@ -47,3 +47,7 @@ The BioProviders package code is formatted using [fantomas](https://fsprojects.g
 BioProviders is covered by the MIT license.
 
 The package also uses [BioFSharp](https://github.com/CSBiology/BioFSharp) and [.NET Bio](https://github.com/dotnetbio/bio), which use the MIT and Apache-2.0 licenses, respectively.
+
+## Maintainers
+
+Current maintainers are [Alex Kenna](https://github.com/AlexKenna) and [James Hogan](https://github.com/jamesmhogan).
