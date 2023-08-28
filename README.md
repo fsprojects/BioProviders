@@ -27,6 +27,13 @@ let genome = GenBankProvider<Species, Accession>.Genome()
 genome.Sequence |> BioSeq.complement
 ```
 
+The above code produces the result:
+
+```fsharp
+BioSeq.BioSeq<Nucleotides.Nucleotide> = seq [C; T; A; C; ...]
+
+```
+
 ## Building
 [![Build Status](https://github.com/AlexKenna/BioProviders/actions/workflows/dotnet.yml/badge.svg)](https://github.com/AlexKenna/BioProviders/actions) 
 
