@@ -31,4 +31,4 @@ jobs:
         publish_branch: gh-pages
         force_orphan: true
     - name: Publish NuGets (if this version not published before)
-      run: dotnet nuget push bin\BioProviders.*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_ORG_TOKEN_2020 }} --skip-duplicate
+      run: dotnet nuget push bin\BioProviders.*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_ORG_TOKEN_2023 }} --skip-duplicate
