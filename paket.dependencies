@@ -1,10 +1,11 @@
+version 6.2.1
 framework: net6.0, netstandard2.0
 source https://api.nuget.org/v3/index.json
 
 github fsprojects/FSharp.TypeProviders.SDK src/ProvidedTypes.fsi
 github fsprojects/FSharp.TypeProviders.SDK src/ProvidedTypes.fs
 
-nuget FSharp.Core >= 5.0.1 lowest_matching: true
+nuget FSharp.Core 6.0.0.0 lowest_matching: true
 nuget FluentFTP 34.0.1
 nuget NetBio.Core
 
@@ -44,7 +45,7 @@ group Test
     frameworks: net6.0
     source https://api.nuget.org/v3/index.json
 
-    nuget FSharp.Core 6.0.5
+    nuget FSharp.Core 6.0.0.0
     nuget Microsoft.NET.Test.Sdk
     nuget NUnit 3.13.1
     nuget NUnit3TestAdapter
