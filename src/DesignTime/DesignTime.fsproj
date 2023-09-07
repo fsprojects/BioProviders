@@ -1,17 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+	<IsPackable>false</IsPackable>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
-	<IsPackable>false</IsPackable>
     <DefineConstants>IS_DESIGNTIME</DefineConstants>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <AssemblyName>BioProviders.DesignTime</AssemblyName>
-    <Name>BioProviders</Name>
-    <OutputPath>..\..\bin\$(Configuration)\typeproviders\fsharp41\</OutputPath>
     <Tailcalls>true</Tailcalls>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="paket.references" />
     <Compile Include="..\..\paket-files\fsprojects\FSharp.TypeProviders.SDK\src\ProvidedTypes.fsi">
       <Paket>True</Paket>
       <Link>paket-files/ProvidedTypes.fsi</Link>
@@ -20,7 +19,6 @@
       <Paket>True</Paket>
       <Link>paket-files/ProvidedTypes.fs</Link>
     </Compile>
-    <None Include="paket.references" />
     <Compile Include="..\RunTime\GenBankSequence.fs" />
     <Compile Include="..\RunTime\GenBankMetadata.fs" />
     <Compile Include="..\RunTime\GenBankFlatFile.fs" />

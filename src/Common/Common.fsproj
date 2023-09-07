@@ -7,14 +7,15 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="paket.references" />
-	<None Include="..\..\build\data\**\*.*" LinkBase="data\">
+	<Content Include="..\..\build\**\*.*">
+	  <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
       <Pack>true</Pack>
-      <PackagePath></PackagePath>
+      <PackagePath>data\</PackagePath>
 	  <IncludeInPackage>true</IncludeInPackage>
 	  <PackageCopyToOutput>true</PackageCopyToOutput>
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  <CopyToPublishDirectory>Always</CopyToPublishDirectory>
-	</None>
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	</Content>
 	<Compile Include="Helpers.fs" />
     <Compile Include="Context.fs" />
     <Compile Include="FTP.fs" />
