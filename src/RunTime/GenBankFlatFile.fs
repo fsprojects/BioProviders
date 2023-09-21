@@ -21,6 +21,10 @@ module GenBankFlatFile =
     /// </summary>
     let createGenBankFlatFile (path: string) =
 
+        // Samuel Smith n7581769.
+        // Testing deleting old files.
+        CacheAccess.deleteOldFiles
+
         // Create DotNet Bio ISequence for the GenBank Flat File.
         let sequence =
             CacheAccess.loadFile path
@@ -30,6 +34,11 @@ module GenBankFlatFile =
             |> Seq.head
 
         let metadata = sequence.Metadata.Item("GenBank") :?> Bio.IO.GenBank.GenBankMetadata
+
+        // Added by Samuel Smith n7581769.
+        // Change the last access date for the requested file.
+        if (File.Exists(path)) then
+            File.SetLastAccessTime(path, System.DateTime.Now)
 
         // Create GenBank Flat File Type.
         { Metadata = Metadata.createMetadata metadata

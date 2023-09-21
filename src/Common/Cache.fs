@@ -14,6 +14,8 @@ type private ICache =
     abstract LoadFile: string -> Stream
     abstract SaveFile: string -> FtpStatus
     abstract Purge: unit -> unit
+    // Added by Samuel Smith n7581769.
+    abstract PurgeOld: float -> unit
 
 
 // --------------------------------------------------------------------------------------
@@ -43,8 +45,27 @@ module private CacheHelpers =
             let cachePath = getCacheFilePath (path)
             FTP.downloadNCBIFile (cachePath, path)
 
-        let clearCache () = ()
+        // Samuel Smith n7581769.
+        // Added an implementation for this function.
+        let clearCache () =
+            let cacheLocation = Path.Combine(Path.GetTempPath(), "BioProviders")
+            if Directory.Exists cacheLocation then
+                let cacheFiles = Directory.GetFiles cacheLocation
+                Seq.iter (fun file -> File.Delete(file)) cacheFiles
 
+        // Samuel Smith n7581769.
+        // A function for clearing the cache of files that haven't been
+        // accessed within a certain time frame.
+        // Takes the number of days as a parameter.
+        let clearCacheOld (days : float) =
+            let cutOffDate = System.DateTime.Now.AddDays(-days)
+            let cacheLocation = Path.Combine(Path.GetTempPath(), "BioProviders")
+            if Directory.Exists cacheLocation then
+                let cacheFiles = Directory.GetFiles cacheLocation
+                Seq.iter (fun file -> match File.GetLastAccessTime(file) < cutOffDate with
+                                      | true -> File.Delete(file)
+                                      | _ -> ()
+                ) cacheFiles
 
     module GenBank =
 
@@ -57,7 +78,10 @@ module private CacheHelpers =
             let assemblyDirectory =
                 Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
 
-            Path.Combine(assemblyDirectory, "data", fileName)
+            // Samuel Smith n7581769.
+            // Changed "data" to "." since that's where the files were getting
+            // packed in the NuGet package.
+            Path.Combine(assemblyDirectory, ".", fileName)
 
         let private getSpeciesLookupPath (speciesName: string) =
             let character = getLookupCharacter speciesName
@@ -212,6 +236,9 @@ type private Cache() =
 
         member __.Purge() = clearCache ()
 
+        // Added by Samuel Smith n7581769.
+        member __.PurgeOld(days) = clearCacheOld days
+
         member this.LoadFile(path: string) =
             match loadCacheFile (path) with
             | Some data -> data :> Stream
@@ -254,3 +281,8 @@ module CacheAccess =
         | RefSeq _, _ -> failwith "RefSeq is not currently supported."
         | GenBank _, ".*" -> failwith "A species pattern is required."
         | GenBank _, _ -> CacheHelpers.GenBank.getSpeciesCollection speciesPattern
+
+    // Samuel Smith n7581769.
+    // Deletes files that haven't been accessed for the specified number of
+    // days.
+    let deleteOldFiles = (new Cache() :> ICache).PurgeOld(90)

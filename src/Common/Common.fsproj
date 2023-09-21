@@ -7,14 +7,15 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="paket.references" />
-	<None Include="..\..\build\data\**\*.*" LinkBase="data\">
+	<!--<None Include="..\..\build\data\**\*.*" LinkBase="data\">
       <Pack>true</Pack>
       <PackagePath></PackagePath>
 	  <IncludeInPackage>true</IncludeInPackage>
 	  <PackageCopyToOutput>true</PackageCopyToOutput>
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  <CopyToPublishDirectory>Always</CopyToPublishDirectory>
-	</None>
+	</None>-->
+    <None Include="..\..\build\data\**\*.*" LinkBase="\" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
 	<Compile Include="Helpers.fs" />
     <Compile Include="Context.fs" />
     <Compile Include="FTP.fs" />
