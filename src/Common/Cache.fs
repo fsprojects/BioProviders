@@ -49,6 +49,7 @@ module private CacheHelpers =
         // Added an implementation for this function.
         let clearCache () =
             let cacheLocation = Path.Combine(Path.GetTempPath(), "BioProviders")
+
             if Directory.Exists cacheLocation then
                 let cacheFiles = Directory.GetFiles cacheLocation
                 Seq.iter (fun file -> File.Delete(file)) cacheFiles
@@ -57,15 +58,19 @@ module private CacheHelpers =
         // A function for clearing the cache of files that haven't been
         // accessed within a certain time frame.
         // Takes the number of days as a parameter.
-        let clearCacheOld (days : float) =
+        let clearCacheOld (days: float) =
             let cutOffDate = System.DateTime.Now.AddDays(-days)
             let cacheLocation = Path.Combine(Path.GetTempPath(), "BioProviders")
+
             if Directory.Exists cacheLocation then
                 let cacheFiles = Directory.GetFiles cacheLocation
-                Seq.iter (fun file -> match File.GetLastAccessTime(file) < cutOffDate with
-                                      | true -> File.Delete(file)
-                                      | _ -> ()
-                ) cacheFiles
+
+                Seq.iter
+                    (fun file ->
+                        match File.GetLastAccessTime(file) < cutOffDate with
+                        | true -> File.Delete(file)
+                        | _ -> ())
+                    cacheFiles
 
     module GenBank =
 

@@ -39,6 +39,11 @@ module FTP =
 
             // Samuel Smith n7581769.
             // Added check for changed file as well as verification.
-            connection.DownloadFile(localPath, remotePath, (isNewerFile localPath remotePath connection), FtpVerify.Retry)
+            connection.DownloadFile(
+                localPath,
+                remotePath,
+                (isNewerFile localPath remotePath connection),
+                FtpVerify.Retry
+            )
 
         useNCBIConnection downloadFile
