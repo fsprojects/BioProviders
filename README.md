@@ -57,4 +57,4 @@ The package also uses [BioFSharp](https://github.com/CSBiology/BioFSharp) and [.
 
 ## Maintainers
 
-Current maintainers are [Alex Kenna](https://github.com/AlexKenna) and [James Hogan](https://github.com/jamesmhogan).
+Current maintainers are [Alex Kenna](https://github.com/AlexKenna), [Samuel Smith](https://github.com/n7581769) and [James Hogan](https://github.com/jamesmhogan).
