@@ -172,10 +172,31 @@ module FTP =
         client.Connect()
         callback client
 
+    // Checks if a file exists and if so, whether it is older than the remote
+    // file.
+    // - If a file doesn't exist, or is older: return to overwrite existing
+    //   file.
+    // - Otherwise: return to resume existing file (in case it wasn't
+    //   downloaded fully before).
+    let isNewerFile (localPath: string) (remotePath: string) (connection: FtpClient) =
+        if (not (File.Exists(localPath))) then
+            FtpLocalExists.Overwrite
+        else
+            match File.GetLastWriteTime(localPath) > connection.GetModifiedTime(remotePath) with
+            | true -> FtpLocalExists.Append
+            | _ -> FtpLocalExists.Overwrite
+
     /// Downloads a file from the NCBI FTP server to the local file system.
     let downloadNCBIFile (localPath: string, remotePath: string) =
         let downloadFile (connection: FtpClient) =
-            connection.DownloadFile(localPath, remotePath)
+
+            // Check for changed file as well as verification.
+            connection.DownloadFile(
+                localPath,
+                remotePath,
+                (isNewerFile localPath remotePath connection),
+                FtpVerify.Retry
+            )
 
         useNCBIConnection downloadFile
 
@@ -183,12 +204,14 @@ module FTP =
 // --------------------------------------------------------------------------------------
 // Cache Interface.
 // --------------------------------------------------------------------------------------
+
 open Context
 
 type private ICache =
     abstract LoadFile: string -> Stream
     abstract SaveFile: string -> FtpStatus
     abstract Purge: unit -> unit
+    abstract PurgeOld: float -> unit
 
 
 // --------------------------------------------------------------------------------------
@@ -218,8 +241,26 @@ module private CacheHelpers =
             let cachePath = getCacheFilePath (path)
             FTP.downloadNCBIFile (cachePath, path)
 
-        let clearCache () = ()
+        let clearCache () =
+            let cacheLocation = Path.Combine(Path.GetTempPath(), "BioProviders")
 
+            if Directory.Exists cacheLocation then
+                let cacheFiles = Directory.GetFiles cacheLocation
+                Seq.iter (fun file -> File.Delete(file)) cacheFiles
+
+        let clearCacheOld (days: float) =
+            let cutOffDate = System.DateTime.Now.AddDays(-days)
+            let cacheLocation = Path.Combine(Path.GetTempPath(), "BioProviders")
+
+            if Directory.Exists cacheLocation then
+                let cacheFiles = Directory.GetFiles cacheLocation
+
+                Seq.iter
+                    (fun file ->
+                        match File.GetLastAccessTime(file) < cutOffDate with
+                        | true -> File.Delete(file)
+                        | _ -> ())
+                    cacheFiles
 
     module GenBank =
 
@@ -232,7 +273,7 @@ module private CacheHelpers =
             let assemblyDirectory =
                 Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
 
-            Path.Combine(assemblyDirectory, "data", fileName)
+            Path.Combine(assemblyDirectory, ".", fileName)
 
         let private getSpeciesLookupPath (speciesName: string) =
             let character = getLookupCharacter speciesName
@@ -387,6 +428,8 @@ type private Cache() =
 
         member __.Purge() = clearCache ()
 
+        member __.PurgeOld(days) = clearCacheOld days
+
         member this.LoadFile(path: string) =
             match loadCacheFile (path) with
             | Some data -> data :> Stream
@@ -429,3 +472,5 @@ module CacheAccess =
         | RefSeq _, _ -> failwith "RefSeq is not currently supported."
         | GenBank _, ".*" -> failwith "A species pattern is required."
         | GenBank _, _ -> CacheHelpers.GenBank.getSpeciesCollection speciesPattern
+
+    let deleteOldFiles = (new Cache() :> ICache).PurgeOld(90)
