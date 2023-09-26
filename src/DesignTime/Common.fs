@@ -4,11 +4,186 @@ open System.Reflection
 open System.Text.RegularExpressions
 open System.IO
 open FluentFTP
-open BioProviders.Common.Context
+
+
+// --------------------------------------------------------------------------------------
+// Project Helpers.
+// --------------------------------------------------------------------------------------
+
+module Helpers =
+
+    /// Parses an optional string. Returns the None option type if the provided string
+    /// is null or empty. Returns the Some option type containing the provided string
+    /// otherwise.
+    let parseOptionString (str: string) =
+        match System.String.IsNullOrEmpty(str) with
+        | true -> None
+        | _ -> Some str
+
+    /// Parses an optional list. Returns the None option type if the provided list
+    /// is empty. Returns the Some option type containing the provided list otherwise.
+    let parseOptionList (lst: 'a list) =
+        match lst.Length with
+        | 0 -> None
+        | _ -> Some lst
+
+    /// Parses an optional date. Returns the None option type if the provided date
+    /// is the default DateTime object (i.e., 1/01/0001 12:00:00 AM). Returns the Some
+    /// option type containing the provided date otherwise.
+    let parseOptionDate (date: System.DateTime) =
+        match date = new System.DateTime() with
+        | true -> None
+        | _ -> Some date
+
+
+// --------------------------------------------------------------------------------------
+// Generation Context State Types.
+// --------------------------------------------------------------------------------------
+
+module Context =
+
+    // ----------------------------------------------------------------------------------
+    // Base Name Type.
+    // ----------------------------------------------------------------------------------
+
+    /// The underlying Name type. Used to determine whether a string follows a regex
+    /// pattern supported by a Type Provider.
+    type Name =
+        | PlainName of string
+        | RegexName of string
+
+        /// Creates a Name type. If a string is empty, or its last character is '*', the
+        /// string is a RegexName. Otherwise, the string is a PlainName.
+        static member Create(name: string) =
+            match name with
+            | _ when name.Length = 0 -> RegexName("*")
+            | _ when name.[name.Length - 1] = '*' -> RegexName name
+            | _ -> PlainName name
+
+        /// Converts a Name type to a string.
+        override this.ToString() =
+            match this with
+            | PlainName name -> name
+            | RegexName name -> name
+
+
+    // ----------------------------------------------------------------------------------
+    // Database Name Type.
+    // ----------------------------------------------------------------------------------
+
+    /// Typed representation of an NCBI Database. NCBI contains two main genome databases
+    /// GenBank and RefSeq.
+    type DatabaseName =
+        | GenBank
+        | RefSeq
+
+        /// Determines the NCBI FTP server path to the appropriate database.
+        member this.GetPath() =
+            match this with
+            | GenBank -> "/genomes/all/GCA"
+            | RefSeq -> "/genomes/all/GCF"
+
+
+    // ----------------------------------------------------------------------------------
+    // Species Types.
+    // ----------------------------------------------------------------------------------
+
+    /// Typed representation of the Species name.
+    type SpeciesName =
+        | SpeciesPlainName of string
+        | SpeciesRegexName of string
+
+        /// Creates a Species Name type. Returns SpeciesRegexName if the species name
+        /// follows a regex format. Otherwise, returns SpeciesPlainName.
+        static member Create(species: string) =
+            match Name.Create species with
+            | PlainName name -> SpeciesPlainName name
+            | RegexName name -> SpeciesRegexName name
+
+        /// Converts a Species Name type to a string. For regex names, the final '*'
+        /// character is replaced by '.*' to follow correct regex formatting.
+        override this.ToString() =
+            match this with
+            | SpeciesPlainName name -> name
+            | SpeciesRegexName name -> name.Substring(0, name.Length - 1) + ".*"
+
+
+    // ----------------------------------------------------------------------------------
+    // Accession Types.
+    // ----------------------------------------------------------------------------------
+
+    /// Typed representation of the Accession name.
+    and AccessionName =
+        | AccessionPlainName of string
+        | AccessionRegexName of string
+
+        /// Creates an Accession Name type. Returns AccessionRegexName if the species
+        /// name follows a regex format. Otherwise, returns AccessionPlainName.
+        static member Create(assembly: string) =
+            match Name.Create assembly with
+            | PlainName name -> AccessionPlainName name
+            | RegexName name -> AccessionRegexName name
+
+        /// Converts an Accession Name type to a string. For regex names, the final '*'
+        /// character is replaced by '.*' to follow correct regex formatting.
+        override this.ToString() =
+            match this with
+            | AccessionPlainName name -> name
+            | AccessionRegexName name -> name.Substring(0, name.Length - 1) + ".*"
+
+
+    // --------------------------------------------------------------------------------------
+    // Generation Context.
+    // --------------------------------------------------------------------------------------
+
+    /// The context for type generation.
+    type Context =
+        { DatabaseName: DatabaseName
+          SpeciesName: SpeciesName
+          Accession: AccessionName }
+
+        /// Parses a species and accession string and returns the corresponding Species and
+        /// Accession types.
+        static member Parse (species: string) (accession: string) =
+            let speciesName = species.ToString() |> (fun s -> s.Trim().ToLower())
+            let accessionName = accession.ToString() |> (fun s -> s.Trim().ToLower())
+
+            SpeciesName.Create speciesName, AccessionName.Create accessionName
+
+
+        /// Creates the context type given a Database, Species, and Accession.
+        static member Create (database: DatabaseName) (species: SpeciesName) (accession: AccessionName) =
+            { DatabaseName = database
+              SpeciesName = species
+              Accession = accession }
+
+
+// --------------------------------------------------------------------------------------
+// FTP Access for Type Providers.
+// --------------------------------------------------------------------------------------
+
+[<RequireQualifiedAccess>]
+module FTP =
+
+    /// Creates and uses a connection with the NCBI FTP server.
+    let internal useNCBIConnection (callback) =
+        let serverBaseLocation = "ftp://ftp.ncbi.nlm.nih.gov"
+        use client = new FtpClient(serverBaseLocation)
+        client.Connect()
+        callback client
+
+    /// Downloads a file from the NCBI FTP server to the local file system.
+    let downloadNCBIFile (localPath: string, remotePath: string) =
+        let downloadFile (connection: FtpClient) =
+            connection.DownloadFile(localPath, remotePath)
+
+        useNCBIConnection downloadFile
+
 
 // --------------------------------------------------------------------------------------
 // Cache Interface.
 // --------------------------------------------------------------------------------------
+open Context
 
 type private ICache =
     abstract LoadFile: string -> Stream

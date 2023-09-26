@@ -15,7 +15,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\DesignTime\DesignTime.fsproj" />
     <ProjectReference Include="..\..\src\RunTime\RunTime.fsproj" />
-	<ProjectReference Include="..\..\src\Common\Common.fsproj" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

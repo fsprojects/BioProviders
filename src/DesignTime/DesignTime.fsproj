@@ -11,6 +11,15 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="paket.references" />
+	<Content Include="..\..\build\**\*.*">
+	  <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <Pack>true</Pack>
+      <PackagePath>data\</PackagePath>
+	  <IncludeInPackage>true</IncludeInPackage>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <Compile Include="..\..\paket-files\fsprojects\FSharp.TypeProviders.SDK\src\ProvidedTypes.fsi">
       <Paket>True</Paket>
       <Link>paket-files/ProvidedTypes.fsi</Link>
@@ -19,6 +28,7 @@
       <Paket>True</Paket>
       <Link>paket-files/ProvidedTypes.fs</Link>
     </Compile>
+    <Compile Include="Common.fs" />
     <Compile Include="..\RunTime\GenBankSequence.fs" />
     <Compile Include="..\RunTime\GenBankMetadata.fs" />
     <Compile Include="..\RunTime\GenBankFlatFile.fs" />
@@ -29,7 +39,7 @@
     <Compile Include="DesignTime.fs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.fsproj" />
+    <PackageReference Include="BioProviders" Version="2.0.0" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

@@ -19,7 +19,6 @@
     <Compile Include="RunTime.fs" />
   </ItemGroup>
   <ItemGroup>
-	<ProjectReference Include="..\Common\Common.fsproj" />
     <ProjectReference Include="..\DesignTime\DesignTime.fsproj">
       <IsFSharpDesignTimeProvider>true</IsFSharpDesignTimeProvider>
       <PrivateAssets>all</PrivateAssets>
