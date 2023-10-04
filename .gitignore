@@ -361,3 +361,9 @@ tmp/
 
 # FAKE
 .fake
+
+# Code backups
+*.bak
+
+# Test script
+Test.fsx

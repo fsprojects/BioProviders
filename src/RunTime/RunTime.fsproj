@@ -1,21 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-	<OutputType>Library</OutputType>
+    <OutputType>Library</OutputType>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>BioProviders</AssemblyName>
-	<FSharpToolsDirectory>typeproviders</FSharpToolsDirectory>
-	<PackagePath>typeproviders</PackagePath>
+    <FSharpToolsDirectory>typeproviders</FSharpToolsDirectory>
+    <PackagePath>typeproviders</PackagePath>
   </PropertyGroup>
   <ItemGroup>
-	<None Include="paket.references" />
-	<Compile Include="GenBankSequence.fs" />
-	<Compile Include="GenBankMetadata.fs" />
-	<Compile Include="GenBankFlatFile.fs" />
-	<Compile Include="GenBankAssembly.fs" />
-	<Compile Include="GenBankSpecies.fs" />
-	<Compile Include="GenBankTaxon.fs" />
+    <None Include="Test.fsx" />
+    <None Include="paket.references" />
+    <Compile Include="GenBankSequence.fs" />
+    <Compile Include="GenBankMetadata.fs" />
+    <Compile Include="GenBankFlatFile.fs" />
+    <Compile Include="GenBankAssembly.fs" />
+    <Compile Include="GenBankSpecies.fs" />
+    <Compile Include="GenBankTaxon.fs" />
     <Compile Include="RunTime.fs" />
   </ItemGroup>
   <ItemGroup>
@@ -23,6 +24,16 @@
       <IsFSharpDesignTimeProvider>true</IsFSharpDesignTimeProvider>
       <PrivateAssets>all</PrivateAssets>
     </ProjectReference>
+  </ItemGroup>
+  <Target Name="DeleteLocalCache" BeforeTargets="Pack">
+    <RemoveDir Directories="$(NugetPackageRoot)/$(PackageId.ToLower())" />
+  </Target>
+  <!-- https://github.com/NuGet/Home/issues/3891#issuecomment-309792369 -->
+  <ItemGroup>
+    <_PackageFiles Include="$(OutputPath)\BioProviders.DesignTime.dll">
+      <BuildAction>None</BuildAction>
+      <PackagePath>lib\netstandard2.0\</PackagePath>
+    </_PackageFiles>
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

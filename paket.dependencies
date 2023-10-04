@@ -11,6 +11,7 @@ nuget NetBio.Core
 
 git https://github.com/CSBiology/BioFSharp.git nuget Packages: /
 nuget BioFSharp
+nuget FSharp.Data
 
 group Build
     source https://api.nuget.org/v3/index.json

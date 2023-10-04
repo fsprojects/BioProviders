@@ -1,2 +1,4 @@
 paket-files/
 tests/
+*.bak
+Test.fsx

@@ -11,7 +11,8 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="paket.references" />
-	<None Include="..\..\build\data\**\*.*" LinkBase="\data" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+	<!--<None Include="..\..\build\data\**\*.*" LinkBase="\data" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />-->
+    <None Include="..\..\build\data\**\*.gz" LinkBase="\" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
     <Compile Include="..\..\paket-files\fsprojects\FSharp.TypeProviders.SDK\src\ProvidedTypes.fsi">
       <Paket>True</Paket>
       <Link>paket-files/ProvidedTypes.fsi</Link>

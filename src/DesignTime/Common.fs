@@ -5,6 +5,8 @@ open System.Text.RegularExpressions
 open System.IO
 open FluentFTP
 
+open FSharp.Data
+
 
 // --------------------------------------------------------------------------------------
 // Project Helpers.
@@ -262,6 +264,61 @@ module private CacheHelpers =
                         | _ -> ())
                     cacheFiles
 
+        // Used to download an assembly list from a remote server.
+        let internal saveAssemblyList (path: string) =
+            let cachePath = getCacheFilePath (path)
+
+            try
+                // At the moment, use the base URL for the raw .gz files in the
+                // BioProviders repository.
+                let url =
+                    sprintf "https://github.com/fsprojects/BioProviders/raw/main/build/data/%s" path
+
+                let data = Http.Request(url).Body
+
+                match data with
+                | Binary bytes ->
+                    File.WriteAllBytes(cachePath, bytes)
+                    true
+                | _ ->
+                    failwith (
+                        sprintf
+                            "Could not download remote file %s to %s - did not recieve binary content."
+                            path
+                            cachePath
+                    )
+
+                    false
+            with ex ->
+                failwith (
+                    sprintf
+                        "Could not download remote file %s to %s, because of the following exception: %s"
+                        path
+                        cachePath
+                        ex.Message
+                )
+
+                false
+
+        // Used to load a data file referring to the location of assemblies on
+        // GenBank's FTP server.. If the file does not exist in the cache
+        // location, attempts to download it from the FTP server (with the
+        // above function).
+        let loadAssemblyList (path: string) =
+
+            // This should be changed so we don't need to split up the path
+            // created to get the filename later.
+            let filename = Seq.last (path.Split('\\'))
+
+            // Read the existing file if the data file has already been
+            // downloaded.
+            if File.Exists(path) then
+                Some(File.OpenRead(path))
+            else
+                match saveAssemblyList filename with
+                | false -> None
+                | _ -> Some(File.OpenRead(path))
+
     module GenBank =
 
         let private getLookupCharacter (name: string) =
@@ -270,10 +327,11 @@ module private CacheHelpers =
             | _ -> '#'
 
         let private getContentPath (fileName: string) =
-            let assemblyDirectory =
+            (*let assemblyDirectory =
                 Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
 
-            Path.Combine(assemblyDirectory, ".", fileName)
+            Path.Combine(assemblyDirectory, ".", fileName)*)
+            Path.Combine(Path.GetTempPath(), "BioProviders", fileName)
 
         let private getSpeciesLookupPath (speciesName: string) =
             let character = getLookupCharacter speciesName
@@ -286,7 +344,7 @@ module private CacheHelpers =
         let private getSpeciesID (speciesName: string) =
             let speciesLookupFile = getSpeciesLookupPath speciesName
 
-            match General.loadFile speciesLookupFile with
+            match General.loadAssemblyList speciesLookupFile with
             | None -> invalidOp "Could not load species lookup file."
             | Some data ->
                 data :> Stream
@@ -322,7 +380,7 @@ module private CacheHelpers =
             let speciesID = getSpeciesID (species.ToString())
             let assemblyLookupFile = getAssemblyLookupPath (species.ToString())
 
-            match General.loadFile assemblyLookupFile with
+            match General.loadAssemblyList assemblyLookupFile with
             | None -> invalidOp "Could not load assembly lookup file."
             | Some data ->
                 data :> Stream
@@ -350,7 +408,7 @@ module private CacheHelpers =
             (speciesID: string)
             (accessionPattern: string)
             =
-            match General.loadFile assemblyLookupPath with
+            match General.loadAssemblyList assemblyLookupPath with
             | None -> invalidOp "Could not load assembly lookup file."
             | Some data ->
                 data :> Stream
@@ -390,7 +448,7 @@ module private CacheHelpers =
             let speciesLookupPath = getSpeciesLookupPath speciesPattern
             let assemblyLookupPath = getAssemblyLookupPath speciesPattern
 
-            match General.loadFile speciesLookupPath with
+            match General.loadAssemblyList speciesLookupPath with
             | None -> invalidOp "Could not load assembly lookup file."
             | Some data ->
                 data :> Stream
