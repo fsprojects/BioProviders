@@ -9,7 +9,6 @@
     <PackagePath>typeproviders</PackagePath>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="Test.fsx" />
     <None Include="paket.references" />
     <Compile Include="GenBankSequence.fs" />
     <Compile Include="GenBankMetadata.fs" />
