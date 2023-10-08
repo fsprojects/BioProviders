@@ -13,8 +13,7 @@ The BioProviders work by parsing genomic data files using the [.NET Bio](https:/
 Below, a simple example of finding the complement of the genomic sequence of a Staphylococcus lugdunensis assembly is provided.
 
 ```fsharp
-#r "nuget:BioProviders"
-#r "nuget:BioFSharp"
+#r "nuget: BioProviders"
 
 open BioProviders
 open BioFSharp
