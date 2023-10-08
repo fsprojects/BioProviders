@@ -21,8 +21,9 @@ module GenBankFlatFile =
     /// </summary>
     let createGenBankFlatFile (path: string) =
 
-        // Samuel Smith n7581769.
-        // Testing deleting old files.
+        // Delete files that are too old.
+        // Ideally, we'd have this in a different place, rather than accessed
+        // any time we want to create a new flat file.
         CacheAccess.deleteOldFiles
 
         // Create DotNet Bio ISequence for the GenBank Flat File.

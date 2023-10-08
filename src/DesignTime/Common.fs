@@ -301,23 +301,21 @@ module private CacheHelpers =
                 false
 
         // Used to load a data file referring to the location of assemblies on
-        // GenBank's FTP server.. If the file does not exist in the cache
+        // GenBank's FTP server. If the file does not exist in the cache
         // location, attempts to download it from the FTP server (with the
         // above function).
         let loadAssemblyList (path: string) =
 
-            // This should be changed so we don't need to split up the path
-            // created to get the filename later.
-            let filename = Seq.last (path.Split('\\'))
+            let fullPath = getCacheFilePath path
 
             // Read the existing file if the data file has already been
             // downloaded.
-            if File.Exists(path) then
-                Some(File.OpenRead(path))
+            if File.Exists(fullPath) then
+                Some(File.OpenRead(fullPath))
             else
-                match saveAssemblyList filename with
+                match saveAssemblyList path with
                 | false -> None
-                | _ -> Some(File.OpenRead(path))
+                | _ -> Some(File.OpenRead(fullPath))
 
     module GenBank =
 
@@ -326,20 +324,13 @@ module private CacheHelpers =
             | c when System.Char.IsLetter(c) -> c
             | _ -> '#'
 
-        let private getContentPath (fileName: string) =
-            (*let assemblyDirectory =
-                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-
-            Path.Combine(assemblyDirectory, ".", fileName)*)
-            Path.Combine(Path.GetTempPath(), "BioProviders", fileName)
-
         let private getSpeciesLookupPath (speciesName: string) =
             let character = getLookupCharacter speciesName
-            getContentPath $"genbank-species-{character}.txt.gz"
+            $"genbank-species-{character}.txt.gz"
 
         let private getAssemblyLookupPath (speciesName: string) =
             let character = getLookupCharacter speciesName
-            getContentPath $"genbank-assemblies-{character}.txt.gz"
+            $"genbank-assemblies-{character}.txt.gz"
 
         let private getSpeciesID (speciesName: string) =
             let speciesLookupFile = getSpeciesLookupPath speciesName
