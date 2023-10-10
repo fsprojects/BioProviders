@@ -26,8 +26,7 @@ and [BioFSharp](https://github.com/CSBiology/BioFSharp) to provide utilities for
 To load the GenBank Type Provider the BioProviders and BioFSharp packages must be referenced and opened:
 *)
 
-#r "../../bin/Debug/lib/netstandard2.0/BioProviders.dll"
-#r "nuget: BioFSharp"
+#r "nuget: BioProviders"
 
 open BioProviders
 open BioFSharp
