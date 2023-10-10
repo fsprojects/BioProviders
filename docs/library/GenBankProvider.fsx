@@ -23,11 +23,18 @@ and [BioFSharp](https://github.com/CSBiology/BioFSharp) to provide utilities for
 <br />
 ## Loading BioProviders Package
 
-To load the GenBank Type Provider the BioProviders and BioFSharp packages must be referenced and opened:
+To load the GenBank Type Provider, a script can use the NuGet syntax to reference the BioProviders package, shown below.
+
+You can optionally include the BioFSharp package. While it's not required to use the basic BioProviders functions, it can be used to explore the metadata of the provided types, as shown in a later example.
 *)
 
-#r "../../bin/Debug/lib/netstandard2.0/BioProviders.dll"
+#r "nuget: BioProviders"
 #r "nuget: BioFSharp"
+
+(** If creating an F# library or application, BioProviders can be added as a package reference. You can use your IDE for this, or use the ```dotnet add package BioProviders``` command in your project folder from the command line.
+
+BioProviders can then be used in your script or code by using an open command. Opening its dependencies should not be required. (BioFSharp is loaded for future examples.)
+*)
 
 open BioProviders
 open BioFSharp
@@ -87,7 +94,7 @@ be extracted using the Metadata field of the Genome Type created previously. The
 provided by [.NET Bio](http://dotnetbio.github.io/Help/html/319bf2e6-4fcf-9f93-586f-fc7ffcf04a83.htm), with modifications
 made to be more idiomatic with F#.
 
-An example of accessing and manipulating the GenBankProvider metadata is provided below:
+Below is an example of how the raw metadata type can be retrieved and displayed:
 
 *)
 
@@ -100,6 +107,8 @@ metadata
 (*** include-it ***)
 
 (** 
+The metadata type consists of many fields, though not all fields of the metadata exist for all assemblies. Therefore, they are provided as option types, on which a match expression can be used. Below are examples of accessing fields from the example assembly.
+  <br />
   <br />
   ✅ Example - Accessing a field that is provided. 
 *)
