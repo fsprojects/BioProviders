@@ -167,7 +167,7 @@ Target.create "GenerateDocs" (fun _ ->
         DotNet.exec
             id
             "fsdocs"
-            ("build --properties Configuration=Release --eval"
+            ("build --properties Configuration=Release --eval --clean --parameters fsdocs-package-version "
              + release.NugetVersion)
 
     if not result.OK then
