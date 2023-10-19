@@ -85,6 +85,12 @@ module Context =
             | GenBank -> "/genomes/all/GCA"
             | RefSeq -> "/genomes/all/GCF"
 
+        // Returns the name of the database as a string.
+        override this.ToString() =
+            match this with
+            | GenBank -> "GenBank"
+            | RefSeq -> "RefSeq"
+
 
     // ----------------------------------------------------------------------------------
     // Species Types.
@@ -222,254 +228,250 @@ type private ICache =
 
 module private CacheHelpers =
 
-    module General =
+    let private getCacheFilePath (path: string) =
+        let cacheLocation = Path.Combine(Path.GetTempPath(), "BioProviders")
+        let cacheFileName = path.Replace("/", " ").Trim().Replace(" ", "-")
+        Path.Combine(cacheLocation, cacheFileName)
 
-        let getCacheFilePath (path: string) =
-            let cacheLocation = Path.Combine(Path.GetTempPath(), "BioProviders")
-            let cacheFileName = path.Replace("/", " ").Trim().Replace(" ", "-")
-            Path.Combine(cacheLocation, cacheFileName)
+    let private loadFile (path: string) =
+        if File.Exists(path) then
+            Some(File.OpenRead(path))
+        else
+            None
 
-        let loadFile (path: string) =
-            if File.Exists(path) then
-                Some(File.OpenRead(path))
-            else
-                None
+    let internal loadCacheFile (path: string) =
+        let cachePath = getCacheFilePath (path)
+        loadFile cachePath
 
-        let loadCacheFile (path: string) =
-            let cachePath = getCacheFilePath (path)
-            loadFile cachePath
+    let internal saveCacheFile (path: string) =
+        let cachePath = getCacheFilePath (path)
+        FTP.downloadNCBIFile (cachePath, path)
 
-        let saveCacheFile (path: string) =
-            let cachePath = getCacheFilePath (path)
-            FTP.downloadNCBIFile (cachePath, path)
+    let internal clearCache () =
+        let cacheLocation = Path.Combine(Path.GetTempPath(), "BioProviders")
 
-        let clearCache () =
-            let cacheLocation = Path.Combine(Path.GetTempPath(), "BioProviders")
+        if Directory.Exists cacheLocation then
+            let cacheFiles = Directory.GetFiles cacheLocation
+            Seq.iter (fun file -> File.Delete(file)) cacheFiles
 
-            if Directory.Exists cacheLocation then
-                let cacheFiles = Directory.GetFiles cacheLocation
-                Seq.iter (fun file -> File.Delete(file)) cacheFiles
+    let internal clearCacheOld (days: float) =
+        let cutOffDate = System.DateTime.Now.AddDays(-days)
+        let cacheLocation = Path.Combine(Path.GetTempPath(), "BioProviders")
 
-        let clearCacheOld (days: float) =
-            let cutOffDate = System.DateTime.Now.AddDays(-days)
-            let cacheLocation = Path.Combine(Path.GetTempPath(), "BioProviders")
+        if Directory.Exists cacheLocation then
+            let cacheFiles = Directory.GetFiles cacheLocation
 
-            if Directory.Exists cacheLocation then
-                let cacheFiles = Directory.GetFiles cacheLocation
+            Seq.iter
+                (fun file ->
+                    match File.GetLastAccessTime(file) < cutOffDate with
+                    | true -> File.Delete(file)
+                    | _ -> ())
+                cacheFiles
 
-                Seq.iter
-                    (fun file ->
-                        match File.GetLastAccessTime(file) < cutOffDate with
-                        | true -> File.Delete(file)
-                        | _ -> ())
-                    cacheFiles
+    // Used to download an assembly list from a remote server.
+    let private saveAssemblyList (path: string) =
+        let cachePath = getCacheFilePath (path)
 
-        // Used to download an assembly list from a remote server.
-        let internal saveAssemblyList (path: string) =
-            let cachePath = getCacheFilePath (path)
+        try
+            // At the moment, use the base URL for the raw .gz files in the
+            // BioProviders repository.
+            let url =
+                sprintf "https://github.com/fsprojects/BioProviders/raw/main/build/data/%s" path
 
-            try
-                // At the moment, use the base URL for the raw .gz files in the
-                // BioProviders repository.
-                let url =
-                    sprintf "https://github.com/fsprojects/BioProviders/raw/main/build/data/%s" path
+            let data = Http.Request(url).Body
 
-                let data = Http.Request(url).Body
-
-                match data with
-                | Binary bytes ->
-                    File.WriteAllBytes(cachePath, bytes)
-                    true
-                | _ ->
-                    failwith (
-                        sprintf
-                            "Could not download remote file %s to %s - did not recieve binary content."
-                            path
-                            cachePath
-                    )
-
-                    false
-            with ex ->
+            match data with
+            | Binary bytes ->
+                File.WriteAllBytes(cachePath, bytes)
+                true
+            | _ ->
                 failwith (
-                    sprintf
-                        "Could not download remote file %s to %s, because of the following exception: %s"
-                        path
-                        cachePath
-                        ex.Message
+                    sprintf "Could not download remote file %s to %s - did not recieve binary content." path cachePath
                 )
 
                 false
+        with ex ->
+            failwith (
+                sprintf
+                    "Could not download remote file %s to %s, because of the following exception: %s"
+                    path
+                    cachePath
+                    ex.Message
+            )
 
-        // Used to load a data file referring to the location of assemblies on
-        // GenBank's FTP server. If the file does not exist in the cache
-        // location, attempts to download it from the FTP server (with the
-        // above function).
-        let loadAssemblyList (path: string) =
+            false
 
-            let fullPath = getCacheFilePath path
+    // Used to load a data file referring to the location of assemblies on
+    // GenBank's FTP server. If the file does not exist in the cache
+    // location, attempts to download it from the FTP server (with the
+    // above function).
+    let private loadAssemblyList (path: string) =
 
-            // Read the existing file if the data file has already been
-            // downloaded.
-            if File.Exists(fullPath) then
-                Some(File.OpenRead(fullPath))
-            else
-                match saveAssemblyList path with
-                | false -> None
-                | _ -> Some(File.OpenRead(fullPath))
+        let fullPath = getCacheFilePath path
 
-    module GenBank =
+        // Read the existing file if the data file has already been
+        // downloaded.
+        if File.Exists(fullPath) then
+            Some(File.OpenRead(fullPath))
+        else
+            match saveAssemblyList path with
+            | false -> None
+            | _ -> Some(File.OpenRead(fullPath))
 
-        let private getLookupCharacter (name: string) =
-            match name.Chars(0) with
-            | c when System.Char.IsLetter(c) -> c
-            | _ -> '#'
+    let private getLookupCharacter (name: string) =
+        match name.Chars(0) with
+        | c when System.Char.IsLetter(c) -> c
+        | _ -> '#'
 
-        let private getSpeciesLookupPath (speciesName: string) =
-            let character = getLookupCharacter speciesName
-            $"genbank-species-{character}.txt.gz"
+    let private getSpeciesLookupPath (database: DatabaseName) (speciesName: string) =
+        let character = getLookupCharacter speciesName
+        $"{(database.ToString()).ToLower()}-species-{character}.txt.gz"
 
-        let private getAssemblyLookupPath (speciesName: string) =
-            let character = getLookupCharacter speciesName
-            $"genbank-assemblies-{character}.txt.gz"
+    let private getAssemblyLookupPath (database: DatabaseName) (speciesName: string) =
+        let character = getLookupCharacter speciesName
+        $"{(database.ToString()).ToLower()}-assemblies-{character}.txt.gz"
 
-        let private getSpeciesID (speciesName: string) =
-            let speciesLookupFile = getSpeciesLookupPath speciesName
+    let private parseAssemblyLine (database: DatabaseName) (assemblyLine: string) =
+        let assemblyInfo = assemblyLine.Split(',')
+        let accession = assemblyInfo.[1]
+        let assemblyPath = $"{database.GetPath()}/{assemblyInfo.[2]}"
 
-            match General.loadAssemblyList speciesLookupFile with
-            | None -> invalidOp "Could not load species lookup file."
-            | Some data ->
-                data :> Stream
-                |> (fun stream -> new Compression.GZipStream(stream, Compression.CompressionMode.Decompress))
-                |> (fun gzipStream ->
-                    use stream = new StreamReader(gzipStream)
+        let assemblyName =
+            assemblyPath.Split('/') |> (fun parts -> parts.[parts.Length - 1])
 
-                    let rec checkLine () =
-                        if not stream.EndOfStream then
-                            let line = stream.ReadLine()
-                            let info = line.Split(',')
+        (accession, assemblyName, assemblyPath)
 
-                            if info.[1].ToLower() <> speciesName then
-                                checkLine ()
-                            else
-                                info.[0]
+    let private getSpeciesID (database: DatabaseName) (speciesName: string) =
+        let speciesLookupFile = getSpeciesLookupPath database speciesName
+
+        match loadAssemblyList speciesLookupFile with
+        | None -> invalidOp $"Could not load {database.ToString()} species lookup file."
+        | Some data ->
+            data :> Stream
+            |> (fun stream -> new Compression.GZipStream(stream, Compression.CompressionMode.Decompress))
+            |> (fun gzipStream ->
+                use stream = new StreamReader(gzipStream)
+
+                let rec checkLine () =
+                    if not stream.EndOfStream then
+                        let line = stream.ReadLine()
+                        let info = line.Split(',')
+
+                        if info.[1].ToLower() <> speciesName then
+                            checkLine ()
                         else
-                            invalidOp "The species could not be found. Check the species name is correct."
+                            info.[0]
+                    else
+                        invalidOp
+                            $"The species could not be found. Check the species name is correct and it is a valid {database.ToString()} species."
 
-                    checkLine ())
+                checkLine ())
 
-        let parseAssemblyLine (database: DatabaseName) (assemblyLine: string) =
-            let assemblyInfo = assemblyLine.Split(',')
-            let accession = assemblyInfo.[1]
-            let assemblyPath = $"{database.GetPath()}/{assemblyInfo.[2]}"
+    let getAssembly (database: DatabaseName) (species: SpeciesName) (accession: AccessionName) =
+        let speciesID = getSpeciesID database (species.ToString())
+        let assemblyLookupFile = getAssemblyLookupPath database (species.ToString())
 
-            let assemblyName =
-                assemblyPath.Split('/') |> (fun parts -> parts.[parts.Length - 1])
+        match loadAssemblyList assemblyLookupFile with
+        | None -> invalidOp $"Could not load {database.ToString()} assembly lookup file."
+        | Some data ->
+            data :> Stream
+            |> (fun stream -> new Compression.GZipStream(stream, Compression.CompressionMode.Decompress))
+            |> (fun gzipStream ->
+                use stream = new StreamReader(gzipStream)
 
-            (accession, assemblyName, assemblyPath)
+                let rec checkLine () =
+                    if not stream.EndOfStream then
+                        let line = stream.ReadLine()
+                        let info = line.Split(',')
 
-        let getAssembly (database: DatabaseName) (species: SpeciesName) (accession: AccessionName) =
-            let speciesID = getSpeciesID (species.ToString())
-            let assemblyLookupFile = getAssemblyLookupPath (species.ToString())
-
-            match General.loadAssemblyList assemblyLookupFile with
-            | None -> invalidOp "Could not load assembly lookup file."
-            | Some data ->
-                data :> Stream
-                |> (fun stream -> new Compression.GZipStream(stream, Compression.CompressionMode.Decompress))
-                |> (fun gzipStream ->
-                    use stream = new StreamReader(gzipStream)
-
-                    let rec checkLine () =
-                        if not stream.EndOfStream then
-                            let line = stream.ReadLine()
-                            let info = line.Split(',')
-
-                            if info.[0] <> speciesID || info.[1].ToLower() <> (accession.ToString()) then
-                                checkLine ()
-                            else
-                                parseAssemblyLine database line
+                        if info.[0] <> speciesID || info.[1].ToLower() <> (accession.ToString()) then
+                            checkLine ()
                         else
-                            invalidOp "The assembly could not be found. Check that the accession is correct."
+                            parseAssemblyLine database line
+                    else
+                        invalidOp
+                            $"The assembly could not be found. Check that the accession is correct and it is a valid {database.ToString()} accession."
 
-                    checkLine ())
+                checkLine ())
 
-        let getAssemblies
-            (database: DatabaseName)
-            (assemblyLookupPath: string)
-            (speciesID: string)
-            (accessionPattern: string)
-            =
-            match General.loadAssemblyList assemblyLookupPath with
-            | None -> invalidOp "Could not load assembly lookup file."
-            | Some data ->
-                data :> Stream
-                |> (fun stream -> new Compression.GZipStream(stream, Compression.CompressionMode.Decompress))
-                |> (fun gzipStream ->
-                    use stream = new StreamReader(gzipStream)
+    let getAssemblyCollection
+        (database: DatabaseName)
+        (assemblyLookupPath: string)
+        (speciesID: string)
+        (accessionPattern: string)
+        =
+        match loadAssemblyList assemblyLookupPath with
+        | None -> invalidOp $"Could not load {database.ToString()} assembly lookup file."
+        | Some data ->
+            data :> Stream
+            |> (fun stream -> new Compression.GZipStream(stream, Compression.CompressionMode.Decompress))
+            |> (fun gzipStream ->
+                use stream = new StreamReader(gzipStream)
 
-                    let rec checkLine (assemblies: (string * string * string) list) =
-                        if not (stream.EndOfStream && assemblies.Length = 0) then
-                            let line = stream.ReadLine()
-                            let info = line.Split(',')
+                let rec checkLine (assemblies: (string * string * string) list) =
+                    if not (stream.EndOfStream && assemblies.Length = 0) then
+                        let line = stream.ReadLine()
+                        let info = line.Split(',')
 
-                            if
-                                info.[0] <> speciesID
-                                || not (Regex.IsMatch(info.[1].ToLower(), accessionPattern))
-                            then
-                                if assemblies.Length = 0 then
-                                    checkLine assemblies
-                                else
-                                    assemblies
+                        if
+                            info.[0] <> speciesID
+                            || not (Regex.IsMatch(info.[1].ToLower(), accessionPattern))
+                        then
+                            if assemblies.Length = 0 then
+                                checkLine assemblies
                             else
-                                assemblies @ [ parseAssemblyLine database line ] |> checkLine
+                                assemblies
                         else
-                            invalidOp
-                                "No assemblies matching the accession pattern could be found. Check the accession pattern is correct."
+                            assemblies @ [ parseAssemblyLine database line ] |> checkLine
+                    else
+                        invalidOp
+                            "No assemblies matching the accession pattern could be found. Check the accession pattern is correct."
 
-                    checkLine [])
+                checkLine [])
 
-        let getSpecies (species: SpeciesName) =
-            let speciesName = species.ToString()
-            let speciesID = getSpeciesID (speciesName)
-            let assemblyLookupFile = getAssemblyLookupPath (speciesName)
+    let getSpecies (database: DatabaseName) (species: SpeciesName) =
+        let speciesName = species.ToString()
+        let speciesID = getSpeciesID database (speciesName)
+        let assemblyLookupFile = getAssemblyLookupPath database (speciesName)
 
-            (speciesID, speciesName, assemblyLookupFile)
+        (speciesID, speciesName, assemblyLookupFile)
 
-        let getSpeciesCollection (speciesPattern: string) =
-            let speciesLookupPath = getSpeciesLookupPath speciesPattern
-            let assemblyLookupPath = getAssemblyLookupPath speciesPattern
+    let getSpeciesCollection (database: DatabaseName) (speciesPattern: string) =
+        let speciesLookupPath = getSpeciesLookupPath database speciesPattern
+        let assemblyLookupPath = getAssemblyLookupPath database speciesPattern
 
-            match General.loadAssemblyList speciesLookupPath with
-            | None -> invalidOp "Could not load assembly lookup file."
-            | Some data ->
-                data :> Stream
-                |> (fun stream -> new Compression.GZipStream(stream, Compression.CompressionMode.Decompress))
-                |> (fun gzipStream ->
-                    use stream = new StreamReader(gzipStream)
+        match loadAssemblyList speciesLookupPath with
+        | None -> invalidOp $"Could not load {database.ToString()} assembly lookup file."
+        | Some data ->
+            data :> Stream
+            |> (fun stream -> new Compression.GZipStream(stream, Compression.CompressionMode.Decompress))
+            |> (fun gzipStream ->
+                use stream = new StreamReader(gzipStream)
 
-                    let rec checkLine (species: (string * string * string) list) =
-                        if not (stream.EndOfStream && species.Length = 0) then
-                            let line = stream.ReadLine()
-                            let info = line.Split(',')
+                let rec checkLine (species: (string * string * string) list) =
+                    if not (stream.EndOfStream && species.Length = 0) then
+                        let line = stream.ReadLine()
+                        let info = line.Split(',')
 
-                            if not (Regex.IsMatch(info.[1].ToLower(), speciesPattern)) then
-                                if species.Length = 0 then checkLine species else species
-                            else
-                                let speciesID = info.[0]
-                                let speciesName = info.[1]
-                                species @ [ (speciesID, speciesName, assemblyLookupPath) ] |> checkLine
+                        if not (Regex.IsMatch(info.[1].ToLower(), speciesPattern)) then
+                            if species.Length = 0 then checkLine species else species
                         else
-                            invalidOp
-                                "No species matching the pattern could be found. Check the species pattern is correct."
+                            let speciesID = info.[0]
+                            let speciesName = info.[1]
+                            species @ [ (speciesID, speciesName, assemblyLookupPath) ] |> checkLine
+                    else
+                        invalidOp
+                            "No species matching the pattern could be found. Check the species pattern is correct."
 
-                    checkLine [])
+                checkLine [])
 
 
 // --------------------------------------------------------------------------------------
 // Cache Implementation.
 // --------------------------------------------------------------------------------------
 
-open CacheHelpers.General
+//open CacheHelpers.General
+open CacheHelpers
 
 type private Cache() =
     interface ICache with
@@ -498,8 +500,8 @@ module CacheAccess =
 
     let getAssembly (database: DatabaseName) (species: SpeciesName) (accession: AccessionName) =
         match database with
-        | RefSeq _ -> failwith "RefSeq is not currently supported."
-        | GenBank _ -> CacheHelpers.GenBank.getAssembly database species accession
+        | RefSeq _ -> CacheHelpers.getAssembly database species accession //CacheHelpers.RefSeq.getAssembly database species accession //failwith "RefSeq is not currently supported."
+        | GenBank _ -> CacheHelpers.getAssembly database species accession //CacheHelpers.GenBank.getAssembly database species accession
 
     let getAssemblies
         (database: DatabaseName)
@@ -508,18 +510,19 @@ module CacheAccess =
         (accessionPattern: string)
         =
         match database with
-        | RefSeq _ -> failwith "RefSeq is not currently supported."
-        | GenBank _ -> CacheHelpers.GenBank.getAssemblies database assemblyLookupPath speciesID accessionPattern
+        | RefSeq _ -> CacheHelpers.getAssemblyCollection database assemblyLookupPath speciesID accessionPattern //CacheHelpers.RefSeq.getAssemblies database assemblyLookupPath speciesID accessionPattern //failwith "RefSeq is not currently supported."
+        | GenBank _ -> CacheHelpers.getAssemblyCollection database assemblyLookupPath speciesID accessionPattern //CacheHelpers.GenBank.getAssemblies database assemblyLookupPath speciesID accessionPattern
 
     let getSpecies (database: DatabaseName) (species: SpeciesName) =
         match database with
-        | RefSeq _ -> failwith "RefSeq is not currently supported."
-        | GenBank _ -> CacheHelpers.GenBank.getSpecies species
+        | RefSeq _ -> CacheHelpers.getSpecies database species //CacheHelpers.RefSeq.getSpecies species //failwith "RefSeq is not currently supported."
+        | GenBank _ -> CacheHelpers.getSpecies database species //CacheHelpers.GenBank.getSpecies species
 
     let getSpeciesCollection (database: DatabaseName) (speciesPattern: string) =
         match database, speciesPattern with
-        | RefSeq _, _ -> failwith "RefSeq is not currently supported."
+        | RefSeq _, ".*" -> failwith "A species pattern is required."
+        | RefSeq _, _ -> CacheHelpers.getSpeciesCollection database speciesPattern //CacheHelpers.RefSeq.getSpeciesCollection speciesPattern //failwith "RefSeq is not currently supported."
         | GenBank _, ".*" -> failwith "A species pattern is required."
-        | GenBank _, _ -> CacheHelpers.GenBank.getSpeciesCollection speciesPattern
+        | GenBank _, _ -> CacheHelpers.getSpeciesCollection database speciesPattern //CacheHelpers.GenBank.getSpeciesCollection speciesPattern
 
     let deleteOldFiles = (new Cache() :> ICache).PurgeOld(90)

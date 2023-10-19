@@ -24,9 +24,6 @@
       <PrivateAssets>all</PrivateAssets>
     </ProjectReference>
   </ItemGroup>
-  <Target Name="DeleteLocalCache" BeforeTargets="Pack">
-    <RemoveDir Directories="$(NugetPackageRoot)/$(PackageId.ToLower())" />
-  </Target>
   <!-- https://github.com/NuGet/Home/issues/3891#issuecomment-309792369 -->
   <ItemGroup>
     <_PackageFiles Include="$(OutputPath)\BioProviders.DesignTime.dll">
