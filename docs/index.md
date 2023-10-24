@@ -25,6 +25,7 @@ BioProviders implements Type Providers for accessing bioinformatic datasets. The
 to data sources (e.g., GenBank) and type-safe representations of their data (e.g., GenBank Flat File).
 
 * [GenBank Type Provider](library/GenBankProvider.html) - access to GenBank data using the `GenBankProvider<..>` type.
+* [RefSeq Type Provider](library/RefSeqProvider.html) - access to RefSeq data using the `RefSeqProvider<..>` type.
 
 
 ## Contributing and Copyright

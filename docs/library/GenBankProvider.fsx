@@ -53,12 +53,11 @@ must be given to the Type Provider:
 For this example, the species name is "Candidatus Carsonella ruddii" and the GenBank assembly accession is "GCA_001274515.1".
 To find this information:
 
-* Visit https://www.ncbi.nlm.nih.gov/
-* Select "Assembly" from the dropdown next to the searchbar
+* Visit https://www.ncbi.nlm.nih.gov/datasets/
 * Search for the name of the species
-* Find the organism from the list of search results
+* Select to view all genones of the species
 
-The species name and GenBank assembly accession can then be found under the corresponding search result. 
+You can then select the assembly's GenBank (as well as RefSeq) accession from the list that appears.
 
 <div class="container-fluid" style="margin:15px 0px 15px 0px;">
     <div class="row-fluid">
@@ -102,9 +101,9 @@ Below is an example of how the raw metadata type can be retrieved and displayed:
 let metadata = genome.Metadata
 
 // Display the metadata type.
-metadata
+printf "%A" metadata
 
-(*** include-it ***)
+(*** include-output ***)
 
 (** 
 The metadata type consists of many fields, though not all fields of the metadata exist for all assemblies. Therefore, they are provided as option types, on which a match expression can be used. Below are examples of accessing fields from the example assembly.
@@ -125,7 +124,7 @@ match metadata.Definition with
   ❌ Example - Accessing a field that is not provided. 
 *)
 
-// Print definition if exists.
+// Print database source if exists.
 match metadata.DbSource with
 | Some dbsource -> printf "%s" dbsource
 | None -> printf "No database source provided."
@@ -149,9 +148,9 @@ An example of accessing and manipulating the GenBankProvider genomic sequence us
 let sequence = genome.Sequence
 
 // Display the sequence type.
-sequence
+printf "%A" sequence
 
-(*** include-it ***)
+(*** include-output ***)
 
 // Take the complement, then transcribe and translate the coding strand.
 sequence
@@ -193,6 +192,13 @@ type Assembly4 = Cohnii.``GCA_014884245.1``
 // Extract statically-typed genome data.
 let data = Assembly1.Genome()
 
+// Show the assembly's definition.
+match data.Metadata.Definition with
+| Some definition -> printf "%s" definition
+| None -> printf "No definition provided."
+
+(*** include-output ***)
+
 (**
 The Accession parameter can also be omitted from the GenBankProvider. In this case, all assemblies for the given species will
 be matched. For example:
@@ -206,3 +212,12 @@ type Assemblies = GenBankProvider<SpeciesName>
 
 // Select assemblies.
 type Assembly = Assemblies.``GCA_001546615.1``
+
+// Show the assembly's primary accession.
+match (Assembly.Genome()).Metadata.Accession with
+| Some accession -> match accession.Primary with
+                    | Some primary -> printf "%s" primary
+                    | None -> printf "No primary accession provided."
+| None -> printf "No accession provided."
+
+(*** include-output ***)

@@ -1,3 +1,6 @@
+### 2.2.0 - Oct 24 2023
+* Added RefSeq type provider.
+
 ### 2.1.0 - Oct 9 2023
 * Fixed bug in previous versions that prevented data files from being accessed.
 * Data files are no longer included to reduce package size - automatically downloaded on demand.

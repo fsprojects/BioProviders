@@ -32,7 +32,7 @@ let (!!) includes =
 // --------------------------------------------------------------------------------------
 
 let project = "BioProviders"
-let authors = "Alex Kenna;fsprojects contributors"
+let authors = "Alex Kenna;Samuel Smith;fsprojects contributors"
 let summary = "F# library for accessing and manipulating bioinformatic datasets."
 
 let description =
