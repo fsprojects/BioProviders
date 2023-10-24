@@ -1,0 +1,20 @@
+<Project>
+  <Import Condition="Exists('version.props')" Project="version.props" />
+  <PropertyGroup>
+    <Description>
+      The BioProviders library provides tools and functionality to simplify accessing and 
+      manipulating bioinformatic data. This library includes:
+
+      * GenBankProvider -- Type Provider for type-safe access to over 240 million genomic 
+                           sequences and their metadata.
+    </Description>
+    <Authors>Alex Kenna;Samuel Smith;fsprojects contributors</Authors>
+    <Copyright>Copyright 2022</Copyright>
+    <PackageTags>F# fsharp data typeprovider bioinformatics genbank refseq</PackageTags>
+    <RepositoryUrl>https://github.com/fsprojects/BioProviders</RepositoryUrl>
+    <PackageProjectUrl>https://fsprojects.github.io/BioProviders/</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/fsprojects/FSharp.Formatting/master/docs/files/img/logo.png</PackageIconUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+</Project>
