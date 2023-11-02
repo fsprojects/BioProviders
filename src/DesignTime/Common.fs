@@ -282,6 +282,10 @@ module private CacheHelpers =
 
             match data with
             | Binary bytes ->
+                // Create the BioProviders directory if it doesn't exist yet.
+                Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "BioProviders"))
+                |> ignore
+
                 File.WriteAllBytes(cachePath, bytes)
                 true
             | _ ->

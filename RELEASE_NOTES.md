@@ -1,3 +1,6 @@
+### 2.2.1 - Nov 2 2023
+* Fixed exception thrown when BioProviders folder does not exist in AppData/Local/Temp and the type provider attempts to download a data file.
+
 ### 2.2.0 - Oct 24 2023
 * Added RefSeq type provider.
 
