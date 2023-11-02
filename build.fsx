@@ -40,8 +40,10 @@ let description =
     The BioProviders library provides tools and functionality to simplify accessing and 
     manipulating bioinformatic data. This library includes:
 
-    * GenBankProvider -- Type Provider for type-safe access to over 240 million genomic 
-                         sequences and their metadata.
+    * GenBankProvider — Type Provider for type-safe access to the genomic sequences and
+                        their metadata for over 500,000 species in the GenBank database. 
+    * RefSeqProvider — Type Provider for type-safe access to the genomic sequences and
+                       their metadata for over 140,000 species in the RefSeq database.
     """
 
 let tags = "F# fsharp data typeprovider bioinformatics genbank refseq"
