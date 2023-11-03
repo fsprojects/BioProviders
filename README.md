@@ -4,7 +4,7 @@
 
 The F# BioProviders simplify programmatic access to bioinformatics data.
 
-This library provides strongly-typed access to over 240 million genomic sequences through a set of Type Providers, including the GenBankProvider. For more information, see the detailed [documentation](https://fsprojects.github.io/BioProviders/).
+This library provides strongly-typed access to over 240 million genomic sequences through a set of Type Providers, including the GenBankProvider and RefSeqProvider. For more information, see the detailed [documentation](https://fsprojects.github.io/BioProviders/).
 
 The BioProviders work by parsing genomic data files using the [.NET Bio](https://github.com/dotnetbio/bio) library, which are then represented using types from the [BioFSharp](https://github.com/CSBiology/BioFSharp) library.
 
