@@ -159,25 +159,6 @@ Target.create "Pack" (fun _ ->
 
 
 // --------------------------------------------------------------------------------------
-// Generate Documentation.
-// --------------------------------------------------------------------------------------
-
-(*Target.create "GenerateDocs" (fun _ ->
-    Shell.cleanDir ".fsdocs"
-
-    let result =
-        DotNet.exec
-            id
-            "fsdocs"
-            ("build --properties Configuration=Release --eval --clean --parameters fsdocs-package-version "
-             + release.NugetVersion)
-
-    if not result.OK then
-        printfn "Errors while generating docs: %A" result.Messages
-        failwith "Failed to generate docs")*)
-
-
-// --------------------------------------------------------------------------------------
 // Help.
 // --------------------------------------------------------------------------------------
 
@@ -188,7 +169,6 @@ Target.create "Help" (fun _ ->
     printfn "  Targets for building:"
     printfn "  * Build"
     printfn "  * RunTests"
-    (*printfn "  * GenerateDocs"*)
     printfn "  * Pack (creates package only, doesn't publish)"
     printfn "  * All (calls previous 4)"
     printfn "")
@@ -228,7 +208,7 @@ Target.create "All" ignore
 
 "Clean" ==> "AssemblyInfo" ==> "CheckFormat" ==> "Build"
 
-"Build" ==> "CleanDocs" ==> (*"GenerateDocs" ==>*) "All"
+"Build" ==> "CleanDocs" ==> "All"
 
 "Build" ==> "Pack" ==> "All"
 "Build" ==> "All"
