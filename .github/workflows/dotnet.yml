@@ -23,8 +23,6 @@ jobs:
       run: dotnet paket restore
     - name: Build and test
       run: dotnet fake build -t All
-    - name: Build documentation
-      run: dotnet fsdocs build --eval
     - name: Deploy documentation
       uses: peaceiris/actions-gh-pages@v3
       with:

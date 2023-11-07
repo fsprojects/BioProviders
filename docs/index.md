@@ -15,7 +15,7 @@ BioProviders is available through [NuGet](https://nuget.org/packages/BioProvider
     <div class="row-fluid">
         <div class="span1"></div>
         <div class="span10" id="anim-holder">
-            <a id="lnk" href="images/GenBankProvider.gif"><img id="anim" src="images/GenBankProvider.gif" /></a>
+            <a id="lnk" href="img/GenBankProvider.gif"><img id="anim" src="img/GenBankProvider.gif" /></a>
         </div>
         <div class="span1"></div>
     </div>

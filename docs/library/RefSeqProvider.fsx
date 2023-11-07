@@ -8,8 +8,8 @@ index: 2
 
 (**
 
-[![Script](../images/badge-script.svg)]({{root}}/{{fsdocs-source-basename}}.fsx)&emsp;
-[![Notebook](../images/badge-notebook.svg)]({{root}}/{{fsdocs-source-basename}}.ipynb)
+[![Script](../img/badge-script.svg)]({{root}}/{{fsdocs-source-basename}}.fsx)&emsp;
+[![Notebook](../img/badge-notebook.svg)]({{root}}/{{fsdocs-source-basename}}.ipynb)
 
 # RefSeq Type Provider
 
@@ -63,7 +63,7 @@ You can then select the assembly's RefSeq (as well as GenBank) accession from th
     <div class="row-fluid">
         <div class="span1"></div>
         <div class="span10" id="anim-holder">
-            <a id="lnk" href="../images/RefSeq_Info.gif"><img id="anim" src="../images/RefSeq_Info.gif" /></a>
+            <a id="lnk" href="../img/RefSeq_Info.gif"><img id="anim" src="../img/RefSeq_Info.gif" /></a>
         </div>
         <div class="span1"></div>
     </div>
