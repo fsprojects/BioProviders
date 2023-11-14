@@ -163,18 +163,47 @@ Target.create "Pack" (fun _ ->
 // --------------------------------------------------------------------------------------
 
 Target.create "GenerateDocs" (fun _ ->
+    printfn "First run of generating documentation (to get API pages)"
     Shell.cleanDir ".fsdocs"
 
-    let result =
+    let result1 =
         DotNet.exec
             id
             "fsdocs"
-            ("build --properties Configuration=Release --eval --clean --noapidocs --parameters fsdocs-package-version "
+            ("build --properties Configuration=Release --eval --clean --parameters fsdocs-package-version "
              + release.NugetVersion)
 
-    if not result.OK then
-        printfn "Errors while generating docs: %A" result.Messages
-        failwith "Failed to generate docs")
+    if not result1.OK then
+        printfn "Errors while generating docs: %A" result1.Messages
+        failwith "Failed to generate docs"
+
+    printfn "Moving API pages before cleaning previous output"
+
+    if (Directory.Exists("temp")) then
+        Shell.cleanDir ("temp")
+    else
+        Directory.create ("temp")
+
+    Directory.Move("output/reference", "temp/reference")
+    printfn "Second run of generating documentation (to get script output)"
+    Shell.cleanDir ".fsdocs"
+    Shell.cleanDirs [ "output" ]
+
+    let result2 =
+        DotNet.exec
+            id
+            "fsdocs"
+            ("build --properties Configuration=Release --eval --noapidocs --clean --parameters fsdocs-package-version "
+             + release.NugetVersion)
+
+    if not result2.OK then
+        printfn "Errors while generating docs: %A" result2.Messages
+        failwith "Failed to generate docs"
+
+    printfn "Moving previous API pages to output"
+    Directory.Move("temp/reference", "output/reference")
+    printfn "Deleting temp folder"
+    Directory.Delete("temp"))
 
 
 // --------------------------------------------------------------------------------------
