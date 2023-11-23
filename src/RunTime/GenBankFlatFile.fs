@@ -11,6 +11,21 @@ module GenBankFlatFile =
 
     /// <summary>
     /// GenBank Flat File representation.
+    ///     <para>It consists of two members:</para>
+    ///     <list type="table">
+    ///         <listheader>
+    ///             <term>Member name</term>
+    ///             <description>Description</description>
+    ///         </listheader>
+    ///         <item>
+    ///             <term>Metadata</term>
+    ///             <description>The metadata for the current sequece, as a GenBankMetadata type.</description>
+    ///         </item>
+    ///         <item>
+    ///             <term>Sequence</term>
+    ///             <description>The sequence itself as a BioFSharp BioSeq type.</description>
+    ///         </item>
+    ///     </list>
     /// </summary>
     type GenBankFlatFile =
         { Metadata: Metadata.Metadata
