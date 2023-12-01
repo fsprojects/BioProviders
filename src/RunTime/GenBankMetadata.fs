@@ -11,6 +11,7 @@ module Metadata =
     /// <summary>
     /// Identifier assigned to each GenBank sequence record.
     /// </summary>
+    /// <remarks>Records can have more than one accession assigned to them. The primary accession number is the newest identifier for the sequence record, and the secondary accession numbers are any of those that were previously assigned to it. A sequence record can have more than one secondary accession.</remarks>
     type Accession =
         { Primary: string option
           Secondary: string list option }
@@ -62,24 +63,43 @@ module Metadata =
     /// Specifies which family a sequence belongs to.
     /// </summary>
     type DivisionCode =
+        /// <summary>Primate sequences</summary>
         | PRI
+        /// <summary>Rodent sequences</summary>
         | ROD
+        /// <summary>Other mammalian sequences</summary>
         | MAM
+        /// <summary>Other vertebrate sequences</summary>
         | VRT
+        /// <summary>Invertebrate sequences</summary>
         | INV
+        /// <summary>=Plant and Fungal sequences</summary>
         | PLN
+        /// <summary>Bacterial sequences</summary>
         | BCT
+        /// <summary>Viral sequences</summary>
         | VRL
+        /// <summary>Phage sequences</summary>
         | PHG
+        /// <summary>Synthetic and chimeric sequences</summary>
         | SYN
+        /// <summary>Unannotated sequences</summary>
         | UNA
+        /// <summary>Expressed Sequence Tags</summary>
         | EST
+        /// <summary>Patent sequences</summary>
         | PAT
+        /// <summary>Sequence Tagged Sites</summary>
         | STS
+        /// <summary>Genome Survey Sequences</summary>
         | GSS
+        /// <summary>High Throughput Genomic sequences</summary>
         | HTG
+        /// <summary>Unfinished High-Throughput cDNA sequencing</summary>
         | HTC
+        /// <summary>Environmental samples</summary>
         | ENV
+        /// <summary>Constructed (for contig assembly)</summary>
         | CON
 
     let private createDivisionCode (divisionCode: Bio.IO.GenBank.SequenceDivisionCode) =
@@ -111,16 +131,27 @@ module Metadata =
     /// Specifies the type of biological sequence.
     /// </summary>
     type MoleculeType =
+        /// <summary>No valid type (but set in metadata)</summary>
         | Invalid
+        /// <summary>Nucleic acid</summary>
         | NA
+        /// <summary>Deoxyribonucleic acid (DNA)</summary>
         | DNA
+        /// <summary>Ribonucleic acid (RNA)</summary>
         | RNA
+        /// <summary>Transfer RNA</summary>
         | TRNA
+        /// <summary>Ribosomal RNA</summary>
         | RRNA
+        /// <summary>Messenger RNA</summary>
         | MRNA
+        /// <summary>Alternate name for SnRNA</summary>
         | URNA
+        /// <summary>Small nuclear RNA</summary>
         | SnRNA
+        /// <summary>Small nucleolar RNA</summary>
         | SnoRNA
+        /// <summary>Protein</summary>
         | Protein
 
     let private createMoleculeType (moleculeType: Bio.IO.GenBank.MoleculeType) =

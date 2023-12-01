@@ -54,7 +54,8 @@ type public GenBankProvider(config: TypeProviderConfig) as this =
     let assemblyHelpText =
         """<summary>Typed representation of the NCBI FTP server, for GenBank data.</summary>
            <param name="Species">The name of the species whose genome is being accessed (e.g. "Staphylococcus borealis"). Defaults to <c>""</c>.</param>
-           <param name="Accession">The accession of the genome assembly being accessed (e.g. "GCA_003042555.1"). Defaults to <c>""</c>.</param>"""
+           <param name="Accession">The accession of the genome assembly being accessed (e.g. "GCA_003042555.1"). Defaults to <c>""</c>.</param>
+           <remarks>Both the <paramref name="Species"/> and <paramref name="Accession"/> parameters can take in a wildcard character '*' to match more than one species or accession. This can be used after any number of characters, but is only valid at the end of the string.</remarks>"""
 
     do assemblyProvidedType.AddXmlDoc(assemblyHelpText)
 
@@ -108,7 +109,8 @@ type public RefSeqProvider(config: TypeProviderConfig) as this =
     let assemblyHelpText =
         """<summary>Typed representation of the NCBI FTP server, for RefSeq data.</summary>
            <param name="Species">The name of the species whose genome is being accessed (e.g. "Staphylococcus borealis"). Defaults to <c>""</c>.</param>
-           <param name="Accession">The accession of the genome assembly being accessed (e.g. "GCF_001224225.1"). Defaults to <c>""</c>.</param>"""
+           <param name="Accession">The accession of the genome assembly being accessed (e.g. "GCF_001224225.1"). Defaults to <c>""</c>.</param>
+           <remarks>Both the <paramref name="Species"/> and <paramref name="Accession"/> parameters can take in a wildcard character '*' to match more than one species or accession. This can be used after any number of characters, but is only valid at the end of the string.</remarks>"""
 
     do assemblyProvidedType.AddXmlDoc(assemblyHelpText)
 

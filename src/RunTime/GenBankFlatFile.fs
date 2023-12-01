@@ -12,18 +12,12 @@ module GenBankFlatFile =
     /// <summary>
     /// GenBank Flat File representation.
     ///     <para>It consists of two members:</para>
-    ///     <list type="table">
-    ///         <listheader>
-    ///             <term>Member name</term>
-    ///             <description>Description</description>
-    ///         </listheader>
+    ///     <list type="bullet">
     ///         <item>
-    ///             <term>Metadata</term>
-    ///             <description>The metadata for the current sequece, as a GenBankMetadata type.</description>
+    ///             <description>Metadata - The metadata for the current sequece, as a GenBankMetadata type.</description>
     ///         </item>
     ///         <item>
-    ///             <term>Sequence</term>
-    ///             <description>The sequence itself as a BioFSharp BioSeq type.</description>
+    ///             <description>Sequence - The sequence itself as a BioFSharp BioSeq type.</description>
     ///         </item>
     ///     </list>
     /// </summary>
@@ -32,8 +26,9 @@ module GenBankFlatFile =
           Sequence: BioFSharp.BioSeq.BioSeq<BioFSharp.Nucleotides.Nucleotide> }
 
     /// <summary>
-    /// Basic constructor for GenBankFlatFile type.
+    /// Basic constructor for GenBankFlatFile type. Creates a representation based upon an NCBI assembly file.
     /// </summary>
+    /// <param name="path">The path to the assembly file. This will usually reside in the cache folder.</param>
     let createGenBankFlatFile (path: string) =
 
         // Delete files that are too old.
