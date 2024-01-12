@@ -278,7 +278,9 @@ module private CacheHelpers =
             // The first line of this file should be the full base URL to use.
             // For the default BioProviders source, the URL for the raw .gz
             // files in the BioProviders repository is used.
-            let urlFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "remote.txt")
+            let urlFile =
+                Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "remote.txt")
+
             let url = (Seq.head (File.ReadLines(urlFile))) + path
 
             let data = Http.Request(url).Body
