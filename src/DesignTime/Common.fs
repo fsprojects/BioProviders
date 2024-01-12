@@ -273,10 +273,13 @@ module private CacheHelpers =
         let cachePath = getCacheFilePath (path)
 
         try
-            // At the moment, use the base URL for the raw .gz files in the
-            // BioProviders repository.
-            let url =
-                sprintf "https://github.com/fsprojects/BioProviders/raw/main/build/data/%s" path
+            // Load the base URL for the location of the assembly lists on a
+            // remote server by reading a text file included in the library.
+            // The first line of this file should be the full base URL to use.
+            // For the default BioProviders source, the URL for the raw .gz
+            // files in the BioProviders repository is used.
+            let urlFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "remote.txt")
+            let url = (Seq.head (File.ReadLines(urlFile))) + path
 
             let data = Http.Request(url).Body
 

@@ -10,6 +10,9 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="paket.references" />
+    <Content Include="..\DesignTime\remote.txt" Link="remote.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Compile Include="GenBankSequence.fs" />
     <Compile Include="GenBankMetadata.fs" />
     <Compile Include="GenBankFlatFile.fs" />
@@ -18,6 +21,7 @@
     <Compile Include="GenBankTaxon.fs" />
     <Compile Include="RunTime.fs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\DesignTime\DesignTime.fsproj">
       <IsFSharpDesignTimeProvider>true</IsFSharpDesignTimeProvider>

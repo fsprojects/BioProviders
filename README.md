@@ -34,25 +34,38 @@ BioSeq.BioSeq<Nucleotides.Nucleotide> = seq [C; T; A; C; ...]
 ```
 
 ## Building
-[![Build Status](https://github.com/AlexKenna/BioProviders/actions/workflows/dotnet.yml/badge.svg)](https://github.com/AlexKenna/BioProviders/actions) 
+[![Build Status](https://github.com/AlexKenna/BioProviders/actions/workflows/dotnet.yml/badge.svg)](https://github.com/AlexKenna/BioProviders/actions)
 
 To build the BioProviders package, perform the following steps:
 
 * Install the .NET SDK specified in the global.json file
 * `build.sh -t Build` or `build.cmd -t Build`
 
+## Creating data files
+
+BioProviders uses a set of data files generated from assembly lists from the NCBI FTP server for species and assembly lookup.
+
+- To generate these files, run ```dotnet fsi DataFileGenerator.fsx```, to save the files to ```build\data```.
+	- Approximately 1 GB is required due to the download size. They are deleted on process completion; use the argument ```-keepDownloads``` to keep them.
+	- To save the files in the type provider's cache folder, use the argument ```-saveToCache```.
+- By default, the package downloads files from this repository to ```AppData\Local\Temp\BioProviders```. To change this for your own version, change the URL in the file ```remote.txt``` in ```src\DesignTime```.
+
 ## Formatting
 
-The BioProviders package code is formatted using [fantomas](https://fsprojects.github.io/fantomas/). 
+The BioProviders package code is formatted using [fantomas](https://fsprojects.github.io/fantomas/).
 
 * To format the code, run `build.sh -t Format` or `build.cmd -t Format`
-* To check formatting, run `build.sh -t CheckFormat` or `build.cmd -t CheckFormat` 
+* To check formatting, run `build.sh -t CheckFormat` or `build.cmd -t CheckFormat`
 
 ## License
 
 BioProviders is covered by the MIT license.
 
-The package also uses [BioFSharp](https://github.com/CSBiology/BioFSharp) and [.NET Bio](https://github.com/dotnetbio/bio), which use the MIT and Apache-2.0 licenses, respectively.
+The package also uses:
+- [BioFSharp](https://github.com/CSBiology/BioFSharp) - MIT license
+- [.NET Bio](https://github.com/dotnetbio/bio) - Apache-2.0 license
+- [FluentFTP](https://github.com/robinrodricks/FluentFTP) - MIT license
+- [FSharp.Data](https://github.com/fsprojects/FSharp.Data/) - Apache-2.0 license
 
 ## Maintainers
 

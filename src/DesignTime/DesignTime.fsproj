@@ -19,6 +19,9 @@
       <Paket>True</Paket>
       <Link>paket-files/ProvidedTypes.fs</Link>
     </Compile>
+    <Content Include="remote.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Compile Include="Common.fs" />
     <Compile Include="..\RunTime\GenBankSequence.fs" />
     <Compile Include="..\RunTime\GenBankMetadata.fs" />
@@ -29,5 +32,6 @@
     <Compile Include="TypeGenerator.fs" />
     <Compile Include="DesignTime.fs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
