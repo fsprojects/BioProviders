@@ -20,7 +20,6 @@ for a specified organism and generates a static type containing its metadata and
 The GenBank Type Provider uses [.NET Bio](https://github.com/dotnetbio/bio) to parse the GenBank data files
 and [BioFSharp](https://github.com/CSBiology/BioFSharp) to provide utilities for manipulating genomic sequences.
 
-<br />
 ## Loading BioProviders Package
 
 To load the GenBank Type Provider, a script can use the NuGet syntax to reference the BioProviders package, shown below.
@@ -40,7 +39,6 @@ open BioProviders
 open BioFSharp
 
 (**
-<br />
 ## GenBankProvider Example
 
 The GenBank Type Provider will be demonstrated for [this GenBank assembly](https://www.ncbi.nlm.nih.gov/nuccore/CP012411) 
@@ -59,15 +57,7 @@ To find this information:
 
 You can then select the assembly's GenBank (as well as RefSeq) accession from the list that appears.
 
-<div class="container-fluid" style="margin:15px 0px 15px 0px;">
-    <div class="row-fluid">
-        <div class="span1"></div>
-        <div class="span10" id="anim-holder">
-            <a id="lnk" href="../img/GenBank_Info.gif"><img id="anim" src="../img/GenBank_Info.gif" /></a>
-        </div>
-        <div class="span1"></div>
-    </div>
-</div>
+![Animation of findng a GenBank assembly accession on NCBI.](../img/GenBank_Info.gif "Animation of findng a GenBank assembly accession on NCBI.").
 
 Passing this information to the Type Provider generates the Assembly Type. The genomic data can then be extracted from the 
 Assembly Type by invoking the Genome method. This is demonstrated below.
@@ -84,8 +74,6 @@ type Ruddii = GenBankProvider<Species, Accession>
 let genome = Ruddii.Genome()
 
 (**
-<br />
-<br />
 ### Metadata
 
 Each genome is accompanied by metadata describing the organism and sequence recorded in the assembly. This metadata can
@@ -107,8 +95,6 @@ printf "%A" metadata
 
 (** 
 The metadata type consists of many fields, though not all fields of the metadata exist for all assemblies. Therefore, they are provided as option types, on which a match expression can be used. Below are examples of accessing fields from the example assembly.
-  <br />
-  <br />
   ✅ Example - Accessing a field that is provided. 
 *)
 
@@ -119,8 +105,7 @@ match metadata.Definition with
 
 (*** include-output ***)
 
-(** 
-  <br /> 
+(**  
   ❌ Example - Accessing a field that is not provided. 
 *)
 
@@ -132,8 +117,6 @@ match metadata.DbSource with
 (*** include-output ***)
 
 (**
-<br />
-<br />
 ### Sequence
 
 The genomic sequence for the organism can be extracted using the Sequence field of the Genome Type created previously.
@@ -162,7 +145,6 @@ sequence
 
 
 (**
-<br />
 ## Wildcard Operators
 
 Wildcard operators are supported in both the Species and Accession provided to the GenBankProvider. By using asterisks "\*"

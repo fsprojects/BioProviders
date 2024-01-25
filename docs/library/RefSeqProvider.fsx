@@ -13,14 +13,13 @@ index: 2
 
 # RefSeq Type Provider
 
-This article describes how to use the RefSeq Type Provider to remotely access genomic data stored in the 
+This article describes how to use the RefSeq Type Provider to remotely access genomic data stored in the
 [RefSeq](https://www.ncbi.nlm.nih.gov/genbank/) database. This Type Provider collects and parses the genomic data
-for a specified organism and generates a static type containing its metadata and sequence. 
+for a specified organism and generates a static type containing its metadata and sequence.
 
 The RefSeq Type Provider uses [.NET Bio](https://github.com/dotnetbio/bio) to parse the RefSeq data files
 and [BioFSharp](https://github.com/CSBiology/BioFSharp) to provide utilities for manipulating genomic sequences.
 
-<br />
 ## Loading BioProviders Package
 
 To load the RefSeq Type Provider, a script can use the NuGet syntax to reference the BioProviders package, shown below.
@@ -40,10 +39,9 @@ open BioProviders
 open BioFSharp
 
 (**
-<br />
 ## RefSeqProvider Example
 
-The RefSeq Type Provider will be demonstrated for [this RefSeq assembly](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_001224225.1/) 
+The RefSeq Type Provider will be demonstrated for [this RefSeq assembly](https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_001224225.1/)
 of the *Staphylococcus borealis* species. To create a typed representation of the assembly, two pieces of information
 must be given to the Type Provider:
 
@@ -59,17 +57,9 @@ To find this information:
 
 You can then select the assembly's RefSeq (as well as GenBank) accession from the list that appears.
 
-<div class="container-fluid" style="margin:15px 0px 15px 0px;">
-    <div class="row-fluid">
-        <div class="span1"></div>
-        <div class="span10" id="anim-holder">
-            <a id="lnk" href="../img/RefSeq_Info.gif"><img id="anim" src="../img/RefSeq_Info.gif" /></a>
-        </div>
-        <div class="span1"></div>
-    </div>
-</div>
+![Animation of findng a RefSeq assembly accession on NCBI.](../img/RefSeq_Info.gif "Animation of findng a RefSeq assembly accession on NCBI.").
 
-Passing this information to the Type Provider generates the Assembly Type. The genomic data can then be extracted from the 
+Passing this information to the Type Provider generates the Assembly Type. The genomic data can then be extracted from the
 Assembly Type by invoking the Genome method. This is demonstrated below.
 *)
 
@@ -84,8 +74,6 @@ type Borealis = RefSeqProvider<Species, Accession>
 let genome = Borealis.Genome()
 
 (**
-<br />
-<br />
 ### Metadata
 
 Each genome is accompanied by metadata describing the organism and sequence recorded in the assembly. This metadata can
@@ -105,11 +93,9 @@ printf "%A" metadata
 
 (*** include-output ***)
 
-(** 
+(**
 The metadata type consists of many fields, though not all fields of the metadata exist for all assemblies. Therefore, they are provided as option types, on which a match expression can be used. Below are examples of accessing fields from the example assembly.
-  <br />
-  <br />
-  ✅ Example - Accessing a field that is provided. 
+  ✅ Example - Accessing a field that is provided.
 *)
 
 // Print definition if exists.
@@ -119,9 +105,8 @@ match metadata.Definition with
 
 (*** include-output ***)
 
-(** 
-  <br /> 
-  ❌ Example - Accessing a field that is not provided. 
+(**
+  ❌ Example - Accessing a field that is not provided.
 *)
 
 // Print database source if exists.
@@ -132,14 +117,12 @@ match metadata.DbSource with
 (*** include-output ***)
 
 (**
-<br />
-<br />
 ### Sequence
 
 The genomic sequence for the organism can be extracted using the Sequence field of the Genome Type created previously.
 This field provides a BioFSharp [BioSeq](https://csbiology.github.io/BioFSharp/reference/biofsharp-bioseq.html) containing
 a series of [Nucleotides](https://csbiology.github.io/BioFSharp//reference/biofsharp-nucleotides-nucleotide.html). More
-can be read about BioFSharp containers [here](https://csbiology.github.io/BioFSharp//BioCollections.html). 
+can be read about BioFSharp containers [here](https://csbiology.github.io/BioFSharp//BioCollections.html).
 
 An example of accessing and manipulating the RefSeqProvider genomic sequence using BioFSharp is provided below:
 *)
@@ -162,11 +145,10 @@ sequence
 
 
 (**
-<br />
 ## Wildcard Operators
 
 Wildcard operators are supported in both the Species and Accession provided to the RefSeqProvider. By using asterisks "\*"
-at the end of a Species or Accession name, species or accessions starting with the provided pattern will be matched. 
+at the end of a Species or Accession name, species or accessions starting with the provided pattern will be matched.
 
 For example, we can get all *Staphylococcus* species starting with the letter 'c' and assembly accesions starting with
 'GCF_01':
