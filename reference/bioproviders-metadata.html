@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Metadata (BioProviders)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Alex Kenna;Samuel Smith;fsprojects contributors">
+
+    <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.6.0/materia/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+    <link rel="shortcut icon" type="image/x-icon" href="https://fsprojects.github.io/BioProviders/img/favicon.ico">
+    <link type="text/css" rel="stylesheet" href="https://fsprojects.github.io/BioProviders/content/navbar-fixed-left.css" />
+    <link type="text/css" rel="stylesheet" href="https://fsprojects.github.io/BioProviders/content/fsdocs-default.css" />
+    <link type="text/css" rel="stylesheet" href="https://fsprojects.github.io/BioProviders/content/fsdocs-custom.css" />
+    <script type="text/javascript" src="https://fsprojects.github.io/BioProviders/content/fsdocs-tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
+    <!-- END SEARCH BOX: this adds support for the search box -->
+    
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-light bg-secondary fixed-left" id="fsdocs-nav">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse navbar-nav-scroll" id="navbarsExampleDefault">
+            <a href="https://fsprojects.github.io/BioProviders/"><img id="fsdocs-logo" src="https://fsprojects.github.io/BioProviders/img/logo.png" /></a>
+            <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+            <div id="header">
+                <div class="searchbox" id="fsdocs-searchbox">
+                    <label for="search-by">
+                        <i class="fas fa-search"></i>
+                    </label>
+                    <input data-search-input="" id="search-by" type="search" placeholder="Search..." />
+                    <span data-search-clear="">
+                        <i class="fas fa-times"></i>
+                    </span>
+                </div>
+            </div>
+
+            <!-- END SEARCH BOX: this adds support for the search box -->
+            <ul class="navbar-nav">
+                <li class="nav-header">Links</li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/BioProviders/blob/master/LICENSE.md">License</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/BioProviders/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/BioProviders/">Source Repository</a></li>
+                <li class="nav-header">
+  Type Providers
+</li>             
+<li class="nav-item">
+  <a class="nav-link" href="https://fsprojects.github.io/BioProviders/library/GenBankProvider.html">
+    GenBank Type Provider
+
+  </a>
+</li>             
+<li class="nav-item">
+  <a class="nav-link" href="https://fsprojects.github.io/BioProviders/library/RefSeqProvider.html">
+    RefSeq Type Provider
+
+  </a>
+</li>
+                <!-- Hard-coding this here since the API docs are generated separately. -->
+                <li class="nav-header">API Reference</li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://fsprojects.github.io/BioProviders/reference/index.html">All Namespaces</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="masthead">
+            <h3 class="muted"><a href="https://fsprojects.github.io/BioProviders/">BioProviders</a></h3>
+        </div>
+        <hr />
+        <div class="container" id="fsdocs-content">
+            <div>
+  <h2>
+    Metadata Module
+  </h2>
+  <dl class="fsdocs-metadata">
+    <dt>
+      Namespace: 
+      <a href="https://fsprojects.github.io/BioProviders/reference/bioproviders.html">
+        BioProviders
+      </a>
+    </dt>
+    <dt>
+      Assembly: BioProviders.dll
+    </dt>
+  </dl>
+  <div class="fsdocs-xmldoc">
+    <div>
+      <p class="fsdocs-summary">
+        
+      </p>
+    </div>
+  </div>
+  <div>
+    <h3>
+      Types
+    </h3>
+    <table class="table outer-list fsdocs-entity-list">
+      <thead>
+        <tr>
+          <td>
+            Type
+          </td>
+          <td>
+            Description
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="fsdocs-entity-name">
+            <p>
+              <a name="Accession">
+                <a href="https://fsprojects.github.io/BioProviders/reference/bioproviders-metadata-accession.html">
+                  Accession
+                </a>
+              </a>
+            </p>
+          </td>
+          <td class="fsdocs-entity-xmldoc">
+            <div>
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:T:BioProviders.Metadata.Accession`')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'T:BioProviders.Metadata.Accession\'/>')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/BioProviders/tree/master/src/RunTime/GenBankMetadata.fs#L15-15" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+ Identifier assigned to each GenBank sequence record.
+ 
+              </p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-entity-name">
+            <p>
+              <a name="DbLink">
+                <a href="https://fsprojects.github.io/BioProviders/reference/bioproviders-metadata-dblink.html">
+                  DbLink
+                </a>
+              </a>
+            </p>
+          </td>
+          <td class="fsdocs-entity-xmldoc">
+            <div>
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:T:BioProviders.Metadata.DbLink`')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'T:BioProviders.Metadata.DbLink\'/>')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/BioProviders/tree/master/src/RunTime/GenBankMetadata.fs#L50-50" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+ Cross-references to resources that support the existence of a sequence
+ record, such as the Project Database and the NCBI Trace Assembly
+ Archive.
+ 
+              </p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-entity-name">
+            <p>
+              <a name="DivisionCode">
+                <a href="https://fsprojects.github.io/BioProviders/reference/bioproviders-metadata-divisioncode.html">
+                  DivisionCode
+                </a>
+              </a>
+            </p>
+          </td>
+          <td class="fsdocs-entity-xmldoc">
+            <div>
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:T:BioProviders.Metadata.DivisionCode`')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'T:BioProviders.Metadata.DivisionCode\'/>')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/BioProviders/tree/master/src/RunTime/GenBankMetadata.fs#L65-65" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+ Specifies which family a sequence belongs to.
+ 
+              </p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-entity-name">
+            <p>
+              <a name="LinkType">
+                <a href="https://fsprojects.github.io/BioProviders/reference/bioproviders-metadata-linktype.html">
+                  LinkType
+                </a>
+              </a>
+            </p>
+          </td>
+          <td class="fsdocs-entity-xmldoc">
+            <div>
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:T:BioProviders.Metadata.LinkType`')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'T:BioProviders.Metadata.LinkType\'/>')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/BioProviders/tree/master/src/RunTime/GenBankMetadata.fs#L31-31" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+ Specifies the type of DBLink.
+ 
+              </p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-entity-name">
+            <p>
+              <a name="Locus">
+                <a href="https://fsprojects.github.io/BioProviders/reference/bioproviders-metadata-locus.html">
+                  Locus
+                </a>
+              </a>
+            </p>
+          </td>
+          <td class="fsdocs-entity-xmldoc">
+            <div>
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:T:BioProviders.Metadata.Locus`')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'T:BioProviders.Metadata.Locus\'/>')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/BioProviders/tree/master/src/RunTime/GenBankMetadata.fs#L210-210" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+ Short mnemonic name for the entry, chosen to suggest the sequence's
+ definition.
+ 
+              </p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-entity-name">
+            <p>
+              <a name="Metadata">
+                <a href="https://fsprojects.github.io/BioProviders/reference/bioproviders-metadata-metadata.html">
+                  Metadata
+                </a>
+              </a>
+            </p>
+          </td>
+          <td class="fsdocs-entity-xmldoc">
+            <div>
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:T:BioProviders.Metadata.Metadata`')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'T:BioProviders.Metadata.Metadata\'/>')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/BioProviders/tree/master/src/RunTime/GenBankMetadata.fs#L347-347" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+ Metadata related to the GenBank Flat File.
+ 
+              </p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-entity-name">
+            <p>
+              <a name="MoleculeType">
+                <a href="https://fsprojects.github.io/BioProviders/reference/bioproviders-metadata-moleculetype.html">
+                  MoleculeType
+                </a>
+              </a>
+            </p>
+          </td>
+          <td class="fsdocs-entity-xmldoc">
+            <div>
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:T:BioProviders.Metadata.MoleculeType`')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'T:BioProviders.Metadata.MoleculeType\'/>')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/BioProviders/tree/master/src/RunTime/GenBankMetadata.fs#L133-133" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+ Specifies the type of biological sequence.
+ 
+              </p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-entity-name">
+            <p>
+              <a name="OrganismInfo">
+                <a href="https://fsprojects.github.io/BioProviders/reference/bioproviders-metadata-organisminfo.html">
+                  OrganismInfo
+                </a>
+              </a>
+            </p>
+          </td>
+          <td class="fsdocs-entity-xmldoc">
+            <div>
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:T:BioProviders.Metadata.OrganismInfo`')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'T:BioProviders.Metadata.OrganismInfo\'/>')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/BioProviders/tree/master/src/RunTime/GenBankMetadata.fs#L289-289" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+ Genus, Species and taxonomic classification levels of the sequence.
+ 
+              </p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-entity-name">
+            <p>
+              <a name="Reference">
+                <a href="https://fsprojects.github.io/BioProviders/reference/bioproviders-metadata-reference.html">
+                  Reference
+                </a>
+              </a>
+            </p>
+          </td>
+          <td class="fsdocs-entity-xmldoc">
+            <div>
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:T:BioProviders.Metadata.Reference`')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'T:BioProviders.Metadata.Reference\'/>')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/BioProviders/tree/master/src/RunTime/GenBankMetadata.fs#L243-243" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+ Citations for all articles containing data reported in this sequence.
+ Citations in PubMed that do not fall within Medline's scope will have only a
+ PUBMED identifier. Similarly, citations that *are* in Medline's scope but
+ which have not yet been assigned Medline UIs will have only a PUBMED
+ identifier. If a citation is present in both the PubMed and Medline
+ databases, both a MEDLINE and a PUBMED line will be present.
+ 
+              </p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-entity-name">
+            <p>
+              <a name="Segment">
+                <a href="https://fsprojects.github.io/BioProviders/reference/bioproviders-metadata-segment.html">
+                  Segment
+                </a>
+              </a>
+            </p>
+          </td>
+          <td class="fsdocs-entity-xmldoc">
+            <div>
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:T:BioProviders.Metadata.Segment`')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'T:BioProviders.Metadata.Segment\'/>')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/BioProviders/tree/master/src/RunTime/GenBankMetadata.fs#L275-275" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+ Information on the order in which this entry appears in a series of
+ discontinuous sequences from the same molecule.
+ 
+              </p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-entity-name">
+            <p>
+              <a name="Source">
+                <a href="https://fsprojects.github.io/BioProviders/reference/bioproviders-metadata-source.html">
+                  Source
+                </a>
+              </a>
+            </p>
+          </td>
+          <td class="fsdocs-entity-xmldoc">
+            <div>
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:T:BioProviders.Metadata.Source`')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'T:BioProviders.Metadata.Source\'/>')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/BioProviders/tree/master/src/RunTime/GenBankMetadata.fs#L308-308" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+ Common name of the organism or the name most frequently used in the
+ literature along with the taxonomic classification levels.
+ 
+              </p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-entity-name">
+            <p>
+              <a name="StrandTopology">
+                <a href="https://fsprojects.github.io/BioProviders/reference/bioproviders-metadata-strandtopology.html">
+                  StrandTopology
+                </a>
+              </a>
+            </p>
+          </td>
+          <td class="fsdocs-entity-xmldoc">
+            <div>
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:T:BioProviders.Metadata.StrandTopology`')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'T:BioProviders.Metadata.StrandTopology\'/>')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/BioProviders/tree/master/src/RunTime/GenBankMetadata.fs#L194-194" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+ Specifies whether the strand is linear or circular.
+ 
+              </p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-entity-name">
+            <p>
+              <a name="StrandType">
+                <a href="https://fsprojects.github.io/BioProviders/reference/bioproviders-metadata-strandtype.html">
+                  StrandType
+                </a>
+              </a>
+            </p>
+          </td>
+          <td class="fsdocs-entity-xmldoc">
+            <div>
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:T:BioProviders.Metadata.StrandType`')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'T:BioProviders.Metadata.StrandType\'/>')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/BioProviders/tree/master/src/RunTime/GenBankMetadata.fs#L177-177" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+ Specifies whether the sequence occurs as a single stranded, double stranded
+ or mixed stranded.
+ 
+              </p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-entity-name">
+            <p>
+              <a name="Version">
+                <a href="https://fsprojects.github.io/BioProviders/reference/bioproviders-metadata-version.html">
+                  Version
+                </a>
+              </a>
+            </p>
+          </td>
+          <td class="fsdocs-entity-xmldoc">
+            <div>
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('`cref:T:BioProviders.Metadata.Version`')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'T:BioProviders.Metadata.Version\'/>')">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/BioProviders/tree/master/src/RunTime/GenBankMetadata.fs#L327-327" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github.png" class="normal"/>
+                <img src="https://fsprojects.github.io/BioProviders/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+ Compound identifier consisting of the primary accession number and a numeric
+ version number associated with the current version of the sequence data in
+ the record. This is followed by an integer key (a "GI") assigned to the
+ sequence by NCBI.
+ 
+              </p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <h3>
+      Functions and values
+    </h3>
+    <table class="table outer-list fsdocs-member-list">
+      <thead>
+        <tr>
+          <td class="fsdocs-member-list-header">
+            Function or value
+          </td>
+          <td class="fsdocs-member-list-header">
+            Description
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '2', 2)" onmouseover="showTip(event, '2', 2)">
+                <p>
+                  <a id="createMetadata">
+                    <a href="#createMetadata">
+                      <code><span>createMetadata&#32;<span>metadata</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="2">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>createMetadata&#32;<span>metadata</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        metadata
+                      </b>
+                      :
+                      <code><a href="https://learn.microsoft.com/dotnet/api/bio.io.genbank.genbankmetadata">GenBankMetadata</a></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><a href="https://fsprojects.github.io/BioProviders/reference/bioproviders-metadata-metadata.html">Metadata</a></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  metadata
+                </span>
+                :
+                <code><a href="https://learn.microsoft.com/dotnet/api/bio.io.genbank.genbankmetadata">GenBankMetadata</a></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns: 
+                </span>
+                <code><a href="https://fsprojects.github.io/BioProviders/reference/bioproviders-metadata-metadata.html">Metadata</a></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+</div>
+            
+        </div>
+
+        <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
+        <script type="text/javascript">var fsdocs_search_baseurl = 'https://fsprojects.github.io/BioProviders/';</script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.8/lunr.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.js"></script>
+        <script type="text/javascript" src="https://fsprojects.github.io/BioProviders/content/fsdocs-search.js"></script>
+        <!-- END SEARCH BOX: this adds support for the search box -->
+    </div>
+</body>
+
+</html>
